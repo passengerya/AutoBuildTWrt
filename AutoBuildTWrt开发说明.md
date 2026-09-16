@@ -294,7 +294,8 @@ store/
 | 32 | 构建失败日志要落在宿主 runner 并 `if: failure()` 上传 artifact | `docker --rm` 容器内日志随容器销毁（Build #8 因此无法取证；用 GCM 凭据认证 GitHub API 才能下载 job 日志） |
 | 33 | aurora 全系（`luci-theme-aurora` 主题、`luci-app-aurora-config` 配置中心、`luci-i18n-aurora-config-*` 语言包）2026-09-16 起彻底移除：builder 侧 4 个工作流删除，同步侧 `EXCLUDED_APPS` 全链路剔除（不下载/不解压/不生成列表），`EXCLUDED_PACKAGE_RE` 与构建侧 prepare 脚本兜底过滤历史旧 .run 资产（三层防线） | aurora 烘焙进固件渲染始终异常：主题+配置中心+语言包烘焙 → 顶部功能选项栏排版错乱、Design Studio 元素缺失；只删语言包 → 恢复正常；只留主题（配置中心也没了）→ 依然错乱；而同一 ipk 运行时安装完全正常（md5 相同、重启后正常）——烘焙环境差异，机制未明，最终决定整体移除。两个通用教训：①剔除名单必须三层（builder 打包层 + 同步解压层 + 构建 prepare 层），因为同步按「资产最多的 Release」选源，修复资产刚上传时最新 Release 资产数最少，同步仍选旧 Release 的旧 .run，仅同步侧剔除保不住 .run 文件本身；②24.10 的 lmo 是无魔数的新格式（值块+哈希索引+尾部总长），勿按旧 0x950412DE 魔数判断损坏 |
 | 34 | 主题类应用排查先查**运行时依赖来源**：aurora 主题 header.ut/sysauth.ut 直接读 UCI `/etc/config/aurora`（顶部工具栏 `toolbar_item` 条目、颜色/nav 等 tokens 全来自该配置），此文件由配置中心的 uci-defaults（`80_aurora`/`81_aurora-fonts`）首次启动生成，主题 ipk 自身不含——所以「只装主题」必然错乱，「主题+配置中心」才是设计上的最小组合 | 只烘焙主题=配置文件不存在→顶部工具栏条目全丢+Design Studio 视图（配置中心提供）缺失=排版错乱。2026-09-16 曾把配置中心一起下架，结果主题单独烘焙仍错乱，暴露了主题对配置的隐藏依赖。教训：下架/改包组合前先解包验证目标应用的运行时依赖来源，勿把「配套组件」当「问题组件」一并移除 |
-| 35 | 99-custom.sh quickfile 块补 **else 分支**：无 quickfile/nginx 时清除残留的 `nginx.global.uci_enable` 并 `uhttpd enable` 恢复网页服务 | 保留配置从带 quickfile 的旧固件升级到无 quickfile 的新固件时：nginx/quickfile 包没了，但 UCI 里的 nginx 接管标志还在 → uhttpd 一直处于禁用状态 → 网页服务整体消失（2026-09-16 用户工控机实测：uhttpd 二进制与 init 脚本都在但不运行、netstat 80 无监听、`nginx.global.uci_enable=true` 残留、uci-defaults 日志停在旧日期）。诊断三板斧：`ls /etc/uci-defaults/`（空=新固件根本没装上/首次启动未执行）、`uci get nginx.global.uci_enable`、`netstat -lntp \| grep :80`。另注意 x86 用 LuCI「备份与升级」sysupgrade 时，升级是否真正生效要以首次启动脚本是否重新执行为准，不能只看页面提示 |
+| 35 | 99-custom.sh quickfile 块补 **else 分支**：无 quickfile/nginx 时清除残留的 `nginx.global.uci_enable` 并 `uhttpd enable` 恢复网页服务 | 保留配置从带 quickfile 的旧固件升级到无 quickfile 的新固件时：nginx/quickfile 包没了，但 UCI 里的 nginx 接管标志还在 → uhttpd 一直处于禁用状态 → 网页服务整体消失（2026-09-16 用户工控机实测：uhttpd 二进制与 init 脚本都在但不运行、netstat 80 无监听、`nginx.global.uci_enable=true` 残留）。现象三件套：网页打不开 + uhttpd 装着不运行 + nginx 接管标志残留。修复已入 fe95e18（验证构建 #22 success） |
+| 36 | 判断「刷机/升级是否真正生效」**勿被化石证据误导**：①保留配置升级会带来旧系统的化石——uci-defaults 日志停在旧日期、/rom 里所有文件时间戳都被钳制为**源构建日期**（squashfs SOURCE_DATE_EPOCH，该机全部显示 Apr 22）——都不能证明「没升级」；②决定性判据是 /rom 文件**内容/大小**与 git 历史逐版本比对（本次 99-custom.sh 9243 字节与 #19-21 完全一致 → 实锤新固件已装上）；③`/etc/uci-defaults/` 为空且目录 mtime 是当天，只是 sysupgrade 删除旧脚本的痕迹，不代表首启脚本执行过；④首启脚本「执行了但写入全失败」的症状：无新日志条目、主题未重置、服务未恢复——判定用 `touch` 写测试，恢复靠手动执行脚本内容 | 2026-09-16 用户工控机「刷 #21 后登录页打不开」曾险些误判为「升级没生效」要求重刷，实际新固件已装上，只是 nginx 接管标志残留 + 首启写入丢失。x86 设备 LuCI「备份与升级」sysupgrade 大镜像并不可靠，写盘工具整盘写入最稳 |
 
 ---
 
@@ -308,6 +309,7 @@ store/
 | 手动加 ipk | 放入 store/run/<arch>/ 下**与 .run 推导名不冲突**的目录，同步不删；会自动出现在阶段三的软件列表中 |
 | 启用软件后构建失败 | ① 包名是否写对（对照生成段）；② 冲突组；③ 该包在对应架构目录是否存在；④ 看 build 日志中 opkg 的报错；⑤ 日志/包清单 artifact 从该次运行页面的 Artifacts 区下载（失败自动上传，含 prepare 包清单与重名报告）；⑥ opkg 报 `check_data_file_clashes` 时对照防错清单 #24/#26 |
 | 刷机后 LuCI 界面元素缺失 | 按防错清单 #27 的取证三步走：浏览器访问 `/cgi-bin/luci/admin/menu`（应返回完整 JSON）与 `/luci-static/argon/css/cascade.css`（应返回 CSS）→ Console 执行 `L.env.sessionid` 与 session.access 检查 → 会话在而页面没嵌入 sessionid 即 nginx cookie 转发问题（quickfile 场景），临时修复：`sed -i 's#^location /cgi-bin/luci {#&\n\tuwsgi_param HTTP_COOKIE $http_cookie;#' /etc/nginx/conf.d/luci.locations && /etc/init.d/nginx reload`，随后强制刷新重新登录 |
+| 刷机/升级后网页**完全打不开** | 按防错 #35/#36 排查：① `netstat -lntp \| grep :80`（无监听=服务没跑）；② `uci get nginx.global.uci_enable`（=true 即残留接管标志，恢复：`uci set nginx.global.uci_enable='false'; uci commit nginx; /etc/init.d/uhttpd enable && /etc/init.d/uhttpd start`）；③ 判断升级是否生效不要看日志日期/文件时间戳（化石证据），要看 /rom 文件内容与构建版本比对；④ 首启脚本可能执行了但写入丢失（`touch` 测试 overlay 可写性）——手动执行对应恢复命令即可，新固件（fe95e18 起）首启自带自愈 |
 | Release 积累过多 | builder 手动触发 clean-release（保留最近 N 天）；本仓库 Release 按机型 tag 复用，无积累问题 |
 
 ---
@@ -328,7 +330,7 @@ store/
 - 开关文件：[shell/custom-packages.sh](shell/custom-packages.sh)（24.10）、[shell/apk-custom-packages.sh](shell/apk-custom-packages.sh)（25.12）
 - 构建脚本：[x86-64/build24.sh](x86-64/build24.sh)、[x86-64/build25.sh](x86-64/build25.sh)、[armsr-armv8/build.sh](armsr-armv8/build.sh)
 - 公共脚本：[shell/prepare-packages.sh](shell/prepare-packages.sh)、[shell/apk-prepare-packages.sh](shell/apk-prepare-packages.sh)
-- 固件开机定制：[files/etc/uci-defaults/99-custom.sh](files/etc/uci-defaults/99-custom.sh)（网络/防火墙/PPPoE/quickfile-nginx 配置 + LuCI 会话 cookie 修复）
+- 固件开机定制：[files/etc/uci-defaults/99-custom.sh](files/etc/uci-defaults/99-custom.sh)（网络/防火墙/PPPoE/quickfile-nginx 配置 + LuCI 会话 cookie 修复 + nginx 接管残留自愈）
 - 离线单元测试：[tests/test_sync_run_files.py](tests/test_sync_run_files.py)（同步脚本纯函数 + 生成器幂等/标记边界/启用状态保持/冲突警告/停更判定/通道化变体选择；不联网、不执行 .run）
 
 **参考仓库（GitHub, 本地已删）**
