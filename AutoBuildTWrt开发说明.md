@@ -25,7 +25,7 @@
    阶段一 .run 同步 → 阶段二 ipk 解压 → 阶段三 软件列表维护 → 自动提交
         │
         ▼
-③ 固件构建（本仓库 16 个工作流, 手动触发）
+③ 固件构建（本仓库 15 个构建工作流, 手动触发 + 每日自动构建开关控制）
    docker imagebuilder 容器挂载 store/ shell/ 等 → build24/25.sh → make image
         │
         ▼
@@ -180,7 +180,7 @@ store/
 
 ## 4. 第三层 固件构建
 
-### 4.1 构建工作流（16 个, 全部手动触发）
+### 4.1 构建工作流（15 个, 手动触发 + 每日自动构建开关控制）
 
 | 工作流 | 机型/产物 | 镜像 |
 | --- | --- | --- |
@@ -195,8 +195,15 @@ store/
 
 **统一输入参数**：luci 版本、管理 IP（多网口）、软件包空间（1G~4G）、enable_store、include_docker、enable_pppoe+账号密码。
 
+**每日自动构建（2026-09-17 起）**：
+- **集中开关**：仓库根目录 [build-flags.conf](build-flags.conf)，每工作流一行 `AUTO_BUILD_<机型>_<通道>=0/1`，改文件推 master 即生效；
+- **触发链**：每日定时同步（23:00 UTC）成功后发 `store-synced` → 开关开启的工作流**即刻构建**；各构建工作流另有 **23:40 UTC 定时兜底**（同步失败/漏发时仍会构建）；
+- **去重**：同一工作流 20 小时内只自动构建一次（当日已手动构建过的自动跳过）；
+- **闸门**：[autobuild-gate.yml](.github/workflows/autobuild-gate.yml)（可复用工作流）统一裁决：手动触发始终放行并标识「手动构建」；自动触发读开关 + 去重后标识「每日自动构建」；标识与时间会追加到各机型的 Release 说明中，与手动构建区分；
+- **参数**：自动构建用各输入项的默认值；自定义参数请手动运行工作流。
+
 **统一规范**（全部工作流已应用）：
-- 输入引用用 `${{ github.event.inputs.xxx }}`；
+- 输入引用统一经**工作流级 env**（`env.xxx`，默认值取输入项 default）——自动触发时输入为空也始终有值；
 - 构建日志写到**宿主 runner**（`mkdir -p "$RUNNER_TEMP/build-logs"` + 宿主侧 `set -o pipefail` + `| tee "$RUNNER_TEMP/build-logs/….log"`，`make image … V=s`）——**不要写进 `docker --rm` 容器内 /tmp**（容器退出即丢日志，2026-09-15 之前 Build #8/#9 失败因此无法取证）；
 - 失败诊断 artifact：`actions/upload-artifact` + `if: failure()` 上传 runner 日志与容器内 `bin/build-diag/`（prepare 脚本包清单 TSV + 重名报告）；**不允许 `|| true` 掩盖失败**；
 - PPPoE 输入用 `::add-mask::` 掩码；build 脚本只回显 `<redacted>`，不打印明文密码；

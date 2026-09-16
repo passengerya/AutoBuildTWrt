@@ -223,11 +223,36 @@ on:
         required: true
         default: 'wukongdaily'
 
+  schedule:
+    # 每日自动构建兜底时间(UTC 23:40 = 北京 07:40, 晚于 sync-store 的 23:00)
+    - cron: '40 23 * * *'
+  repository_dispatch:
+    types: [store-synced]
+
 permissions:
   contents: write
+  actions: read
+
+env:
+  luci_version: ${{ github.event.inputs.luci_version || '24.10.6' }}
+  openwrt_kernel: ${{ github.event.inputs.openwrt_kernel || '6.1.y' }}
+  openwrt_board: ${{ github.event.inputs.openwrt_board || 'a311d-oes' }}
+  include_docker: ${{ github.event.inputs.include_docker || 'no' }}
+  enable_store: ${{ github.event.inputs.enable_store || 'true' }}
+  skip_imagebuilder: ${{ github.event.inputs.skip_imagebuilder || 'false' }}
+  replace_banner: ${{ github.event.inputs.replace_banner || 'false' }}
+  rootfs_partsize: ${{ github.event.inputs.rootfs_partsize || '1024' }}
+  builder_name: ${{ github.event.inputs.builder_name || 'wukongdaily' }}
 
 jobs:
+  gate:
+    uses: ./.github/workflows/autobuild-gate.yml
+    with:
+      flag_name: AUTO_BUILD_OPHUB_24_10
+      workflow_file: build-boxs-by-ophub.yml
   build:
+    needs: gate
+    if: ${{ needs.gate.outputs.should_build == 'true' }}
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
@@ -241,7 +266,7 @@ jobs:
       
       - name: Enable Store integration
         run: |
-          if [ "${{ github.event.inputs.enable_store }}" == "true" ]; then
+          if [ "${{ env.enable_store }}" == "true" ]; then
             # 插入到自动生成段内(自动维护结束标记之前), 避免落到 imm 固定段之后
             sed -i '/# ============ 自动维护结束 ============/i CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-store"' shell/custom-packages.sh
             echo "✅ 已追加 luci-app-store"
@@ -250,19 +275,19 @@ jobs:
           fi
 
       - name: 处理是否替换 banner 信息
-        if: ${{ github.event.inputs.skip_imagebuilder == 'false' && github.event.inputs.replace_banner == 'true' }}
+        if: ${{ env.skip_imagebuilder == 'false' && env.replace_banner == 'true' }}
         run: |
           # 使用ImageBuilder构建 且用户勾选了替换banner时
           cp n1/99-banner.sh files/etc/uci-defaults/
       
       - name: Build Rootfs for Radxa and Other Boards (ImmortalWrt)
-        if: ${{ github.event.inputs.skip_imagebuilder != 'true' }}
+        if: ${{ env.skip_imagebuilder != 'true' }}
         run: |
           echo "✅ 使用 ImageBuilder 构建 rootfs"
           profiles="generic"
-          include_docker="${{ github.event.inputs.include_docker }}"
-          rootfs_partsize="${{ github.event.inputs.rootfs_partsize }}"
-          luci_version="${{ github.event.inputs.luci_version }}"
+          include_docker="${{ env.include_docker }}"
+          rootfs_partsize="${{ env.rootfs_partsize }}"
+          luci_version="${{ env.luci_version }}"
           
           IFS=',' read -r -a profile_array <<< "$profiles"
           
@@ -286,7 +311,7 @@ jobs:
           done
           
       - name: Download prebuilt rootfs.tar.gz
-        if: ${{ github.event.inputs.skip_imagebuilder == 'true' }}
+        if: ${{ env.skip_imagebuilder == 'true' }}
         run: |
           echo "📦 正在下载预构建 rootfs"
           echo "PREBUILT_LUCI_VERSION=24.10.2" >> $GITHUB_ENV
@@ -309,18 +334,18 @@ jobs:
         uses: ophub/amlogic-s9xxx-openwrt@main
         with:
           openwrt_path: ${{ steps.find_rootfs.outputs.file }}
-          openwrt_board: ${{ github.event.inputs.openwrt_board }}
-          openwrt_kernel: ${{ github.event.inputs.openwrt_kernel }}
+          openwrt_board: ${{ env.openwrt_board }}
+          openwrt_kernel: ${{ env.openwrt_kernel }}
           auto_kernel: true
           kernel_repo: "ophub/kernel"
           kernel_usage: flippy
-          builder_name: ${{ github.event.inputs.builder_name }}
+          builder_name: ${{ env.builder_name }}
 
       - name: Rename .img.gz files
         id: rename
         run: |
-          MODEL=${{ github.event.inputs.openwrt_board }}
-          LUCI_VERSION="${{ github.event.inputs.luci_version }}"
+          MODEL=${{ env.openwrt_board }}
+          LUCI_VERSION="${{ env.luci_version }}"
 
           for FILE in ${{ env.PACKAGED_OUTPUTPATH }}/*.img.gz; do
             echo "Processing file: $FILE"
@@ -341,6 +366,10 @@ jobs:
             mv "$FILE" "${{ env.PACKAGED_OUTPUTPATH }}/$NEW_NAME"
             echo "Renamed to: $NEW_NAME"
           done
+
+      - name: 标注构建方式
+        run: |
+          printf '\n- 🏷️ **构建方式**: %s\n' "${{ needs.gate.outputs.build_label }}" >> "${{ github.workspace }}/n1/box.md"
 
       - name: Upload firmware to GitHub Releases
         uses: softprops/action-gh-release@v3

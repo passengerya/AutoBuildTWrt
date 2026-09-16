@@ -53,11 +53,33 @@ on:
         description: "宽带密码 (若启用PPPoE)"
         required: false
 
+  schedule:
+    # 每日自动构建兜底时间(UTC 23:40 = 北京 07:40, 晚于 sync-store 的 23:00)
+    - cron: '40 23 * * *'
+  repository_dispatch:
+    types: [store-synced]
+
 permissions:
   contents: write
+  actions: read
+
+env:
+  luci_version: ${{ github.event.inputs.luci_version || '25.12.1' }}
+  custom_router_ip: ${{ github.event.inputs.custom_router_ip || '192.168.100.1' }}
+  profile: ${{ github.event.inputs.profile || '1G' }}
+  enable_store: ${{ github.event.inputs.enable_store || 'false' }}
+  include_docker: ${{ github.event.inputs.include_docker || 'no' }}
+  enable_pppoe: ${{ github.event.inputs.enable_pppoe || 'no' }}
 
 jobs:
+  gate:
+    uses: ./.github/workflows/autobuild-gate.yml
+    with:
+      flag_name: AUTO_BUILD_X86_64_25_12
+      workflow_file: build-x86-64-25.12.x.yml
   build:
+    needs: gate
+    if: ${{ needs.gate.outputs.should_build == 'true' }}
     runs-on: ubuntu-22.04
 
     steps:
@@ -70,14 +92,14 @@ jobs:
       - name: Save Custom Router IP into OpenWrt files
         run: |
           mkdir -p "${{ github.workspace }}/custom"
-          echo "${{ github.event.inputs.custom_router_ip }}" > "${{ github.workspace }}/custom/custom_router_ip.txt"
-          echo "您设置的路由器管理地址是:${{ github.event.inputs.custom_router_ip }}"
+          echo "${{ env.custom_router_ip }}" > "${{ github.workspace }}/custom/custom_router_ip.txt"
+          echo "您设置的路由器管理地址是:${{ env.custom_router_ip }}"
           # 后续步骤会将该文件映射到路由器/etc/config/custom_router_ip.txt 以便用于开机脚本99-custom.sh读取用户设置的ip
       
       - name: Validate PPPoE Inputs
         run: |
-          if [[ "${{ github.event.inputs.enable_pppoe }}" == "yes" ]]; then
-            if [[ -z "${{ github.event.inputs.pppoe_account }}" || -z "${{ github.event.inputs.pppoe_password }}" ]]; then
+          if [[ "${{ env.enable_pppoe }}" == "yes" ]]; then
+            if [[ -z "${{ env.pppoe_account }}" || -z "${{ env.pppoe_password }}" ]]; then
               echo "Error: PPPoE account and password must be provided when PPPoE is enabled!"
               exit 1
             fi
@@ -92,12 +114,12 @@ jobs:
             echo "::add-mask::$(printf '%s' "$PPPOE_PASSWORD" | sed 's/%/%25/g; s/\r/%0D/g; s/\n/%0A/g')"
           fi
         env:
-          PPPOE_ACCOUNT: ${{ github.event.inputs.pppoe_account }}
-          PPPOE_PASSWORD: ${{ github.event.inputs.pppoe_password }}
+          PPPOE_ACCOUNT: ${{ env.pppoe_account }}
+          PPPOE_PASSWORD: ${{ env.pppoe_password }}
       
       - name: Enable Store integration
         run: |
-          if [ "${{ github.event.inputs.enable_store }}" == "true" ]; then
+          if [ "${{ env.enable_store }}" == "true" ]; then
             # 插入到自动生成段内(自动维护结束标记之前), 避免落到 imm 固定段之后
             sed -i '/# ============ 自动维护结束 ============/i CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-store"' shell/apk-custom-packages.sh
             echo "✅ 已追加 luci-app-store"
@@ -107,7 +129,7 @@ jobs:
 
       - name: Build ImmortalWrt-x86-64-efi 25.12.x
         run: |
-          profile="${{ github.event.inputs.profile }}"
+          profile="${{ env.profile }}"
           case "$profile" in
             1G)
               ROOTFS_SIZE=1024
@@ -123,8 +145,8 @@ jobs:
               ;;
           esac
           echo "ROOTFS_SIZE=$ROOTFS_SIZE" >> $GITHUB_ENV
-          include_docker="${{ github.event.inputs.include_docker }}"
-          luci_version="${{ github.event.inputs.luci_version }}"
+          include_docker="${{ env.include_docker }}"
+          luci_version="${{ env.luci_version }}"
           echo "Building for rootfs_size: $profile"
           # 构建日志写到 runner; 失败时由后续步骤上传为 artifact 诊断
           mkdir -p "$RUNNER_TEMP/build-logs"
@@ -140,9 +162,9 @@ jobs:
             -v "${{ github.workspace }}/x86-64/build25.sh:/home/build/immortalwrt/build.sh" \
             -e PROFILE=$ROOTFS_SIZE \
             -e INCLUDE_DOCKER=$include_docker \
-            -e ENABLE_PPPOE=${{ github.event.inputs.enable_pppoe }} \
-            -e PPPOE_ACCOUNT=${{ github.event.inputs.pppoe_account }} \
-            -e PPPOE_PASSWORD=${{ github.event.inputs.pppoe_password }} \
+            -e ENABLE_PPPOE=${{ env.enable_pppoe }} \
+            -e PPPOE_ACCOUNT=${{ env.pppoe_account }} \
+            -e PPPOE_PASSWORD=${{ env.pppoe_password }} \
             -e BUILD_LOG_DIR=/home/build/immortalwrt/bin/build-diag \
           immortalwrt/imagebuilder:x86-64-openwrt-${luci_version} \
             /bin/bash -lc "/home/build/immortalwrt/build.sh" \
@@ -167,17 +189,21 @@ jobs:
            <img src="https://img.shields.io/badge/若下载慢可套用国内加速站下载-FC7C0D?logo=github&logoColor=fff&labelColor=000&style=for-the-badge"/>
           </a>
           
-          - 🏠 **后台地址**: ${{ github.event.inputs.custom_router_ip }}
+          - 🏠 **后台地址**: ${{ env.custom_router_ip }}
           - 👤 **用户名**: root
           - 🔑 **密码**: 无
           EOF
 
-          if [ "${{ github.event.inputs.include_docker }}" == "yes" ]; then
+          if [ "${{ env.include_docker }}" == "yes" ]; then
             extra_content="#### 默认带docker"
             echo -e "\n$extra_content" >> ${{ github.workspace }}/router-info.md
           else
             echo -e "\n#### 不带docker" >> ${{ github.workspace }}/router-info.md
           fi
+
+      - name: 标注构建方式
+        run: |
+          printf '\n- 🏷️ **构建方式**: %s\n' "${{ needs.gate.outputs.build_label }}" >> "${{ github.workspace }}/router-info.md"
 
       - name: Upload ImmortWrt as release assets
         uses: softprops/action-gh-release@v3

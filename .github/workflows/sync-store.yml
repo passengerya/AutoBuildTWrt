@@ -6,6 +6,10 @@
 #   2. 定时: 每天 23:00 UTC(北京时间 7:00), 兜底(通知漏发/全部失败时仍会同步)
 #   3. 手动: workflow_dispatch(可指定其它源仓库)
 #
+# 同步成功后的下游动作: 仅「定时触发」的同步会发 repository_dispatch(store-synced)
+# 通知各构建工作流即刻执行每日自动构建(开关见仓库根目录 build-flags.conf);
+# 构建工作流自身还有 23:40 UTC 的定时兜底。
+#
 # 注意: 定时/通知触发只会使用默认分支(master)上的 workflow 文件,
 #       请把本文件合并到 master 分支后才会生效。
 
@@ -59,3 +63,14 @@ jobs:
           git commit -m "sync: 从 ${BUILDER_REPO} 同步 run 文件到内嵌 store ($(date -u +%F))" \
             -m "Co-Authored-By: Claude Code <noreply@anthropic.com>"
           git push
+
+      - name: Notify daily auto builds
+        # 仅每日定时同步成功后即刻通知各构建工作流(builder-done 同步不通知,
+        # 避免上游每日分批构建中途的半成品 store 触发构建)
+        if: ${{ success() && github.event_name == 'schedule' }}
+        run: |
+          code=$(curl -s -o /dev/null -w '%{http_code}' -X POST \
+            -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/dispatches" \
+            -d '{"event_type":"store-synced"}')
+          echo "✅ 已通知每日自动构建 (HTTP $code)"

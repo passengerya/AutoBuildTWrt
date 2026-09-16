@@ -45,11 +45,32 @@ on:
         default: '1024'
 
 
+  schedule:
+    # 每日自动构建兜底时间(UTC 23:40 = 北京 07:40, 晚于 sync-store 的 23:00)
+    - cron: '40 23 * * *'
+  repository_dispatch:
+    types: [store-synced]
+
 permissions:
   contents: write
+  actions: read
+
+env:
+  profile: ${{ github.event.inputs.profile || 'rpi-4' }}
+  luci_version: ${{ github.event.inputs.luci_version || '24.10.6' }}
+  enable_store: ${{ github.event.inputs.enable_store || 'true' }}
+  include_docker: ${{ github.event.inputs.include_docker || 'no' }}
+  size: ${{ github.event.inputs.size || '1024' }}
 
 jobs:
+  gate:
+    uses: ./.github/workflows/autobuild-gate.yml
+    with:
+      flag_name: AUTO_BUILD_RASPBERRYPI_24_10
+      workflow_file: build-RaspBerryPi-24.10.x.yml
   build:
+    needs: gate
+    if: ${{ needs.gate.outputs.should_build == 'true' }}
     runs-on: ubuntu-22.04
 
     steps:
@@ -62,7 +83,7 @@ jobs:
       
       - name: Enable Store integration
         run: |
-          if [ "${{ github.event.inputs.enable_store }}" == "true" ]; then
+          if [ "${{ env.enable_store }}" == "true" ]; then
             # 插入到自动生成段内(自动维护结束标记之前), 避免落到 imm 固定段之后
             sed -i '/# ============ 自动维护结束 ============/i CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-store"' shell/custom-packages.sh
             echo "✅ 已追加 luci-app-store"
@@ -73,8 +94,8 @@ jobs:
       
       - name: Build raspberrypi ImmortalWrt 24.10.x
         run: |
-          luci_version="${{ github.event.inputs.luci_version }}"
-          profiles="${{ github.event.inputs.profile }}"
+          luci_version="${{ env.luci_version }}"
+          profiles="${{ env.profile }}"
           if [ "$profiles" = "rpi" ]; then
             tag=bcm27xx-bcm2708-openwrt-${luci_version}
             echo "cpu=bcm2708" >> $GITHUB_ENV
@@ -94,8 +115,8 @@ jobs:
             tag=bcm27xx-bcm2712-openwrt-${luci_version}
             echo "cpu=bcm2712" >> $GITHUB_ENV
           fi
-          include_docker="${{ github.event.inputs.include_docker }}"
-          size="${{ github.event.inputs.size }}"
+          include_docker="${{ env.include_docker }}"
+          size="${{ env.size }}"
           
           IFS=',' read -r -a profile_array <<< "$profiles"
           for profile in "${profile_array[@]}"; do
@@ -119,13 +140,17 @@ jobs:
       
       - name: Create info
         run: |
-          if [ "${{ github.event.inputs.include_docker }}" == "yes" ]; then
+          if [ "${{ env.include_docker }}" == "yes" ]; then
             extra_content="### 默认带docker"
             echo -e "\n $extra_content" >> ${{ github.workspace }}/info.md
           else
             echo -e "NO docker"
           fi
  
+      - name: 标注构建方式
+        run: |
+          printf '\n- 🏷️ **构建方式**: %s\n' "${{ needs.gate.outputs.build_label }}" >> "${{ github.workspace }}/info.md"
+
       - name: Upload ImmortalWrt as release assets
         uses: softprops/action-gh-release@v3
         with:

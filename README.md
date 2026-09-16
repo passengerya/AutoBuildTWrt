@@ -22,6 +22,7 @@
 | 📦 自定义固件大小 | 默认 1GB，可选 1G~4G；也可用分区扩容插件自行扩容 |
 | 🐳 可选预装 Docker | UI 勾选即可 |
 | 🏪 可选集成 iStore 商店 | UI 布尔开关控制 |
+| ⏰ 每日自动构建 | 集中开关控制（`build-flags.conf`），Sync Store 同步成功后即刻构建 + 23:40 UTC 定时兜底，Release 标注「每日自动构建/手动构建」区分 |
 | 🌐 支持 24.10.x 与 25.12.x | 两条软件通道严格分离（opkg/ipk 与 apk），互不干扰 |
 | 📡 多机型 | x86-64（含 ISO 安装器）、rockchip、armsr-armv8、sunxi、N1、无线路由器（MTK/高通/博通）、树莓派等，详见 [SUPPORT.md](SUPPORT.md) |
 | 🔧 自定义管理地址 | 多网口机型可在 UI 设置 LAN IP（默认 `192.168.100.1`） |
@@ -56,8 +57,9 @@
 ### 阶段二：固件构建（手动触发）
 
 ```
-③ 构建工作流（16 个，按机型手动触发，UI 填写参数）
+③ 构建工作流（15 个，手动触发，或由每日自动构建开关控制）
    参数示例：luci 版本 / 管理 IP / 软件包空间 / 集成 iStore / 集成 Docker / PPPoE
+   （每日自动构建见下文「每日自动构建」，开关集中在仓库根目录 build-flags.conf）
 
    ↓ docker 挂载本仓库目录到 ImageBuilder 容器
      store/ shell/ 机型配置文件 files/ → /home/build/immortalwrt/
@@ -88,7 +90,7 @@
 
 ```
 AutoBuildTWrt/
-├── .github/workflows/    # 16 个机型构建工作流 + sync-store.yml 同步工作流
+├── .github/workflows/    # 15 个机型构建工作流 + sync-store.yml 同步 + autobuild-gate.yml 自动构建闸门
 ├── store/                # 内嵌第三方软件包库（Sync Store 工作流每日自动更新）
 │   ├── sync_run_files.py # 同步脚本：.run 拉取 + ipk 解压 + 列表维护三阶段
 │   └── run/x86/  run/arm64/   # .run 根目录 + 应用同名 ipk 子目录
@@ -120,6 +122,14 @@ AutoBuildTWrt/
 3. 构建约 8~15 分钟，产物自动上传到 Release（各机型的 tag 如 `Autobuild-x86-64`），下载刷机即可。
 
 > 第三方软件无需手动处理：只要在 `custom-packages.sh`（或 apk 版）里取消了注释，构建时自动从内嵌 store 装进固件。
+
+## ⏰ 每日自动构建
+
+1. 编辑仓库根目录的 **[build-flags.conf](build-flags.conf)**，把想自动构建的机型开关改为 `1`（`AUTO_BUILD_<机型>_<通道>=1`），推送到 master 即生效；
+2. 触发链：每天 23:00 UTC（北京 07:00）定时同步内嵌 store **成功后即刻触发**自动构建；若同步失败/漏发，各构建工作流还有 **23:40 UTC（北京 07:40）定时兜底**；
+3. 去重：同一工作流 20 小时内只自动构建一次，当日已手动构建过的自动跳过；
+4. 参数：自动构建使用各输入项的默认值（如需自定义请手动运行工作流）；
+5. 区分：Release 说明会标注 **「每日自动构建」或「手动构建」+ UTC 时间**。
 
 ## ✅ 如何开启软件（两种来源）
 
@@ -154,6 +164,7 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-i18n-ddns-go-zh-cn"   # ← 去掉行首 
 - **单网口设备**：默认 DHCP 自动获取 IP（旁路由模式），在上级路由器查看分配的地址访问后台；
 - **多网口设备**：WAN 口 DHCP（勾选 PPPoE 则为拨号），LAN IP 为 UI 中设置的值（默认 `192.168.100.1`），eth0 为 WAN；
 - 后台：用户名 `root`，密码无（建议首次登录后设置）；
+- 主机名：默认统一为 `Twrt`（可在 系统 → 系统 → 主机名 中修改）；
 - 为易用性，WAN 口防火墙入站默认开启，调试完毕后建议自行关闭（网络 → 防火墙 → WAN 入站改为拒绝）；
 - 以上行为均可通过 `files/etc/uci-defaults/99-custom.sh` 调整。
 

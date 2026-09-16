@@ -57,12 +57,33 @@ on:
           - '3G'
           - '4G'
 
+  schedule:
+    # 每日自动构建兜底时间(UTC 23:40 = 北京 07:40, 晚于 sync-store 的 23:00)
+    - cron: '40 23 * * *'
+  repository_dispatch:
+    types: [store-synced]
+
 permissions:
   contents: write
+  actions: read
 
+
+env:
+  profile: ${{ github.event.inputs.profile || 'xunlong_orangepi-zero3' }}
+  luci_version: ${{ github.event.inputs.luci_version || '24.10.6' }}
+  enable_store: ${{ github.event.inputs.enable_store || 'true' }}
+  include_docker: ${{ github.event.inputs.include_docker || 'no' }}
+  rootfs_partsize: ${{ github.event.inputs.rootfs_partsize || '1G' }}
 
 jobs:
+  gate:
+    uses: ./.github/workflows/autobuild-gate.yml
+    with:
+      flag_name: AUTO_BUILD_SUNXI_24_10
+      workflow_file: build-sunxi-cortexa53-24.10.x.yml
   build:
+    needs: gate
+    if: ${{ needs.gate.outputs.should_build == 'true' }}
     runs-on: ubuntu-22.04
 
     steps:
@@ -75,7 +96,7 @@ jobs:
       
       - name: Enable Store integration
         run: |
-          if [ "${{ github.event.inputs.enable_store }}" == "true" ]; then
+          if [ "${{ env.enable_store }}" == "true" ]; then
             # 插入到自动生成段内(自动维护结束标记之前), 避免落到 imm 固定段之后
             sed -i '/# ============ 自动维护结束 ============/i CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-store"' shell/custom-packages.sh
             echo "✅ 已追加 luci-app-store"
@@ -85,9 +106,9 @@ jobs:
       
       - name: Build sunxi-cortexa53 ImmpotalWrt 24.10.x
         run: |
-          profiles="${{ github.event.inputs.profile }}"
-          include_docker="${{ github.event.inputs.include_docker }}"
-          rootfs_partsize="${{ github.event.inputs.rootfs_partsize }}"
+          profiles="${{ env.profile }}"
+          include_docker="${{ env.include_docker }}"
+          rootfs_partsize="${{ env.rootfs_partsize }}"
           case "$rootfs_partsize" in
             1G)
               ROOTFS_SIZE=1024
@@ -103,7 +124,7 @@ jobs:
               ;;
           esac
           echo "ROOTFS_SIZE=$ROOTFS_SIZE" >> $GITHUB_ENV
-          luci_version="${{ github.event.inputs.luci_version }}"
+          luci_version="${{ env.luci_version }}"
           
           IFS=',' read -r -a profile_array <<< "$profiles"
           
@@ -127,12 +148,16 @@ jobs:
      
       - name: Create info
         run: |
-          if [ "${{ github.event.inputs.include_docker }}" == "yes" ]; then
+          if [ "${{ env.include_docker }}" == "yes" ]; then
             extra_content="### 默认带docker"
             echo -e "\n $extra_content" >> ${{ github.workspace }}/sunxi-cortexa53/info.md
           else
             echo -e "NO docker"
           fi
+
+      - name: 标注构建方式
+        run: |
+          printf '\n- 🏷️ **构建方式**: %s\n' "${{ needs.gate.outputs.build_label }}" >> "${{ github.workspace }}/sunxi-cortexa53/info.md"
 
       - name: Upload ImmortWrt as release assets
         uses: softprops/action-gh-release@v3

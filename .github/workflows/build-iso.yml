@@ -59,11 +59,32 @@ on:
         description: "宽带密码 (若启用PPPoE)"
         required: false
 
+  schedule:
+    # 每日自动构建兜底时间(UTC 23:40 = 北京 07:40, 晚于 sync-store 的 23:00)
+    - cron: '40 23 * * *'
+  repository_dispatch:
+    types: [store-synced]
+
 permissions:
   contents: write
+  actions: read
+
+env:
+  luci_version: ${{ github.event.inputs.luci_version || '24.10.6' }}
+  profile: ${{ github.event.inputs.profile || '1G' }}
+  include_docker: ${{ github.event.inputs.include_docker || 'no' }}
+  enable_store: ${{ github.event.inputs.enable_store || 'true' }}
+  enable_pppoe: ${{ github.event.inputs.enable_pppoe || 'no' }}
 
 jobs:
+  gate:
+    uses: ./.github/workflows/autobuild-gate.yml
+    with:
+      flag_name: AUTO_BUILD_ISO_24_10
+      workflow_file: build-iso.yml
   build_immortalwrt:
+    needs: gate
+    if: ${{ needs.gate.outputs.should_build == 'true' }}
     runs-on: ubuntu-22.04
 
     steps:
@@ -75,7 +96,7 @@ jobs:
       
       - name: Enable Store integration
         run: |
-          if [ "${{ github.event.inputs.enable_store }}" == "true" ]; then
+          if [ "${{ env.enable_store }}" == "true" ]; then
             # 插入到自动生成段内(自动维护结束标记之前), 避免落到 imm 固定段之后
             sed -i '/# ============ 自动维护结束 ============/i CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-store"' shell/custom-packages.sh
             echo "✅ 已追加 luci-app-store"
@@ -85,8 +106,8 @@ jobs:
 
       - name: Validate PPPoE Inputs
         run: |
-          if [[ "${{ github.event.inputs.enable_pppoe }}" == "yes" ]]; then
-            if [[ -z "${{ github.event.inputs.pppoe_account }}" || -z "${{ github.event.inputs.pppoe_password }}" ]]; then
+          if [[ "${{ env.enable_pppoe }}" == "yes" ]]; then
+            if [[ -z "${{ env.pppoe_account }}" || -z "${{ env.pppoe_password }}" ]]; then
               echo "Error: PPPoE account and password must be provided when PPPoE is enabled!"
               exit 1
             fi
@@ -94,7 +115,7 @@ jobs:
 
       - name: ✅ 正在构建ImmortalWrt固件
         run: |
-          profile="${{ github.event.inputs.profile }}"
+          profile="${{ env.profile }}"
           case "$profile" in
             1G)
               ROOTFS_SIZE=1024
@@ -110,8 +131,8 @@ jobs:
               ;;
           esac
           echo "ROOTFS_SIZE=$ROOTFS_SIZE" >> $GITHUB_ENV
-          include_docker="${{ github.event.inputs.include_docker }}"
-          luci_version="${{ github.event.inputs.luci_version }}"
+          include_docker="${{ env.include_docker }}"
+          luci_version="${{ env.luci_version }}"
           echo "Building for rootfs_size: $profile"
           docker run --rm -i \
               --user root \
@@ -123,9 +144,9 @@ jobs:
               -v "${{ github.workspace }}/x86-64/build24.sh:/home/build/immortalwrt/build.sh" \
               -e PROFILE=$ROOTFS_SIZE \
               -e INCLUDE_DOCKER=$include_docker \
-              -e ENABLE_PPPOE=${{ github.event.inputs.enable_pppoe }} \
-              -e PPPOE_ACCOUNT=${{ github.event.inputs.pppoe_account }} \
-              -e PPPOE_PASSWORD=${{ github.event.inputs.pppoe_password }} \
+              -e ENABLE_PPPOE=${{ env.enable_pppoe }} \
+              -e PPPOE_ACCOUNT=${{ env.pppoe_account }} \
+              -e PPPOE_PASSWORD=${{ env.pppoe_password }} \
           immortalwrt/imagebuilder:x86-64-openwrt-${luci_version} /bin/bash -lc "set -o pipefail; /home/build/immortalwrt/build.sh 2>&1 | tee /tmp/imm_build.log"
          
 
@@ -142,7 +163,7 @@ jobs:
 
   build_installer_iso:
     runs-on: ubuntu-22.04
-    needs: build_immortalwrt
+    needs: [build_immortalwrt, gate]
 
     steps:
       - name: Download firmware artifact
@@ -165,6 +186,10 @@ jobs:
           firmware_file=$(ls *squashfs-combined-efi.img.gz)
           cd img-installer
           bash autobuild/autobuild.sh "../$firmware_file"
+
+      - name: 标注构建方式
+        run: |
+          printf '\n- 🏷️ **构建方式**: %s\n' "${{ needs.gate.outputs.build_label }}" >> "${{ github.workspace }}/img-installer/autobuild/info.md"
 
       - name: 🚀 上传 ISO 到 Release
         uses: softprops/action-gh-release@v3

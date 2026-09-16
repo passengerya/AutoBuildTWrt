@@ -1,0 +1,72 @@
+# 每日自动构建闸门(被各构建工作流复用):
+#   - 手动触发(workflow_dispatch): 始终放行, 标识「手动构建」
+#   - 自动触发(schedule / repository_dispatch store-synced):
+#       ① 读取仓库根目录 build-flags.conf 的集中开关, 未开启(=1)则跳过;
+#       ② 开启后若本工作流 20 小时内已有其它运行(手动或自动), 跳过,
+#          防止「Sync Store 完成后即刻触发」与「定时兜底」重复构建。
+name: AutoBuild Gate
+
+on:
+  workflow_call:
+    inputs:
+      flag_name:
+        description: 'build-flags.conf 中的开关名'
+        required: true
+        type: string
+      workflow_file:
+        description: '本构建工作流的文件名(用于当日去重)'
+        required: true
+        type: string
+    outputs:
+      should_build:
+        value: ${{ jobs.gate.outputs.should_build }}
+      build_label:
+        value: ${{ jobs.gate.outputs.build_label }}
+
+jobs:
+  gate:
+    runs-on: ubuntu-22.04
+    outputs:
+      should_build: ${{ steps.decide.outputs.should_build }}
+      build_label: ${{ steps.decide.outputs.build_label }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Decide
+        id: decide
+        env:
+          FLAG_NAME: ${{ inputs.flag_name }}
+          WF_FILE: ${{ inputs.workflow_file }}
+          EVENT: ${{ github.event_name }}
+        run: |
+          # 手动触发: 始终构建
+          if [ "$EVENT" = "workflow_dispatch" ]; then
+            echo "should_build=true" >> "$GITHUB_OUTPUT"
+            echo "build_label=手动构建 $(date -u '+%Y-%m-%d %H:%M UTC')" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # 自动触发: 读集中开关(build-flags.conf, KEY=value 格式)
+          flag="$(awk -F= -v k="$FLAG_NAME" '$1==k {print $2}' build-flags.conf | tail -1 | tr -d '[:space:]')"
+          if [ "$flag" != "1" ]; then
+            echo "⏭️ $FLAG_NAME=$flag (未开启), 跳过每日自动构建"
+            echo "should_build=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # 当日去重: 本工作流 20 小时内已有其它运行(手动或自动)则跳过
+          prev_created="$(curl -s -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/workflows/$WF_FILE/runs?per_page=10" \
+            | jq -r --argjson rid "$GITHUB_RUN_ID" '.workflow_runs[] | select(.id != $rid) | .created_at' | head -1)"
+          if [ -n "$prev_created" ]; then
+            age=$(( $(date -u +%s) - $(date -u -d "$prev_created" +%s) ))
+            if [ "$age" -lt 72000 ]; then
+              echo "⏭️ 本工作流 20 小时内已有运行($prev_created), 跳过自动构建"
+              echo "should_build=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+
+          echo "should_build=true" >> "$GITHUB_OUTPUT"
+          echo "build_label=每日自动构建 $(date -u '+%Y-%m-%d %H:%M UTC')" >> "$GITHUB_OUTPUT"
