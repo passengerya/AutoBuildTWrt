@@ -187,6 +187,17 @@ EOT
 
     uci commit nginx
     echo "fix quickfile nginx config" >>$LOGFILE
+else
+    # 无 quickfile/nginx 的系统若仍残留「nginx 接管」配置(从带 quickfile 的旧固件
+    # 保留配置升级而来), uhttpd 会一直处于禁用状态 → 网页服务整体消失。
+    # 清除接管标志并恢复 uhttpd(2026-09-16 用户工控机实测踩到)。
+    if [ "$(uci -q get nginx.global.uci_enable)" = "true" ]; then
+        uci set nginx.global.uci_enable='false'
+        uci commit nginx
+        /etc/init.d/uhttpd enable 2>/dev/null
+        /etc/init.d/uhttpd start 2>/dev/null
+        echo "fix stale nginx takeover, restore uhttpd" >>$LOGFILE
+    fi
 fi
 
 # 若安装了dockerd 则设置docker的防火墙规则
