@@ -96,7 +96,7 @@ checkout → 装 makeself → 下载 ipk 分平台目录 → apk 文件名规范
 ### 2.4 Release 与调度
 
 - 所有工作流上传到**同一个当日 tag**（`YYYY-MM-DD` 北京时间），softprops/action-gh-release 自动合并资产；
-- cron 全部在 UTC 22:00（北京 6:00）起，**分钟数错开**（0~20），避免并发抢 tag；
+- cron 全部在北京时间 06:00（UTC 22:00）起，**分钟数错开**（0~20），避免并发抢 tag；
 - **完成即通知（领导选举）**：每个上传工作流末尾有「Notify Sync Store」步骤——sleep 15s 让同期构建入队后，由「最新启动且仍在运行/排队」的运行向第三层发 repository_dispatch（event_type: builder-done）即时触发同步，确定性单通知（跨仓库 PAT 存于 secrets.SYNC_DISPATCH_TOKEN，未配置时跳过、依赖定时兜底）；
 - 注意事项（历史教训）：
   - 所有 GitHub API curl 必须带 `Authorization: token ${{ secrets.GITHUB_TOKEN }}`，否则会撞共享 IP 限流（60 次/小时）；
@@ -126,7 +126,7 @@ store/
 
 ### 3.2 触发与提交（.github/workflows/sync-store.yml）
 
-- 触发：①即时——第一层全部构建完成后发 repository_dispatch（types: `builder-done`）；②定时兜底 `0 23 * * *` UTC（北京 7:00，晚于第一层 6:00 的构建）；③手动 workflow_dispatch（可指定 `builder_repo`）；
+- 触发：①即时——第一层全部构建完成后发 repository_dispatch（types: `builder-done`）；②定时兜底 `0 23 * * *`（北京 07:00 = UTC 23:00，晚于第一层 06:00 的构建）；③手动 workflow_dispatch（可指定 `builder_repo`）；
 - 提交：`git add store/ shell/` → `sync: 从 <仓库> 同步 run 文件到内嵌 store (日期)`；
 - 只读默认分支（master）的 workflow 文件，改动需合并 master 才生效。
 
@@ -197,7 +197,7 @@ store/
 
 **每日自动构建（2026-09-17 起）**：
 - **集中开关**：仓库根目录 [build-flags.conf](build-flags.conf)，每工作流一行 `AUTO_BUILD_<机型>_<通道>=0/1`，改文件推 master 即生效；
-- **触发链**：每日定时同步（23:00 UTC）成功后发 `store-synced` → 开关开启的工作流**即刻构建**；各构建工作流另有 **23:40 UTC 定时兜底**（同步失败/漏发时仍会构建）；
+- **触发链**：每日定时同步（北京时间 07:00 = UTC 23:00）成功后发 `store-synced` → 开关开启的工作流**即刻构建**；各构建工作流另有 **北京时间 07:40（UTC 23:40）定时兜底**（同步失败/漏发时仍会构建）；
 - **去重**：同一工作流 20 小时内只自动构建一次（当日已手动构建过的自动跳过）；
 - **闸门**：[autobuild-gate.yml](.github/workflows/autobuild-gate.yml)（可复用工作流）统一裁决：手动触发始终放行并标识「手动构建」；自动触发读开关 + 去重后标识「每日自动构建」；标识与时间会追加到各机型的 Release 说明中，与手动构建区分；
 - **参数**：自动构建用各输入项的默认值；自定义参数请手动运行工作流。

@@ -43,7 +43,7 @@ jobs:
           # 手动触发: 始终构建
           if [ "$EVENT" = "workflow_dispatch" ]; then
             echo "should_build=true" >> "$GITHUB_OUTPUT"
-            echo "build_label=手动构建 $(date -u '+%Y-%m-%d %H:%M UTC')" >> "$GITHUB_OUTPUT"
+            echo "build_label=手动构建 $(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M') 北京时间" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -62,11 +62,12 @@ jobs:
           if [ -n "$prev_created" ]; then
             age=$(( $(date -u +%s) - $(date -u -d "$prev_created" +%s) ))
             if [ "$age" -lt 72000 ]; then
-              echo "⏭️ 本工作流 20 小时内已有运行($prev_created), 跳过自动构建"
+              prev_disp="$(TZ=Asia/Shanghai date -d "$prev_created" '+%Y-%m-%d %H:%M' 2>/dev/null || echo "$prev_created")"
+              echo "⏭️ 本工作流 20 小时内已有运行(北京时间 $prev_disp), 跳过自动构建"
               echo "should_build=false" >> "$GITHUB_OUTPUT"
               exit 0
             fi
           fi
 
           echo "should_build=true" >> "$GITHUB_OUTPUT"
-          echo "build_label=每日自动构建 $(date -u '+%Y-%m-%d %H:%M UTC')" >> "$GITHUB_OUTPUT"
+          echo "build_label=每日自动构建 $(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M') 北京时间" >> "$GITHUB_OUTPUT"

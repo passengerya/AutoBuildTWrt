@@ -27,7 +27,7 @@ jobs:
         run: |
           : "${KEEP_DAYS:=1}"
           THRESHOLD="$(date -u -d "${KEEP_DAYS} days ago" '+%Y-%m-%dT%H:%M:%SZ')"
-          echo "阈值时间(UTC)：$THRESHOLD"
+          echo "阈值时间(北京时间)：$(TZ=Asia/Shanghai date -d "${KEEP_DAYS} days ago" '+%Y-%m-%d %H:%M')"
 
           RUN_IDS=$(gh api -X GET "repos/${GITHUB_REPOSITORY}/actions/runs" \
                     --paginate -F per_page=100 \

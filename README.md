@@ -17,12 +17,12 @@
 
 | 特性 | 说明 |
 | --- | --- |
-| 🧩 第三方软件即时自动同步 | 上游软件包由 [CloudRunFilesBuilder](https://github.com/passengerya/CloudRunFilesBuilder) 每日打包，构建完成后即时通知（repository_dispatch）本仓库 Sync Store 同步进内嵌 `store/` 目录（23:00 UTC 定时兜底），**新版本软件当天即可用** |
+| 🧩 第三方软件即时自动同步 | 上游软件包由 [CloudRunFilesBuilder](https://github.com/passengerya/CloudRunFilesBuilder) 每日打包，构建完成后即时通知（repository_dispatch）本仓库 Sync Store 同步进内嵌 `store/` 目录（北京时间 07:00 定时兜底），**新版本软件当天即可用** |
 | ⚙️ 按需集成软件 | 在 `shell/custom-packages.sh` 中**取消注释**即可把软件装进固件（详见下文"如何开启第三方软件"） |
 | 📦 自定义固件大小 | 默认 1GB，可选 1G~4G；也可用分区扩容插件自行扩容 |
 | 🐳 可选预装 Docker | UI 勾选即可 |
 | 🏪 可选集成 iStore 商店 | UI 布尔开关控制 |
-| ⏰ 每日自动构建 | 集中开关控制（`build-flags.conf`），Sync Store 同步成功后即刻构建 + 23:40 UTC 定时兜底，Release 标注「每日自动构建/手动构建」区分 |
+| ⏰ 每日自动构建 | 集中开关控制（`build-flags.conf`），Sync Store 同步成功后即刻构建 + 北京时间 07:40 定时兜底，Release 标注「每日自动构建/手动构建」区分 |
 | 🌐 支持 24.10.x 与 25.12.x | 两条软件通道严格分离（opkg/ipk 与 apk），互不干扰 |
 | 📡 多机型 | x86-64（含 ISO 安装器）、rockchip、armsr-armv8、sunxi、N1、无线路由器（MTK/高通/博通）、树莓派等，详见 [SUPPORT.md](SUPPORT.md) |
 | 🔧 自定义管理地址 | 多网口机型可在 UI 设置 LAN IP（默认 `192.168.100.1`） |
@@ -126,10 +126,10 @@ AutoBuildTWrt/
 ## ⏰ 每日自动构建
 
 1. 编辑仓库根目录的 **[build-flags.conf](build-flags.conf)**，把想自动构建的机型开关改为 `1`（`AUTO_BUILD_<机型>_<通道>=1`），推送到 master 即生效；
-2. 触发链：每天 23:00 UTC（北京 07:00）定时同步内嵌 store **成功后即刻触发**自动构建；若同步失败/漏发，各构建工作流还有 **23:40 UTC（北京 07:40）定时兜底**；
+2. 触发链：每天北京时间 07:00（UTC 23:00）定时同步内嵌 store **成功后即刻触发**自动构建；若同步失败/漏发，各构建工作流还有 **北京时间 07:40（UTC 23:40）定时兜底**；
 3. 去重：同一工作流 20 小时内只自动构建一次，当日已手动构建过的自动跳过；
 4. 参数：自动构建使用各输入项的默认值（如需自定义请手动运行工作流）；
-5. 区分：Release 说明会标注 **「每日自动构建」或「手动构建」+ UTC 时间**。
+5. 区分：Release 说明会标注 **「每日自动构建」或「手动构建」+ 北京时间**。
 
 ## ✅ 如何开启软件（两种来源）
 

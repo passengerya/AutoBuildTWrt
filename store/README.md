@@ -53,9 +53,9 @@ store/
 
 **触发**：`.github/workflows/sync-store.yml`
 - 即时：上游 builder 全部构建完成后发 repository_dispatch（event_type: `builder-done`）
-- 定时兜底：每天 23:00 UTC（北京时间 7:00，晚于上游 6:00 的每日构建）
+- 定时兜底：每天北京时间 07:00（UTC 23:00，晚于上游 06:00 的每日构建）
 - 手动：workflow_dispatch（可指定其它源仓库）
-- **下游动作**：仅「定时触发」的同步成功后发 repository_dispatch（`store-synced`）通知各构建工作流执行每日自动构建（开关见仓库根目录 `build-flags.conf`；构建工作流另有 23:40 UTC 定时兜底）
+- **下游动作**：仅「定时触发」的同步成功后发 repository_dispatch（`store-synced`）通知各构建工作流执行每日自动构建（开关见仓库根目录 `build-flags.conf`；构建工作流另有北京时间 07:40 = UTC 23:40 定时兜底）
 
 > 本目录只由 `sync-store` 工作流自动更新，**不要手动修改**；如需人工新增 ipk，按应用建同名子目录放入即可。
 
