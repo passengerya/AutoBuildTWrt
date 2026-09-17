@@ -201,7 +201,7 @@ store/
 - **去重**：同一工作流 20 小时内只自动构建一次（当日已手动构建过的自动跳过）；
 - **闸门**：[autobuild-gate.yml](.github/workflows/autobuild-gate.yml)（可复用工作流）统一裁决：手动触发始终放行并标识「手动构建」；自动触发读开关 + 去重后标识「每日自动构建」；标识与时间会追加到各机型的 Release 说明中，与手动构建区分；
 - **参数**：自动构建用各输入项的默认值；自定义参数请手动运行工作流。
-- **发布不覆盖**（2026-09-17 起）：上传前把固件按构建时间重命名（文件名插入 `-YYYYMMDD-HHMM` 北京时间时间戳，如 `immortalwrt-24.10.6-x86-64-generic-squashfs-combined-efi-20260917-0740.img.gz`），一个固件对应一个文件；Release 说明中另有「构建方式 + 时间」标注。上传后自动清理：每个 Release 保留**最新 20 个**固件文件（gh api 按 updated_at 排序删除第 21 个起，用户确认的方案 B），防止无限增长撞 GitHub 容量限制。
+- **发布不覆盖**（2026-09-17 起）：上传前把固件按构建时间重命名（文件名插入 `-YYYYMMDD-HHMM` 北京时间时间戳，如 `immortalwrt-24.10.6-x86-64-generic-squashfs-combined-efi-20260917-0740.img.gz`），一个固件对应一个文件；Release 说明中另有「构建方式 + 时间」标注。上传后自动清理：每个 Release 保留**最新 20 个**固件文件（gh api 按 updated_at 排序删除第 21 个起，用户确认的方案 B），防止无限增长撞 GitHub 容量限制。**重命名必须 `sudo mv`**：bin/targets 下固件由容器内 root 生成（docker `--user root` + `-v` 挂载），runner 用户对宿主侧文件无写权限（验证构建 #27 实测 Permission denied）；上传步骤只读不受影响
 
 **统一规范**（全部工作流已应用）：
 - 输入引用统一经**工作流级 env**（`env.xxx`，默认值取输入项 default）——自动触发时输入为空也始终有值；
