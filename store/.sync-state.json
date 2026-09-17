@@ -1,6 +1,6 @@
 {
   "misses": {
-    "luci-theme-shadcn-0.5.0-r20260830_all.run": 106
+    "luci-theme-shadcn-0.5.0-r20260830_all.run": 108
   },
   "stale": [
     "luci-theme-shadcn-0.5.0-r20260830_all.run"
