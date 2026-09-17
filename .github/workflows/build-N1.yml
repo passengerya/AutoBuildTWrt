@@ -345,3 +345,14 @@ jobs:
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 清理旧固件(Release 保留最新 20 个)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag='phicomm-n1'
+          gh api "repos/$GITHUB_REPOSITORY/releases/tags/$tag" --jq '.assets[] | [.id, .updated_at] | @tsv' \
+            | sort -k2 -r | tail -n +21 | cut -f1 | while read -r id; do
+              [ -n "$id" ] || continue
+              gh api -X DELETE "repos/$GITHUB_REPOSITORY/releases/assets/$id" >/dev/null
+              echo "🗑️ 已删除旧固件 asset $id"
+            done
