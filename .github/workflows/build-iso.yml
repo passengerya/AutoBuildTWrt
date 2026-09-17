@@ -187,6 +187,22 @@ jobs:
           cd img-installer
           bash autobuild/autobuild.sh "../$firmware_file"
 
+      - name: 固件按构建时间重命名(不覆盖历史固件)
+        run: |
+          ts="$(TZ=Asia/Shanghai date '+%Y%m%d-%H%M')"
+          for f in img-installer/output/custom-installer-x86_64.iso; do
+            [ -f "$f" ] || continue
+            case "$f" in
+              *.img.gz) mv "$f" "${{f%.img.gz}}-$ts.img.gz" ;;
+              *.tar.gz) mv "$f" "${{f%.tar.gz}}-$ts.tar.gz" ;;
+              *.iso)    mv "$f" "${{f%.iso}}-$ts.iso" ;;
+              *.qcow2)  mv "$f" "${{f%.qcow2}}-$ts.qcow2" ;;
+              *.vmdk)   mv "$f" "${{f%.vmdk}}-$ts.vmdk" ;;
+              *)        mv "$f" "${{f%.*}}-$ts.${{f##*.}}" ;;
+            esac
+            echo "已重命名: $f"
+          done
+
       - name: 标注构建方式
         run: |
           printf '\n- 🏷️ **构建方式**: %s\n' "${{ needs.gate.outputs.build_label }}" >> "${{ github.workspace }}/img-installer/autobuild/info.md"
