@@ -145,7 +145,7 @@ jobs:
       - name: 固件按构建时间重命名(不覆盖历史固件)
         run: |
           ts="$(TZ=Asia/Shanghai date '+%Y%m%d-%H%M')"
-          for f in ${{ github.workspace }}/bin/targets/sunxi/cortexa53/*squashfs-sdcard.img.gz; do
+          for f in ${{ github.workspace }}/bin/targets/sunxi/cortexa53/*squashfs-sdcard*.img.gz; do
             [ -f "$f" ] || continue
             case "$f" in
               *.img.gz) sudo mv "$f" "${f%.img.gz}-$ts.img.gz" ;;
@@ -169,7 +169,7 @@ jobs:
           name: ImmortalWrt-sunxi-cortexa53
           body_path: ${{ github.workspace }}/sunxi-cortexa53/info.md
           files: |
-            ${{ github.workspace }}/bin/targets/sunxi/cortexa53/*squashfs-sdcard.img.gz
+            ${{ github.workspace }}/bin/targets/sunxi/cortexa53/*squashfs-sdcard*.img.gz
           fail_on_unmatched_files: true
           token: ${{ secrets.GITHUB_TOKEN }}
         env:

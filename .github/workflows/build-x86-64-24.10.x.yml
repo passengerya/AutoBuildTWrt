@@ -210,7 +210,7 @@ jobs:
       - name: 固件按构建时间重命名(不覆盖历史固件)
         run: |
           ts="$(TZ=Asia/Shanghai date '+%Y%m%d-%H%M')"
-          for f in ${{ github.workspace }}/bin/targets/x86/64/*squashfs-combined-efi.img.gz; do
+          for f in ${{ github.workspace }}/bin/targets/x86/64/*squashfs-combined-efi*.img.gz; do
             [ -f "$f" ] || continue
             case "$f" in
               *.img.gz) sudo mv "$f" "${f%.img.gz}-$ts.img.gz" ;;
@@ -233,7 +233,7 @@ jobs:
           tag_name: Autobuild-x86-64
           body_path: ${{ github.workspace }}/router-info.md
           files: |
-            ${{ github.workspace }}/bin/targets/x86/64/*squashfs-combined-efi.img.gz
+            ${{ github.workspace }}/bin/targets/x86/64/*squashfs-combined-efi*.img.gz
           fail_on_unmatched_files: true
           token: ${{ secrets.GITHUB_TOKEN }}
         env:

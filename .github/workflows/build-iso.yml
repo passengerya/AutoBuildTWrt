@@ -213,7 +213,7 @@ jobs:
           tag_name: "Custom-Installer-x86_64-ISO"
           body_path: "${{ github.workspace }}/img-installer/autobuild/info.md"
           files: |
-            img-installer/output/custom-installer-x86_64.iso
+            img-installer/output/custom-installer-x86_64*.iso
           fail_on_unmatched_files: true
           token: "${{ secrets.GITHUB_TOKEN }}"
       - name: 清理旧固件(Release 保留最新 20 个)
