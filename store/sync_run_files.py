@@ -88,6 +88,7 @@ APP_META = {
     "luci-app-amlogic": {"cn": "晶晨宝盒", "desc": "晶晨机顶盒管理(仅 ARM64 平台)", "src": "ophub/luci-app-amlogic", "cat": "设备管理"},
     "luci-app-aurora-config": {"cn": "极光配置中心", "desc": "Aurora 主题配置中心(提供 /etc/config/aurora, 与主题配套启用)", "src": "eamonxg/luci-app-aurora-config", "cat": "系统与界面"},
     "luci-app-nekobox": {"cn": "NekoBox代理", "desc": "NekoBox 代理工具", "src": "Thaolga/openwrt-nekobox", "cat": "代理工具"},
+    "luci-app-oaf": {"cn": "应用过滤", "desc": "OpenAppFilter 应用过滤(基于 nftables, 程序管控/游戏加速)", "src": "destan19/OpenAppFilter", "cat": "网络服务"},
     "luci-app-store": {"cn": "iStore商店", "desc": "iStore 应用商店", "src": "linkease/istore", "cat": "设备管理"},
     "luci-app-tailscale-community": {"cn": "Tailscale组网", "desc": "Tailscale 组网(Community 版)", "src": "Tokisaki-Galaxy/luci-app-tailscale-community", "cat": "网络服务"},
     "luci-app-uninstall": {"cn": "高级卸载", "desc": "彻底卸载插件的工具", "src": "上游 run 直采", "cat": "系统与界面"},
