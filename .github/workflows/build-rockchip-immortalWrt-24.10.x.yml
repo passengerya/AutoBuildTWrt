@@ -254,7 +254,7 @@ jobs:
           {
             echo ""
             echo "## 固件基础信息"
-            echo "- **固件**: `$fw`"
+            echo "- **固件**: $fw"
             echo "- **后台地址**: ${{ env.custom_router_ip }}"
             echo "- **用户名**: root"
             echo "- **密码**: 无"
