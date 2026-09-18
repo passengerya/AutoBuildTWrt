@@ -6,6 +6,8 @@
 # ==========================================================
 
 # ============ 以下由 Sync Store 自动维护(根据内嵌 store 实际内容生成) ============
+# ⚠️ 冲突警告: argon 与 luci-theme-aurora 同时开启, 可能互相冲突, 请只保留其中一个
+
 # ───────────────────── 代理工具 ─────────────────────
 # 自动生成: clashoo | Clashoo代理 | 代理工具(与 nikki 冲突勿同时开启) | 2026.09.14 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES clashoo luci-app-clashoo luci-i18n-clashoo-zh-cn"
