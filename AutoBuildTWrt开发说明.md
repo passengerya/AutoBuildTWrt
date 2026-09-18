@@ -54,13 +54,13 @@
 
 ## 2. 第一层 CloudRunFilesBuilder
 
-### 2.1 工作流清单（51 个）
+### 2.1 工作流清单（53 个）
 
-**24.10 ipk 通道（29 个）**：adguardhome、argon、aurora-theme、aurora-config、shadcn、advancedplus、amlogic（仅 ARM64）、bandix、clashoo、dufs、easytier、homeproxy、lucky、momo、mosdns、nekobox、nikki、openclash(oc)、openlist2、openwrt-daede、passwall(main)、passwall2(pw2)、quickfile(24-quickfile)、rtp2httpd、sing-box(singbox)、ssr-plus(ssrp)、tailscale-community、iStore(store)、高级卸载(advance_uninstall)
+**24.10 ipk 通道（30 个）**：adguardhome、argon、aurora-theme、aurora-config、shadcn、oaf、advancedplus、amlogic（仅 ARM64）、bandix、clashoo、dufs、easytier、homeproxy、lucky、momo、mosdns、nekobox、nikki、openclash(oc)、openlist2、openwrt-daede、passwall(main)、passwall2(pw2)、quickfile(24-quickfile)、rtp2httpd、sing-box(singbox)、ssr-plus(ssrp)、tailscale-community、iStore(store)、高级卸载(advance_uninstall)
 
-**25.12 apk 通道（19 个）**：argon25、build-pw、mosdns25、oc25、pw2-25、ssrp25、store25、25-quickfile、25-singbox、25-openwrt-daede、25-clashoo、25-rtp2httpd、25-advancedplus、25-aurora-theme、25-aurora-config、25-amlogic、25-tailscale-community、25-easytier、25-shadcn
+**25.12 apk 通道（20 个）**：argon25、build-pw、mosdns25、oc25、pw2-25、ssrp25、store25、25-quickfile、25-singbox、25-openwrt-daede、25-clashoo、25-rtp2httpd、25-advancedplus、25-aurora-theme、25-aurora-config、25-oaf、25-amlogic、25-tailscale-community、25-easytier、25-shadcn
 
-> aurora 全系（主题+配置中心+语言包）2026-09-18 按用户要求恢复：luci-theme-aurora 为主题、luci-app-aurora-config 为配置中心（含 zh-cn 语言包）。此前 2026-09-16 曾整体下架（见防错清单 #33/#34 的历史记录）。
+> aurora 全系（主题+配置中心+语言包）2026-09-18 按用户要求恢复：luci-theme-aurora 为主题、luci-app-aurora-config 为配置中心（含 zh-cn 语言包）。此前 2026-09-16 曾整体下架（见防错清单 #33/#34 的历史记录）。同日新增 **oaf 应用过滤**（destan19/OpenAppFilter，24 ipk+25 apk 双通道，含 zh-cn 语言包）——注意上游 v7.x 起只发 apk，24.10 工作流自动选择「最近 20 个 release 中含 ipk 资产的最新一个」；25.12 的 zh-cn apk 名无版本后缀，匹配模式需放宽。
 
 **维护（3 个）**：clean（旧运行记录）、clean-release（旧 Release）、remove（全部 tag）
 
