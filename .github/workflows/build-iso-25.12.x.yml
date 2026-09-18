@@ -190,12 +190,31 @@ jobs:
             echo "REL_TAG=${{ env.TAG_BASE }}-$d" >> "$GITHUB_ENV"
           fi
           echo "Release 标签: $REL_TAG"
+          echo "BUILD_TIME=$(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M') 北京时间" >> "$GITHUB_ENV"
         env:
           TAG_BASE: Custom-Installer-x86_64-ISO
 
-      - name: 标注构建方式
+      - name: 生成固件说明(Release Notes)
         run: |
-          printf '\n- 🏷️ **构建方式**: %s\n' "${{ needs.gate.outputs.build_label }}" >> "${{ github.workspace }}/img-installer/autobuild/info.md"
+          fw="$(ls img-installer/output/custom-installer-x86_64.iso 2>/dev/null | grep -E '\.(img|bin|iso|qcow2|vmdk)(\.gz)?$' | xargs -n1 basename 2>/dev/null | tr '\n' ' ')"
+          pkgs="$(grep -m1 '第三方软件包:' "$RUNNER_TEMP"/build-logs/*.log 2>/dev/null | sed 's/^.*第三方软件包://' | tr -s ' ' | xargs 2>/dev/null || true)"
+          if [ -z "$pkgs" ]; then
+            pkgs="$(grep '^CUSTOM_PACKAGES=' shell/apk-custom-packages.sh 2>/dev/null | sed 's/^CUSTOM_PACKAGES="\$CUSTOM_PACKAGES //; s/"$//' | tr '\n' ' ')"
+          fi
+          [ -n "$pkgs" ] || pkgs="未记录"
+          {
+            echo ""
+            echo "## 固件基础信息"
+            echo "- **固件**: `$fw`"
+            echo "- **用户名**: root"
+            echo "- **密码**: 无"
+            echo "- **docker**: ${{ env.include_docker == 'yes' && '带docker' || '不带docker' }}"
+            echo "- **luci 版本**: ${{ env.luci_version }}"
+            echo "- **软件包空间**: ${{ env.profile }}"
+            echo "- **构建时间**: $BUILD_TIME"
+            echo "- **构建方式**: ${{ needs.gate.outputs.build_mode }}"
+            echo "- **第三方插件**: $pkgs"
+          } >> "${{ github.workspace }}/img-installer/autobuild/info.md"
 
       - name: 🚀 上传 ISO 到 Release
         uses: softprops/action-gh-release@v3

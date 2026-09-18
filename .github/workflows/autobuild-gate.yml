@@ -20,15 +20,15 @@ on:
     outputs:
       should_build:
         value: ${{ jobs.gate.outputs.should_build }}
-      build_label:
-        value: ${{ jobs.gate.outputs.build_label }}
+      build_mode:
+        value: ${{ jobs.gate.outputs.build_mode }}
 
 jobs:
   gate:
     runs-on: ubuntu-22.04
     outputs:
       should_build: ${{ steps.decide.outputs.should_build }}
-      build_label: ${{ steps.decide.outputs.build_label }}
+      build_mode: ${{ steps.decide.outputs.build_mode }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -43,7 +43,7 @@ jobs:
           # 手动触发: 始终构建
           if [ "$EVENT" = "workflow_dispatch" ]; then
             echo "should_build=true" >> "$GITHUB_OUTPUT"
-            echo "build_label=手动构建 $(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M') 北京时间" >> "$GITHUB_OUTPUT"
+            echo "build_mode=手动构建" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -70,4 +70,4 @@ jobs:
           fi
 
           echo "should_build=true" >> "$GITHUB_OUTPUT"
-          echo "build_label=每日自动构建 $(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M') 北京时间" >> "$GITHUB_OUTPUT"
+          echo "build_mode=每日自动构建" >> "$GITHUB_OUTPUT"
