@@ -263,10 +263,88 @@ class MaintainListsTests(unittest.TestCase):
         state = {"misses": {}, "stale": []}
         for _ in range(srf.STALE_THRESHOLD):
             srf.mark_stale_runs(set(), state)
-        self.assertIn(run_name, state["stale"])
-        # 上游重新出现后解除停更
+        self.assertIn("ipk|old-app", state["stale"])
+        # 上游以同名资产重新出现后解除停更
         srf.mark_stale_runs({run_name}, state)
-        self.assertNotIn(run_name, state["stale"])
+        self.assertNotIn("ipk|old-app", state["stale"])
+        self.assertNotIn("ipk|old-app", state["misses"])
+
+    def test_stale_clears_on_version_bump_return(self):
+        # 回归: 旧实现按 .run 文件名登记, 应用带新版本(新文件名)回归时,
+        # cleanup_old 先删旧文件, 旧文件名的停更标记成孤儿永不解除
+        os.makedirs(srf.ARCH_DIRS["x86"], exist_ok=True)
+        old = os.path.join(srf.ARCH_DIRS["x86"], "old-app_1.0_x86_64.run")
+        with open(old, "w", encoding="utf-8") as f:
+            f.write("")
+
+        state = {"misses": {}, "stale": []}
+        for _ in range(srf.STALE_THRESHOLD):
+            srf.mark_stale_runs(set(), state)
+        self.assertIn("ipk|old-app", state["stale"])
+
+        # 模拟同步: 旧文件被 cleanup_old 删除, 新版本资产(新文件名)落盘
+        os.remove(old)
+        new = "old-app_1.1_x86_64.run"
+        with open(os.path.join(srf.ARCH_DIRS["x86"], new), "w", encoding="utf-8") as f:
+            f.write("")
+        srf.mark_stale_runs({new}, state)
+        self.assertNotIn("ipk|old-app", state["stale"])
+        self.assertNotIn("ipk|old-app", state["misses"])
+
+    def test_mark_stale_counts_once_per_app_per_run(self):
+        # 同一应用 x86 + arm64 两份文件, 每轮同步缺失只计一次
+        for arch in ("x86", "arm64"):
+            os.makedirs(srf.ARCH_DIRS[arch], exist_ok=True)
+        with open(os.path.join(srf.ARCH_DIRS["x86"], "foo_1.0_x86_64.run"), "w", encoding="utf-8") as f:
+            f.write("")
+        with open(os.path.join(srf.ARCH_DIRS["arm64"], "foo_1.0_aarch64_generic.run"), "w", encoding="utf-8") as f:
+            f.write("")
+
+        state = {"misses": {}, "stale": []}
+        srf.mark_stale_runs(set(), state)
+        srf.mark_stale_runs(set(), state)
+        self.assertEqual(state["misses"].get("ipk|foo"), 2)
+        self.assertNotIn("ipk|foo", state["stale"])
+        # 第 3 次才标记停更
+        srf.mark_stale_runs(set(), state)
+        self.assertIn("ipk|foo", state["stale"])
+
+    def test_state_migration_from_filename_keys(self):
+        # 旧格式 state(按 .run 文件名登记)加载时自动迁移为「通道|应用」标识
+        state_file = srf.STATE_FILE
+        with open(state_file, "w", encoding="utf-8") as f:
+            f.write(
+                '{"misses": {"luci-theme-shadcn-0.5.0-r20260830_all.run": 148},'
+                ' "stale": ["luci-theme-shadcn-0.5.0-r20260830_all.run"]}'
+            )
+        state = srf.load_state()
+        self.assertEqual(state["stale"], ["ipk|luci-theme-shadcn"])
+        self.assertEqual(state["misses"], {"ipk|luci-theme-shadcn": 148})
+
+    def test_stale_label_in_generated_lists(self):
+        # 停更应用在 README 表格与开关文件注释中带「上游停更」说明(文件仍保留)
+        self._write_fixtures(
+            ipk_enabled={},
+            ipk_disabled={"old-app": ["old-app"]},
+        )
+        with open(srf.STATE_FILE, "w", encoding="utf-8") as f:
+            f.write('{"misses": {}, "stale": ["ipk|old-app"]}')
+        summary = {
+            ("ipk", "old-app"): {
+                "version": "1.0",
+                "archs": {"x86"},
+                "ipks": {"old-app_1.0_x86_64.ipk"},
+                "apks": set(),
+            },
+        }
+        srf.maintain_lists(summary, valid_names=None, dry_run=False)
+        readme = self._read("store/README.md")
+        ipk_sh = self._read("shell/custom-packages.sh")
+        self.assertIn("⚠️上游停更", readme)
+        self.assertIn("上游停更(保留旧版)", ipk_sh)
+        # 列表条目本身仍在(保留旧版, 不删除)
+        self.assertIn("old-app", readme)
+        self.assertIn("old-app", ipk_sh)
 
 
 if __name__ == "__main__":

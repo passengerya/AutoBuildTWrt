@@ -20,6 +20,11 @@ store 中的所有文件均来源于 passengerya/CloudRunFilesBuilder。
     各自独立选择变体, 两版 .run 在 store 中共存、互不挤占
   - 24 对应 shell/custom-packages.sh(opkg 构建), 25 对应 shell/apk-custom-packages.sh(apk 构建)
 
+同步选源:
+  - 每次取上游最新 Release(跳过 draft/prerelease); 缺失应用不回落旧 Release,
+    由阶段三的停更机制接管(连续 3 次不在最新 Release -> 标记停更, 文件保留)
+  - 最新 Release 尚无 .run 资产时(刚建好/上传中途), 跳过本次 run 同步且不判定停更
+
 同步完成后, 删除同一应用、同一架构、同日期前缀下的旧版本 .run 文件
 (24_ 只删 24_, 25- 只删 25-, 避免同步 apk 版时误删 ipk 版),
 只清理 run/x86、run/arm64 根目录下的 .run。
@@ -38,7 +43,7 @@ store 中的所有文件均来源于 passengerya/CloudRunFilesBuilder。
   - 生成段内部按 APP_META 的 cat 字段分大分类(见 CATEGORY_ORDER), 新应用
     填好 cat 即自动归类, 分类在每次同步后保持一致
   - 生成段中已取消注释(启用)的应用在后续同步中保留启用状态
-  - 连续 3 次同步不在上游 Release 的应用标记为「停更」: .run 与软件包目录
+  - 连续 3 次同步不在上游最新 Release 的应用标记为「停更」: .run 与软件包目录
     全部保留, 仅在 README 表格版本列与生成段注释中附加"上游停更(保留旧版)"
     说明; 应用重新出现在 Release 时自动解除标记
 
@@ -129,8 +134,8 @@ BASE_ENABLED_APPS = {"argon"}
 # 与 CloudRunFilesBuilder f82f32f 保持一致的冗余包剔除名单:
 # easytier-noweb 与 easytier 提供相同二进制、luci-i18n-easytier-zh-cn 的文件
 # 已由 luci-app-easytier 内置, 同时安装必然 check_data_file_clashes 导致构建失败。
-# builder 新 Release 已不再打包, 但同步按「资产最多的 Release」选择时可能仍拿到
-# 旧资产, 故同步侧兜底剔除, 直到上游资产完全替换为止。
+# builder f82f32f 起新 Release 已不再打包; 同步侧保留兜底剔除,
+# 防止 store 中既有历史旧 .run 或上游残留资产把冲突包带入构建。
 EXCLUDED_PACKAGE_RE = [
     re.compile(r"^easytier-noweb[-_].*\.(ipk|apk)$"),
     re.compile(r"^luci-i18n-easytier-zh-cn[-_].*\.(ipk|apk)$"),
@@ -495,10 +500,37 @@ def load_state():
     if os.path.isfile(STATE_FILE):
         try:
             with open(STATE_FILE, encoding="utf-8") as f:
-                return json.load(f)
+                return normalize_state(json.load(f))
         except Exception:
             pass
     return {"misses": {}, "stale": []}
+
+
+def stale_identity(channel, app):
+    """停更登记的稳定标识: 「通道|应用」, 与 .run 文件名无关。
+
+    文件名随版本升级变化, 按文件名登记会在应用带新版本回归时
+    留下无法解除的孤儿标记(旧文件已被 cleanup_old 删除)。
+    """
+    return "%s|%s" % (channel, app)
+
+
+def normalize_state(state):
+    """旧版 state 按 .run 文件名登记 misses/stale, 新版按 stale_identity 标识。
+
+    加载旧格式时自动迁移: 文件名 -> 「通道|应用」; misses 多个旧键
+    映射到同一标识时取最大计数(连续缺失次数不因迁移而丢失)。
+    """
+    state["stale"] = sorted(
+        {n if "|" in n else stale_identity(channel_of(n), app_dir_of(n))
+         for n in state.get("stale", [])}
+    )
+    misses = {}
+    for k, v in state.get("misses", {}).items():
+        key = k if "|" in k else stale_identity(channel_of(k), app_dir_of(k))
+        misses[key] = max(misses.get(key, 0), v)
+    state["misses"] = misses
+    return state
 
 
 def save_state(state, dry_run=False):
@@ -533,17 +565,25 @@ def read_enabled_apps(path):
 
 
 def mark_stale_runs(valid_names, state, dry_run=False):
-    """连续 3 次同步不在上游 Release 的应用标记为「停更」: 保留文件与列表, 仅在注释中附加停更说明。
+    """连续 3 次同步不在上游最新 Release 的应用标记为「停更」: 保留文件与列表, 仅在注释中附加停更说明。
 
     停更应用重新出现在 Release 时自动解除标记(恢复更新)。
+    登记按「通道|应用」标识而非 .run 文件名: 应用带新版本(新文件名)回归
+    时同样能解除, 同一应用两个架构的文件每轮只计一次缺失。
 
     valid_names: 本次 Release 的全部 .run 资产名(无法获取 Release 时应传 None 跳过判定)。
     """
     if valid_names is None:
-        print("[维护] 未获取到上游 Release 信息, 跳过停更判定")
+        print("[维护] 未取得上游最新 Release 资产清单(无 Release/无 .run 资产), 跳过停更判定")
         return
-    misses = state.setdefault("misses", {})
-    stale = set(state.get("stale", []))
+    # 本次 Release 出现的应用, 按(通道, 应用)标识, 与文件名无关
+    present = set()
+    for name in valid_names:
+        app = app_dir_of(name)
+        if app:
+            present.add((channel_of(name), app))
+    # 本地 store 现有的应用(同一应用两个架构的文件只计一次)
+    local = set()
     for arch, d in sorted(ARCH_DIRS.items()):
         if not os.path.isdir(d):
             continue
@@ -551,17 +591,24 @@ def mark_stale_runs(valid_names, state, dry_run=False):
             p = os.path.join(d, f)
             if not f.endswith(".run") or not os.path.isfile(p):
                 continue
-            if f in valid_names:
-                if misses.pop(f, None) is not None:
-                    print("[%s] 应用恢复更新: %s" % (arch, f))
-                if f in stale:
-                    stale.discard(f)
-                    print("[%s] 解除停更标记: %s" % (arch, f))
-                continue
-            misses[f] = misses.get(f, 0) + 1
-            if misses[f] >= STALE_THRESHOLD and f not in stale:
-                stale.add(f)
-                print("[%s] 标记停更(连续 %d 次不在 Release): %s" % (arch, STALE_THRESHOLD, f))
+            app = app_dir_of(f)
+            if app:
+                local.add((channel_of(f), app))
+    misses = state.setdefault("misses", {})
+    stale = set(state.get("stale", []))
+    for ch, app in sorted(local):
+        ident = stale_identity(ch, app)
+        if (ch, app) in present:
+            if misses.pop(ident, None) is not None:
+                print("[维护] 应用恢复更新: %s (%s 通道)" % (app, ch))
+            if ident in stale:
+                stale.discard(ident)
+                print("[维护] 解除停更标记: %s (%s 通道)" % (app, ch))
+            continue
+        misses[ident] = misses.get(ident, 0) + 1
+        if misses[ident] >= STALE_THRESHOLD and ident not in stale:
+            stale.add(ident)
+            print("[维护] 标记停更(连续 %d 次不在最新 Release): %s (%s 通道)" % (STALE_THRESHOLD, app, ch))
     state["stale"] = sorted(stale)
 
 
@@ -576,7 +623,7 @@ def maintain_lists(summary, valid_names, dry_run=False):
     print("== 阶段三: 维护软件列表 ==")
     state = load_state()
     mark_stale_runs(valid_names, state, dry_run=dry_run)
-    stale_keys = {(channel_of(n), app_dir_of(n)) for n in state.get("stale", [])}
+    stale_keys = {tuple(n.split("|", 1)) for n in state.get("stale", [])}
 
     # 汇总表: 按(应用, 通道)排序
     rows = []
@@ -659,7 +706,7 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="只打印将执行的操作, 不下载、不删除")
     args = parser.parse_args()
 
-    valid_names = None  # 上游 Release 的全部 .run 资产名; 无法获取时为 None(跳过下线清理)
+    valid_names = None  # 上游最新 Release 的全部 .run 资产名; 无法获取时为 None(跳过停更判定)
     try:
         releases = api_get("https://api.github.com/repos/%s/releases?per_page=5" % BUILDER_REPO)
     except urllib.error.HTTPError as e:
@@ -668,24 +715,25 @@ def main():
         else:
             raise
     else:
+        # 直接取最新 Release(跳过 draft/prerelease, per_page=5 给过滤留余量):
+        # builder 全部构建完成后发 builder-done 通知触发同步, 此时最新 Release
+        # 已完整; 每日 07:00 定时兜底时当日构建也已结束。
+        # 缺失应用不回落旧 Release, 由阶段三的停更机制接管(连续 3 次不在
+        # 最新 Release -> 标记「上游停更」, 文件保留, 重新出现自动解除)。
+        releases = [r for r in releases if not r.get("draft") and not r.get("prerelease")]
         if not releases:
-            print("源仓库 %s 暂无 release, 跳过 run 同步。" % BUILDER_REPO)
+            print("源仓库 %s 暂无正式 release, 跳过 run 同步。" % BUILDER_REPO)
         else:
-            # 从最近 5 个 Release 中选 .run 资产最多的那个:
-            # 每日 cron 分批上传时最新的 Release 可能还在填充中(资产不全),
-            # 直接取最新会把多数应用误判为缺失(误标停更)。
-            def run_count(r):
-                return sum(1 for a in r.get("assets", []) if a["name"].endswith(".run"))
-            release = max(releases, key=run_count)
-            print("使用 release: %s (%s, %d 个 .run 资产; 最新为 %s, %d 个)"
-                  % (release["tag_name"], release.get("name", ""), run_count(release),
-                     releases[0]["tag_name"], run_count(releases[0])))
-
+            release = releases[0]
             assets = [a for a in release.get("assets", []) if a["name"].endswith(".run")]
-            valid_names = {a["name"] for a in assets}
+            print("使用最新 release: %s (%s, %d 个 .run 资产)"
+                  % (release["tag_name"], release.get("name", ""), len(assets)))
             if not assets:
-                print("该 release 中没有 .run 资产, 跳过 run 同步。")
+                # 最新 Release 尚无 .run 资产(可能刚开始分批上传):
+                # 跳过 run 同步, 且不判定停更, 避免把尚未上传的应用误计缺失。
+                print("该 release 中没有 .run 资产, 跳过 run 同步(停更判定一并跳过)。")
             else:
+                valid_names = {a["name"] for a in assets}
                 run_sync(assets, args.dry_run)
 
     # 阶段二独立执行: 即使上游暂无新 .run 资产, 也要保持软件包目录与 .run 一致

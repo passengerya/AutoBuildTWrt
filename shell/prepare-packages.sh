@@ -107,8 +107,8 @@ find "$TEMP_DIR" -type f -name "*.ipk" -print >> "$CANDIDATE_LIST"
 find "$BASE_DIR" -mindepth 2 -maxdepth 2 -type f -name "*.ipk" ! -path "$TEMP_DIR/*" -print >> "$CANDIDATE_LIST"
 
 # 剔除冗余/冲突包(名单与 store/sync_run_files.py 的 EXCLUDED_PACKAGE_RE 保持一致):
-# 同步按「资产最多的 Release」选源, 可能拿到历史旧 .run(内含已被剔除的包,
-# 如 easytier-noweb), 这里兜底过滤, 防止其重新进入 packages/ 被烘焙。
+# store 中可能仍保留历史旧 .run(内含已被剔除的包, 如 easytier-noweb,
+# 在新资产同步前不会被替换), 这里兜底过滤, 防止其重新进入 packages/ 被烘焙。
 EXCLUDED_PKG_RE='^(easytier-noweb|luci-i18n-easytier-zh-cn)[-_].*\.ipk$'
 : > "$CANDIDATE_LIST.filtered"
 while IFS= read -r pkg; do
