@@ -86,10 +86,12 @@ APP_META = {
     "homeproxy": {"cn": "代理平台", "desc": "现代代理平台(基于 sing-box)", "src": "immortalwrt/homeproxy", "cat": "代理工具"},
     "luci-app-advancedplus": {"cn": "高级设置", "desc": "进阶设置(与 argon-config 冲突勿同时开启)", "src": "sirpdboy/luci-app-advancedplus", "cat": "系统与界面"},
     "luci-app-amlogic": {"cn": "晶晨宝盒", "desc": "晶晨机顶盒管理(仅 ARM64 平台)", "src": "ophub/luci-app-amlogic", "cat": "设备管理"},
+    "luci-app-aurora-config": {"cn": "极光配置中心", "desc": "Aurora 主题配置中心(提供 /etc/config/aurora, 与主题配套启用)", "src": "eamonxg/luci-app-aurora-config", "cat": "系统与界面"},
     "luci-app-nekobox": {"cn": "NekoBox代理", "desc": "NekoBox 代理工具", "src": "Thaolga/openwrt-nekobox", "cat": "代理工具"},
     "luci-app-store": {"cn": "iStore商店", "desc": "iStore 应用商店", "src": "linkease/istore", "cat": "设备管理"},
     "luci-app-tailscale-community": {"cn": "Tailscale组网", "desc": "Tailscale 组网(Community 版)", "src": "Tokisaki-Galaxy/luci-app-tailscale-community", "cat": "网络服务"},
     "luci-app-uninstall": {"cn": "高级卸载", "desc": "彻底卸载插件的工具", "src": "上游 run 直采", "cat": "系统与界面"},
+    "luci-theme-aurora": {"cn": "极光主题", "desc": "极光主题界面(需配套 luci-app-aurora-config 配置中心, 会接管 LuCI 菜单/路由, 谨慎启用)", "src": "eamonxg/luci-theme-aurora", "cat": "系统与界面"},
     "luci-theme-shadcn": {"cn": "Shadcn主题", "desc": "现代 Shadcn 风格界面主题(会接管 LuCI 菜单/路由, 24.10 下谨慎启用)", "src": "eamonxg/luci-theme-shadcn", "cat": "系统与界面"},
     "lucky": {"cn": "Lucky大吉", "desc": "端口转发/反向代理/内网穿透", "src": "gdy666/lucky via dl.openwrt.ai", "cat": "网络服务"},
     "momo": {"cn": "Momo代理", "desc": "基于 sing-box 的透明代理", "src": "nikkinikki-org/OpenWrt-momo", "cat": "代理工具"},
@@ -116,7 +118,7 @@ CONFLICT_GROUPS = [
     {"clashoo", "nikki"},
     {"luci-app-advancedplus", "argon"},
     {"quickfile", "luci-app-run"},
-    {"argon", "luci-theme-shadcn"},
+    {"argon", "luci-theme-aurora", "luci-theme-shadcn"},
 ]
 
 # 各机型 build 脚本默认都会加入 Argon; 生成段里即使没取消注释 argon,
@@ -133,12 +135,10 @@ EXCLUDED_PACKAGE_RE = [
     re.compile(r"^luci-i18n-easytier-zh-cn[-_].*\.(ipk|apk)$"),
 ]
 
-# 已下架应用(不再同步/解压/生成列表, 双通道生效): aurora 全系。
-# 2026-09-16 决定彻底移除 luci-theme-aurora 主题与 luci-app-aurora-config 配置中心
-# (及其语言包): 烘焙进固件的 aurora 主题渲染始终异常(顶部工具栏排版错乱/元素缺失,
-# 机制未明), 项目不再打包维护。builder 侧 4 个工作流已同步删除,
-# 此处兜底剔除历史 Release 中的旧资产。
-EXCLUDED_APPS = {"luci-app-aurora-config", "luci-theme-aurora"}
+# 已下架应用(不再同步/解压/生成列表, 双通道生效): 当前为空。
+# aurora 全系(主题+配置中心+语言包)已于 2026-09-18 按用户要求恢复
+# (luci-theme-aurora 为主题, luci-app-aurora-config 为配置中心)。
+EXCLUDED_APPS = set()
 
 
 def is_excluded_package(name):

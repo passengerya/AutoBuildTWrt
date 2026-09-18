@@ -693,11 +693,6 @@ jobs:
       - name: 生成固件说明(Release Notes)
         run: |
           fw="$(ls ${{ github.workspace }}/bin/targets/${{ env.platform }}/* 2>/dev/null | grep -E '\.(img|bin|iso|qcow2|vmdk)(\.gz)?$' | xargs -n1 basename 2>/dev/null | tr '\n' ' ')"
-          pkgs="$(grep -m1 '第三方软件包:' "$RUNNER_TEMP"/build-logs/*.log 2>/dev/null | sed 's/^.*第三方软件包://' | tr -s ' ' | xargs 2>/dev/null || true)"
-          if [ -z "$pkgs" ]; then
-            pkgs="$(grep '^CUSTOM_PACKAGES=' shell/apk-custom-packages.sh 2>/dev/null | sed 's/^CUSTOM_PACKAGES="\$CUSTOM_PACKAGES //; s/"$//' | tr '\n' ' ')"
-          fi
-          [ -n "$pkgs" ] || pkgs="未记录"
           {
             echo ""
             echo "## 固件基础信息"
@@ -709,7 +704,20 @@ jobs:
             echo "- **luci 版本**: ${{ env.luci_version }}"
             echo "- **构建时间**: $BUILD_TIME"
             echo "- **构建方式**: ${{ needs.gate.outputs.build_mode }}"
-            echo "- **第三方插件**: $pkgs"
+          # 第三方软件列表(启用应用 x store/README 自动表格, 同 7 列)
+          soft="$(awk '/^# 自动生成: /{app=$3} /自动维护结束/{app=""} /^CUSTOM_PACKAGES=/{if(app!="")print app}' shell/apk-custom-packages.sh 2>/dev/null | tr '\n' ' ')"
+          {
+            echo ""
+            echo "## 第三方软件"
+            echo ""
+            echo "| 软件 | 中文名 | 通道 | 版本 | 架构 | 用途 | 来源 |"
+            echo "| --- | --- | --- | --- | --- | --- | --- |"
+            for app in $soft; do
+              row="$(grep -m1 "^| $app |" store/README.md 2>/dev/null)"
+              [ -n "$row" ] && echo "$row"
+            done
+          } >> "${{ github.workspace }}/mediatek-filogic/info.md"
+
           } >> "${{ github.workspace }}/mediatek-filogic/info.md"
 
       - name: Upload ImmortalWrt as release assets

@@ -40,7 +40,7 @@ store/
 - 来源：阶段一从 CloudRunFilesBuilder 拉取的 **.run 自解压包本身**——同步时把每个 .run 里的 .ipk 解压到应用同名子目录（如 `dufs-0.46.0-r1_x86_64.run` → `run/x86/dufs/*.ipk`）
 - 由解压生成的应用目录每次同步会**重建**（归同步管理）；不含 .ipk 的 .run（如 25.12 的 apk 包）不生成目录
 - **冗余包剔除**：解压时按 `EXCLUDED_PACKAGE_RE` 剔除已知与主包文件冲突的包（`easytier-noweb`、`luci-i18n-easytier-zh-cn`，与 builder 的剔除一致），ipk/apk 双通道生效——被剔除的包不进应用目录、不进软件列表，上游资产完全替换后自动成为空操作；`shell/prepare-packages.sh`（apk 版同）在构建时对 .run 解包结果做**同样的兜底过滤**，防止选源拿到旧 .run 时剔除包重新进入 packages/
-- **已下架应用**：`EXCLUDED_APPS` 中的整应用（当前：aurora 全系——`luci-app-aurora-config` 与 `luci-theme-aurora`，烘焙进固件渲染始终异常，2026-09-16 彻底移除）全链路剔除——不下载 .run、不解压、不进软件列表
+- **已下架应用**：`EXCLUDED_APPS` 中的整应用全链路剔除——不下载 .run、不解压、不进软件列表。当前为空（aurora 全系已于 2026-09-18 恢复：主题 + 配置中心 + 语言包）
 - 人工新增 ipk 请放入独立的、与 .run 推导名不冲突的目录，不会被删除
 
 **阶段三：软件列表维护（自动）**

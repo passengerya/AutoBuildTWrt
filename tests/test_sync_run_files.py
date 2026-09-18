@@ -67,13 +67,11 @@ class HelperTests(unittest.TestCase):
             self.assertEqual(srf.read_enabled_apps(path), {"easytier"})
 
     def test_excluded_apps(self):
-        # aurora 全系(主题+配置中心)已彻底移除: 同步/解压/生成列表全链路剔除
-        self.assertIn("luci-app-aurora-config", srf.EXCLUDED_APPS)
-        self.assertIn("luci-theme-aurora", srf.EXCLUDED_APPS)
-        self.assertNotIn("luci-app-aurora-config", srf.APP_META)
-        self.assertNotIn("luci-theme-aurora", srf.APP_META)
+        # aurora 全系(主题+配置中心)已于 2026-09-18 恢复: EXCLUDED_APPS 为空
+        self.assertEqual(srf.EXCLUDED_APPS, set())
+        self.assertIn("luci-app-aurora-config", srf.APP_META)
+        self.assertIn("luci-theme-aurora", srf.APP_META)
         # 其它主题不受影响
-        self.assertNotIn("luci-theme-shadcn", srf.EXCLUDED_APPS)
         self.assertIn("luci-theme-shadcn", srf.APP_META)
 
     def test_is_excluded_package(self):

@@ -157,7 +157,7 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-i18n-ddns-go-zh-cn"   # ← 去掉行首 
 3. 触发构建，软件即被打进固件。
 
 > 注意：24.10 与 25.12 是两条独立通道，请按固件版本改对应的开关文件；部分软件存在冲突组合（如 `luci-app-run` 与 `quickfile`、`clashoo` 与 `nikki`、`advancedplus` 与 `argon-config`），注释里已标注请勿同时开启——若被同时开启，Sync Store 会在生成段顶部自动输出 ⚠️ 冲突警告行。
-> 主题提示：各机型 build 脚本固定加入 Argon 主题；`shadcn` 并非纯 CSS 主题（会接管 LuCI 菜单/路由），如需启用请只保留一个主题界面，同步脚本会在多主题并存时输出 ⚠️ 警告。aurora 主题全系（主题/配置中心/语言包）已彻底移除不再提供。
+> 主题提示：各机型 build 脚本固定加入 Argon 主题；`aurora`/`shadcn` 并非纯 CSS 主题（会接管 LuCI 菜单/路由），如需启用请只保留一个主题界面，同步脚本会在多主题并存时输出 ⚠️ 警告。`luci-theme-aurora`（极光主题）需配套启用 `luci-app-aurora-config`（极光配置中心，含语言包）——主题读取配置中心生成的 `/etc/config/aurora` 渲染顶部工具栏。
 > 若开启 `quickfile`（会引入 nginx 前端接管 80 端口），固件首次启动会自动修复 LuCI 会话 cookie 转发（历史教训见开发说明防错清单 #27）；反之，**不带 quickfile 的固件**首次启动会自动清除残留的 nginx 接管标志并恢复 uhttpd——从带 quickfile 的旧固件「保留配置」升级过来也不会丢网页服务（见防错 #35）。
 
 ## 📟 固件默认行为

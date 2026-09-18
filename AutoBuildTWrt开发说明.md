@@ -54,13 +54,13 @@
 
 ## 2. 第一层 CloudRunFilesBuilder
 
-### 2.1 工作流清单（47 个）
+### 2.1 工作流清单（51 个）
 
-**24.10 ipk 通道（27 个）**：adguardhome、argon、shadcn、advancedplus、amlogic（仅 ARM64）、bandix、clashoo、dufs、easytier、homeproxy、lucky、momo、mosdns、nekobox、nikki、openclash(oc)、openlist2、openwrt-daede、passwall(main)、passwall2(pw2)、quickfile(24-quickfile)、rtp2httpd、sing-box(singbox)、ssr-plus(ssrp)、tailscale-community、iStore(store)、高级卸载(advance_uninstall)
+**24.10 ipk 通道（29 个）**：adguardhome、argon、aurora-theme、aurora-config、shadcn、advancedplus、amlogic（仅 ARM64）、bandix、clashoo、dufs、easytier、homeproxy、lucky、momo、mosdns、nekobox、nikki、openclash(oc)、openlist2、openwrt-daede、passwall(main)、passwall2(pw2)、quickfile(24-quickfile)、rtp2httpd、sing-box(singbox)、ssr-plus(ssrp)、tailscale-community、iStore(store)、高级卸载(advance_uninstall)
 
-**25.12 apk 通道（17 个）**：argon25、build-pw、mosdns25、oc25、pw2-25、ssrp25、store25、25-quickfile、25-singbox、25-openwrt-daede、25-clashoo、25-rtp2httpd、25-advancedplus、25-amlogic、25-tailscale-community、25-easytier、25-shadcn
+**25.12 apk 通道（19 个）**：argon25、build-pw、mosdns25、oc25、pw2-25、ssrp25、store25、25-quickfile、25-singbox、25-openwrt-daede、25-clashoo、25-rtp2httpd、25-advancedplus、25-aurora-theme、25-aurora-config、25-amlogic、25-tailscale-community、25-easytier、25-shadcn
 
-> 2026-09-16 起 aurora 全系（`luci-theme-aurora` 主题、`luci-app-aurora-config` 配置中心及语言包，24/25 双通道共 4 个工作流）彻底移除——烘焙进固件的 aurora 主题渲染始终异常（见防错清单 #33/#34），项目不再打包维护。
+> aurora 全系（主题+配置中心+语言包）2026-09-18 按用户要求恢复：luci-theme-aurora 为主题、luci-app-aurora-config 为配置中心（含 zh-cn 语言包）。此前 2026-09-16 曾整体下架（见防错清单 #33/#34 的历史记录）。
 
 **维护（3 个）**：clean（旧运行记录）、clean-release（旧 Release）、remove（全部 tag）
 
