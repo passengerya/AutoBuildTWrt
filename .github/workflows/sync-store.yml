@@ -62,7 +62,19 @@ jobs:
           git add store/ shell/
           git commit -m "sync: 从 ${BUILDER_REPO} 同步 run 文件到内嵌 store ($(date -u +%F))" \
             -m "Co-Authored-By: Claude Code <noreply@anthropic.com>"
-          git push
+          # push 失败自动 rebase 重试: 上游 builder 完成通知集中到达时会触发一批同步,
+          # checkout 与 push 之间远程 master 可能已被其它提交更新(2026-09-18 实测
+          # 出现 fetch first 拒绝), rebase 后重推即可自愈。
+          for i in 1 2 3; do
+            if git push; then
+              exit 0
+            fi
+            echo "push 失败(第 $i 次), rebase 后重试..."
+            git pull --rebase origin master || true
+            sleep 5
+          done
+          echo "❌ push 3 次仍失败"
+          exit 1
 
       - name: Notify daily auto builds
         # 仅每日定时同步成功后即刻通知各构建工作流(builder-done 同步不通知,
