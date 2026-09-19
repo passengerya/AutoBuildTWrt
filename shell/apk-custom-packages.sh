@@ -9,7 +9,7 @@
 # ⚠️ 冲突警告: argon 与 luci-theme-aurora 同时开启, 可能互相冲突, 请只保留其中一个
 
 # ───────────────────── 代理工具 ─────────────────────
-# 自动生成: clashoo | Clashoo代理 | 代理工具(与 nikki 冲突勿同时开启) | 2026.09.14 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: clashoo | Clashoo代理 | 代理工具(与 nikki 冲突勿同时开启) | 2026.09.16 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES clashoo luci-app-clashoo luci-i18n-clashoo-zh-cn"
 # 自动生成: openclash | OpenClash | Clash 代理客户端 | v0.47.156 上游停更(保留旧版) | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-openclash"
