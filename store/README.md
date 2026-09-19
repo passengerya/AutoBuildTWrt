@@ -103,7 +103,7 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | luci-app-oaf | 应用过滤 | ipk (24.10) | 6.1.4-r1 ⚠️上游停更 | arm64 / x86 | OpenAppFilter 应用过滤(基于 nftables, 程序管控/游戏加速) | destan19/OpenAppFilter |
 | luci-app-store | iStore商店 | ipk (24.10) | 0.2.1-r1 | arm64 / x86 | iStore 应用商店 | linkease/istore |
 | luci-app-tailscale-community | Tailscale组网 | ipk (24.10) | 4.2.3-r1 ⚠️上游停更 | arm64 / x86 | Tailscale 组网(Community 版) | Tokisaki-Galaxy/luci-app-tailscale-community |
-| luci-app-uninstall | 高级卸载 | ipk (24.10) | v1.2.6 ⚠️上游停更 | arm64 / x86 | 彻底卸载插件的工具 | 上游 run 直采 |
+| luci-app-uninstall | 高级卸载 | ipk (24.10) | v1.2.6 | arm64 / x86 | 彻底卸载插件的工具 | 上游 run 直采 |
 | luci-theme-aurora | 极光主题 | ipk (24.10) | 1.3.0-r20260830 ⚠️上游停更 | arm64 / x86 | 极光主题界面(需配套 luci-app-aurora-config 配置中心, 会接管 LuCI 菜单/路由, 谨慎启用) | eamonxg/luci-theme-aurora |
 | luci-theme-shadcn | Shadcn主题 | ipk (24.10) | 0.5.0-r20260830 ⚠️上游停更 | arm64 / x86 | 现代 Shadcn 风格界面主题(会接管 LuCI 菜单/路由, 24.10 下谨慎启用) | eamonxg/luci-theme-shadcn |
 | lucky | Lucky大吉 | ipk (24.10) | 2.20.2-r13 ⚠️上游停更 | arm64 / x86 | 端口转发/反向代理/内网穿透 | gdy666/lucky via dl.openwrt.ai |
