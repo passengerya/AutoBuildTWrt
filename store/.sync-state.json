@@ -1,15 +1,13 @@
 {
   "misses": {
-    "apk|quickfile": 12,
-    "ipk|luci-app-aurora-config": 12,
-    "ipk|passwall": 12,
-    "ipk|passwall2": 12,
-    "ipk|quickfile": 12,
-    "ipk|ssrp-mihomo": 12
+    "apk|quickfile": 13,
+    "ipk|passwall": 13,
+    "ipk|passwall2": 13,
+    "ipk|quickfile": 13,
+    "ipk|ssrp-mihomo": 13
   },
   "stale": [
     "apk|quickfile",
-    "ipk|luci-app-aurora-config",
     "ipk|passwall",
     "ipk|passwall2",
     "ipk|quickfile",
