@@ -79,7 +79,7 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | luci-app-store | iStore商店 | apk (25.12) | 0.2.1-r1 | arm64 / x86 | iStore 应用商店 | linkease/istore |
 | luci-app-tailscale-community | Tailscale组网 | apk (25.12) | 4.2.3-r1 | arm64 / x86 | Tailscale 组网(Community 版) | Tokisaki-Galaxy/luci-app-tailscale-community |
 | luci-theme-aurora | 极光主题 | apk (25.12) | 1.3.0-r20260830 | arm64 / x86 | 极光主题界面(需配套 luci-app-aurora-config 配置中心, 会接管 LuCI 菜单/路由, 谨慎启用) | eamonxg/luci-theme-aurora |
-| luci-theme-shadcn | Shadcn主题 | apk (25.12) | 0.5.0-r20260830 ⚠️上游停更 | arm64 / x86 | 现代 Shadcn 风格界面主题(会接管 LuCI 菜单/路由, 24.10 下谨慎启用) | eamonxg/luci-theme-shadcn |
+| luci-theme-shadcn | Shadcn主题 | apk (25.12) | 0.5.0-r20260830 | arm64 / x86 | 现代 Shadcn 风格界面主题(会接管 LuCI 菜单/路由, 24.10 下谨慎启用) | eamonxg/luci-theme-shadcn |
 | mosdns | DNS分流 | apk (25.12) | v5.3.4-r14 | arm64 / x86 | 高性能 DNS 分流(DoH/DoQ 等) | sbwml/luci-app-mosdns |
 | openclash | OpenClash | apk (25.12) | v0.47.156 | arm64 / x86 | Clash 代理客户端 | vernesong/OpenClash |
 | openwrt-daede | eBPF代理 | apk (25.12) | 2026.09.19 | arm64 / x86 | 基于 eBPF 的高性能透明代理(dae/daed) | kenzok8/openwrt-daede |
@@ -105,7 +105,7 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | luci-app-tailscale-community | Tailscale组网 | ipk (24.10) | 4.2.3-r1 | arm64 / x86 | Tailscale 组网(Community 版) | Tokisaki-Galaxy/luci-app-tailscale-community |
 | luci-app-uninstall | 高级卸载 | ipk (24.10) | v1.2.6 | arm64 / x86 | 彻底卸载插件的工具 | 上游 run 直采 |
 | luci-theme-aurora | 极光主题 | ipk (24.10) | 1.3.0-r20260830 | arm64 / x86 | 极光主题界面(需配套 luci-app-aurora-config 配置中心, 会接管 LuCI 菜单/路由, 谨慎启用) | eamonxg/luci-theme-aurora |
-| luci-theme-shadcn | Shadcn主题 | ipk (24.10) | 0.5.0-r20260830 ⚠️上游停更 | arm64 / x86 | 现代 Shadcn 风格界面主题(会接管 LuCI 菜单/路由, 24.10 下谨慎启用) | eamonxg/luci-theme-shadcn |
+| luci-theme-shadcn | Shadcn主题 | ipk (24.10) | 0.5.0-r20260830 | arm64 / x86 | 现代 Shadcn 风格界面主题(会接管 LuCI 菜单/路由, 24.10 下谨慎启用) | eamonxg/luci-theme-shadcn |
 | lucky | Lucky大吉 | ipk (24.10) | 2.20.2-r13 | arm64 / x86 | 端口转发/反向代理/内网穿透 | gdy666/lucky via dl.openwrt.ai |
 | momo | Momo代理 | ipk (24.10) | v1.2.1 | arm64 / x86 | 基于 sing-box 的透明代理 | nikkinikki-org/OpenWrt-momo |
 | mosdns | DNS分流 | ipk (24.10) | v5.3.4-r14 | arm64 / x86 | 高性能 DNS 分流(DoH/DoQ 等) | sbwml/luci-app-mosdns |

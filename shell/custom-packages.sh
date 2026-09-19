@@ -71,7 +71,7 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-aurora-config luci-i18n-aurora-config
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-uninstall"
 # 自动生成: luci-theme-aurora | 极光主题 | 极光主题界面(需配套 luci-app-aurora-config 配置中心, 会接管 LuCI 菜单/路由, 谨慎启用) | 1.3.0-r20260830 | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-theme-aurora"
-# 自动生成: luci-theme-shadcn | Shadcn主题 | 现代 Shadcn 风格界面主题(会接管 LuCI 菜单/路由, 24.10 下谨慎启用) | 0.5.0-r20260830 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: luci-theme-shadcn | Shadcn主题 | 现代 Shadcn 风格界面主题(会接管 LuCI 菜单/路由, 24.10 下谨慎启用) | 0.5.0-r20260830 | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-theme-shadcn"
 
 # ───────────────────── 设备管理 ─────────────────────

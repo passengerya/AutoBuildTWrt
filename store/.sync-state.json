@@ -1,19 +1,15 @@
 {
   "misses": {
-    "ipk|luci-theme-shadcn": 159,
-    "apk|luci-theme-shadcn": 11,
-    "apk|quickfile": 11,
-    "ipk|luci-app-aurora-config": 11,
-    "ipk|passwall": 11,
-    "ipk|passwall2": 11,
-    "ipk|quickfile": 11,
-    "ipk|ssrp-mihomo": 11
+    "apk|quickfile": 12,
+    "ipk|luci-app-aurora-config": 12,
+    "ipk|passwall": 12,
+    "ipk|passwall2": 12,
+    "ipk|quickfile": 12,
+    "ipk|ssrp-mihomo": 12
   },
   "stale": [
-    "apk|luci-theme-shadcn",
     "apk|quickfile",
     "ipk|luci-app-aurora-config",
-    "ipk|luci-theme-shadcn",
     "ipk|passwall",
     "ipk|passwall2",
     "ipk|quickfile",
