@@ -1,11 +1,11 @@
 {
   "misses": {
-    "apk|quickfile": 36,
-    "ipk|passwall": 36,
-    "ipk|passwall2": 36,
-    "ipk|quickfile": 36,
-    "ipk|ssrp-mihomo": 36,
-    "apk|clashoo": 11
+    "apk|quickfile": 37,
+    "ipk|passwall": 37,
+    "ipk|passwall2": 37,
+    "ipk|quickfile": 37,
+    "ipk|ssrp-mihomo": 37,
+    "apk|clashoo": 12
   },
   "stale": [
     "apk|clashoo",
