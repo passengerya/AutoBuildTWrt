@@ -80,7 +80,7 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | luci-app-store | iStore商店 | apk (25.12) | 0.2.1-r1 | arm64 / x86 | iStore 应用商店 | linkease/istore |
 | luci-app-tailscale-community | Tailscale组网 | apk (25.12) | 4.2.3-r1 | arm64 / x86 | Tailscale 组网(Community 版) | Tokisaki-Galaxy/luci-app-tailscale-community |
 | luci-theme-aurora | 极光主题 | apk (25.12) | 1.4.0-r20260920 | arm64 / x86 | 极光主题界面(需配套 luci-app-aurora-config 配置中心, 会接管 LuCI 菜单/路由, 谨慎启用) | eamonxg/luci-theme-aurora |
-| luci-theme-shadcn | Shadcn主题 | apk (25.12) | 0.6.0-r20260920 ⚠️上游停更 | arm64 / x86 | 现代 Shadcn 风格界面主题(会接管 LuCI 菜单/路由, 24.10 下谨慎启用) | eamonxg/luci-theme-shadcn |
+| luci-theme-shadcn | Shadcn主题 | apk (25.12) | 0.6.0-r20260920 | arm64 / x86 | 现代 Shadcn 风格界面主题(会接管 LuCI 菜单/路由, 24.10 下谨慎启用) | eamonxg/luci-theme-shadcn |
 | mosdns | DNS分流 | apk (25.12) | v5.3.4-r14 | arm64 / x86 | 高性能 DNS 分流(DoH/DoQ 等) | sbwml/luci-app-mosdns |
 | openclash | OpenClash | apk (25.12) | v0.47.156 | arm64 / x86 | Clash 代理客户端 | vernesong/OpenClash |
 | openwrt-daede | eBPF代理 | apk (25.12) | 2026.09.21 | arm64 / x86 | 基于 eBPF 的高性能透明代理(dae/daed) | kenzok8/openwrt-daede |
@@ -99,7 +99,7 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | homeproxy | 代理平台 | ipk (24.10) | 26.187.07809 | arm64 / x86 | 现代代理平台(基于 sing-box) | immortalwrt/homeproxy |
 | luci-app-advancedplus | 高级设置 | ipk (24.10) | 1.8.7-r20251116 | arm64 / x86 | 进阶设置(与 argon-config 冲突勿同时开启) | sirpdboy/luci-app-advancedplus |
 | luci-app-amlogic | 晶晨宝盒 | ipk (24.10) | 3.1.321-r1 | arm64 / x86 | 晶晨机顶盒管理(仅 ARM64 平台) | ophub/luci-app-amlogic |
-| luci-app-aurora-config | 极光配置中心 | ipk (24.10) | 1.2.5-r20260920 ⚠️上游停更 | arm64 / x86 | Aurora 主题配置中心(提供 /etc/config/aurora, 与主题配套启用) | eamonxg/luci-app-aurora-config |
+| luci-app-aurora-config | 极光配置中心 | ipk (24.10) | 1.2.5-r20260920 | arm64 / x86 | Aurora 主题配置中心(提供 /etc/config/aurora, 与主题配套启用) | eamonxg/luci-app-aurora-config |
 | luci-app-nekobox | NekoBox代理 | ipk (24.10) | 2.0.9 | arm64 / x86 | NekoBox 代理工具 | Thaolga/openwrt-nekobox |
 | luci-app-oaf | 应用过滤 | ipk (24.10) | 6.1.4-r1 | arm64 / x86 | OpenAppFilter 应用过滤(基于 nftables, 程序管控/游戏加速) | destan19/OpenAppFilter |
 | luci-app-store | iStore商店 | ipk (24.10) | 0.2.1-r1 | arm64 / x86 | iStore 应用商店 | linkease/istore |
