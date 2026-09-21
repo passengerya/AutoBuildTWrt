@@ -13,7 +13,7 @@
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES clashoo luci-app-clashoo luci-i18n-clashoo-zh-cn"
 # 自动生成: homeproxy | 代理平台 | 现代代理平台(基于 sing-box) | 26.187.07809 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-homeproxy luci-i18n-homeproxy-zh-cn sing-box-tiny"
-# 自动生成: luci-app-nekobox | NekoBox代理 | NekoBox 代理工具 | 2.0.9 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: luci-app-nekobox | NekoBox代理 | NekoBox 代理工具 | 2.0.9 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-nekobox"
 # 自动生成: momo | Momo代理 | 基于 sing-box 的透明代理 | v1.2.1 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-momo luci-i18n-momo-zh-cn momo"
@@ -27,7 +27,7 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-openclash"
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES 23.05-24.10_luci-app-passwall 23.05-24.10_luci-i18n-passwall-zh-cn chinadns-ng dns2socks geoview ipt2socks microsocks naiveproxy shadow-tls shadowsocks-rust-sslocal shadowsocks-rust-ssserver shadowsocksr-libev-ssr-local shadowsocksr-libev-ssr-redir shadowsocksr-libev-ssr-server simple-obfs-client tcping trojan-plus tuic-client v2ray-geoip v2ray-geosite v2ray-plugin xray-core xray-plugin"
 # 自动生成: passwall2 | PassWall2 | 代理工具(自带依赖) | 26.9.12-2 上游停更(保留旧版) | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES chinadns-ng geoview luci-app-passwall2 luci-i18n-passwall2-zh-cn naiveproxy shadowsocks-rust-sslocal shadowsocks-rust-ssserver shadowsocksr-libev-ssr-local shadowsocksr-libev-ssr-redir shadowsocksr-libev-ssr-server simple-obfs-client tcping tuic-client v2ray-geoip v2ray-geosite v2ray-plugin xray-core"
-# 自动生成: sing-box | Sing-box内核 | 通用代理内核 | v1.14.1 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: sing-box | Sing-box内核 | 通用代理内核 | v1.14.1 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES sing-box"
 # 自动生成: ssrp-mihomo | SSRP代理 | SSR-Plus 代理工具(mihomo 内核) | 上游停更(保留旧版) | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES chinadns-ng dns2socks dns2socks-rust dns2tcp hysteria ipt2socks ipt2socks-rs libopenssl3 libudns lua-neturl luci-app-ssr-plus luci-i18n-ssr-plus-zh-cn microsocks mosdns naiveproxy redsocks2 shadow-tls shadowsocks-libev-ss-server shadowsocks-rust-sslocal shadowsocks-rust-ssmanager shadowsocks-rust-ssserver shadowsocks-rust-ssservice shadowsocks-rust-ssurl shadowsocksr-libev-ssr-check shadowsocksr-libev-ssr-local shadowsocksr-libev-ssr-nat shadowsocksr-libev-ssr-redir shadowsocksr-libev-ssr-server simple-obfs-client tcping tcping-simple trojan trojan-plus tuic-client v2ray-plugin xray-core"
