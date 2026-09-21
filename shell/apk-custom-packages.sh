@@ -59,6 +59,10 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-theme-aurora"
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-amlogic luci-i18n-amlogic-zh-cn"
 # 自动生成: luci-app-store | iStore商店 | iStore 应用商店 | 0.2.1-r1 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-store luci-lib-taskd luci-lib-xterm taskd"
+
+# ───────────────────── 其他 ─────────────────────
+# 自动生成: clashoo-cc0 |  |  | 2026.09.19.5019 | 取消下一行注释即启用
+#CUSTOM_PACKAGES="$CUSTOM_PACKAGES clashoo luci-app-clashoo luci-i18n-clashoo-zh-cn"
 # ============ 自动维护结束 ============
 
 #===========================以下imm仓库内的软件==============================↓

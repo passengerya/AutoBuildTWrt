@@ -21,7 +21,7 @@
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-nikki luci-i18n-nikki-ru luci-i18n-nikki-zh-cn luci-i18n-nikki-zh-tw mihomo-alpha mihomo-meta nikki"
 # 自动生成: openclash | OpenClash | Clash 代理客户端 | v0.47.156 上游停更(保留旧版) | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-openclash"
-# 自动生成: openwrt-daede | eBPF代理 | 基于 eBPF 的高性能透明代理(dae/daed) | 2026.09.20 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: openwrt-daede | eBPF代理 | 基于 eBPF 的高性能透明代理(dae/daed) | 2026.09.21 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES dae daed luci-app-daede vmlinux-btf"
 # 自动生成: passwall | PassWall | 代理工具(自带依赖) | 26.9.9-1 上游停更(保留旧版) | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES 23.05-24.10_luci-app-passwall 23.05-24.10_luci-i18n-passwall-zh-cn chinadns-ng dns2socks geoview ipt2socks microsocks naiveproxy shadow-tls shadowsocks-rust-sslocal shadowsocks-rust-ssserver shadowsocksr-libev-ssr-local shadowsocksr-libev-ssr-redir shadowsocksr-libev-ssr-server simple-obfs-client tcping trojan-plus tuic-client v2ray-geoip v2ray-geosite v2ray-plugin xray-core xray-plugin"
@@ -49,7 +49,7 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-lucky lucky"
 # ───────────────────── 广告与DNS ─────────────────────
 # 自动生成: adguardhome | 本地DNS去广告 | AdGuardHome 广告拦截与 DNS 服务 | v0.107.79 | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-adguardhome"
-# 自动生成: mosdns | DNS分流 | 高性能 DNS 分流(DoH/DoQ 等) | v5.3.4-r14 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: mosdns | DNS分流 | 高性能 DNS 分流(DoH/DoQ 等) | v5.3.4-r14 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES geo2txt luci-app-mosdns luci-i18n-mosdns-zh-cn mosdns v2ray-geoip v2ray-geosite"
 
 # ───────────────────── 文件与存储 ─────────────────────
