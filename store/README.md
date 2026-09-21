@@ -69,7 +69,7 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 <!-- AUTO-SOFTWARE-TABLE:START (Sync Store 自动维护, 勿手动修改) -->
 | 软件 | 中文名 | 通道 | 版本 | 架构 | 用途 | 来源 |
 | --- | --- | --- | --- | --- | --- | --- |
-| argon | Argon主题 | apk (25.12) | 2.4.7 ⚠️上游停更 | arm64 / x86 | 简洁主题, 支持明暗自动切换 | ImmortalWrt 官方源 |
+| argon | Argon主题 | apk (25.12) | 2.4.7 | arm64 / x86 | 简洁主题, 支持明暗自动切换 | ImmortalWrt 官方源 |
 | clashoo | Clashoo代理 | apk (25.12) | 2026.09.16 ⚠️上游停更 | arm64 / x86 | 代理工具(与 nikki 冲突勿同时开启) | kenzok8/openwrt-clashoo |
 | easytier | 异地组网 | apk (25.12) | v2.6.4 ⚠️上游停更 | arm64 / x86 | EasyTier 点对点组网工具 | EasyTier/luci-app-easytier |
 | luci-app-advancedplus | 高级设置 | apk (25.12) | 1.8.7-r20251116 ⚠️上游停更 | arm64 / x86 | 进阶设置(与 argon-config 冲突勿同时开启) | sirpdboy/luci-app-advancedplus |
@@ -87,12 +87,12 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | passwall2 | PassWall2 | apk (25.12) | 26.9.16-1 ⚠️上游停更 | arm64 / x86 | 代理工具(自带依赖) | Openwrt-Passwall/openwrt-passwall2 |
 | quickfile | 文件管理 | apk (25.12) | 1.0.16 ⚠️上游停更 | arm64 / x86 | 轻量网页文件管理器(与 luci-app-run 冲突勿同时开启) | sbwml/luci-app-quickfile |
 | rtp2httpd | IPTV转发 | apk (25.12) | 3.17.1-r1 ⚠️上游停更 | arm64 / x86 | IPTV 流媒体转发服务器 | stackia/rtp2httpd |
-| sing-box | Sing-box内核 | apk (25.12) | v1.14.1 ⚠️上游停更 | arm64 / x86 | 通用代理内核 | SagerNet/sing-box |
+| sing-box | Sing-box内核 | apk (25.12) | v1.14.1 | arm64 / x86 | 通用代理内核 | SagerNet/sing-box |
 | ssrp-mihomo | SSRP代理 | apk (25.12) | ⚠️上游停更 | arm64 / x86 | SSR-Plus 代理工具(mihomo 内核) | fw876/helloworld |
 | adguardhome | 本地DNS去广告 | ipk (24.10) | v0.107.79 | arm64 / x86 | AdGuardHome 广告拦截与 DNS 服务 | AdguardTeam/AdGuardHome |
-| argon | Argon主题 | ipk (24.10) | 2.4.3-r20250722 ⚠️上游停更 | arm64 / x86 | 简洁主题, 支持明暗自动切换 | ImmortalWrt 官方源 |
+| argon | Argon主题 | ipk (24.10) | 2.4.3-r20250722 | arm64 / x86 | 简洁主题, 支持明暗自动切换 | ImmortalWrt 官方源 |
 | bandix | 流量监控 | ipk (24.10) | 0.11.0-r25 ⚠️上游停更 | arm64 / x86 | Bandix 实时流量监控与统计 | timsaya/luci-app-bandix + dl.openwrt.ai |
-| clashoo | Clashoo代理 | ipk (24.10) | 2026.09.16 ⚠️上游停更 | arm64 / x86 | 代理工具(与 nikki 冲突勿同时开启) | kenzok8/openwrt-clashoo |
+| clashoo | Clashoo代理 | ipk (24.10) | 2026.09.19 | arm64 / x86 | 代理工具(与 nikki 冲突勿同时开启) | kenzok8/openwrt-clashoo |
 | dufs | 文件服务器 | ipk (24.10) | 0.46.0-r1 | arm64 / x86 | 轻量文件服务器(静态托管/上传/WebDAV) | sigoden/dufs |
 | easytier | 异地组网 | ipk (24.10) | v2.6.4 ⚠️上游停更 | arm64 / x86 | EasyTier 点对点组网工具 | EasyTier/luci-app-easytier |
 | homeproxy | 代理平台 | ipk (24.10) | 26.187.07809 | arm64 / x86 | 现代代理平台(基于 sing-box) | immortalwrt/homeproxy |

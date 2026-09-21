@@ -9,7 +9,7 @@
 # ⚠️ 冲突警告: argon 与 luci-theme-aurora 与 luci-theme-shadcn 同时开启, 可能互相冲突, 请只保留其中一个
 
 # ───────────────────── 代理工具 ─────────────────────
-# 自动生成: clashoo | Clashoo代理 | 代理工具(与 nikki 冲突勿同时开启) | 2026.09.16 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: clashoo | Clashoo代理 | 代理工具(与 nikki 冲突勿同时开启) | 2026.09.19 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES clashoo luci-app-clashoo luci-i18n-clashoo-zh-cn"
 # 自动生成: homeproxy | 代理平台 | 现代代理平台(基于 sing-box) | 26.187.07809 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-homeproxy luci-i18n-homeproxy-zh-cn sing-box-tiny"
@@ -61,7 +61,7 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-adguardhome"
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-quickfile luci-i18n-quickfile-zh-cn quickfile"
 
 # ───────────────────── 系统与界面 ─────────────────────
-# 自动生成: argon | Argon主题 | 简洁主题, 支持明暗自动切换 | 2.4.3-r20250722 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: argon | Argon主题 | 简洁主题, 支持明暗自动切换 | 2.4.3-r20250722 | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-argon-config luci-i18n-argon-config-zh-cn luci-theme-argon"
 # 自动生成: luci-app-advancedplus | 高级设置 | 进阶设置(与 argon-config 冲突勿同时开启) | 1.8.7-r20251116 上游停更(保留旧版) | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-advancedplus luci-i18n-advancedplus-zh-cn"
