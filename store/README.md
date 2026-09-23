@@ -72,14 +72,14 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | argon | Argon主题 | apk (25.12) | 2.4.7 | arm64 / x86 | 简洁主题, 支持明暗自动切换 | ImmortalWrt 官方源 |
 | clashoo | Clashoo代理 | apk (25.12) | 2026.09.16 ⚠️上游停更 | arm64 / x86 | 代理工具(与 nikki 冲突勿同时开启) | kenzok8/openwrt-clashoo |
 | clashoo-cc0 | — | apk (25.12) | 2026.09.19.5019 | arm64 / x86 | — | — |
-| easytier | 异地组网 | apk (25.12) | v2.6.4 ⚠️上游停更 | arm64 / x86 | EasyTier 点对点组网工具 | EasyTier/luci-app-easytier |
+| easytier | 异地组网 | apk (25.12) | v2.6.4 | arm64 / x86 | EasyTier 点对点组网工具 | EasyTier/luci-app-easytier |
 | luci-app-advancedplus | 高级设置 | apk (25.12) | 1.8.7-r20251116 | arm64 / x86 | 进阶设置(与 argon-config 冲突勿同时开启) | sirpdboy/luci-app-advancedplus |
-| luci-app-amlogic | 晶晨宝盒 | apk (25.12) | 3.1.321-r1 ⚠️上游停更 | arm64 / x86 | 晶晨机顶盒管理(仅 ARM64 平台) | ophub/luci-app-amlogic |
+| luci-app-amlogic | 晶晨宝盒 | apk (25.12) | 3.1.321-r1 | arm64 / x86 | 晶晨机顶盒管理(仅 ARM64 平台) | ophub/luci-app-amlogic |
 | luci-app-aurora-config | 极光配置中心 | apk (25.12) | 1.2.5-r20260920 ⚠️上游停更 | arm64 / x86 | Aurora 主题配置中心(提供 /etc/config/aurora, 与主题配套启用) | eamonxg/luci-app-aurora-config |
 | luci-app-oaf | 应用过滤 | apk (25.12) | 7.0-r1 | arm64 / x86 | OpenAppFilter 应用过滤(基于 nftables, 程序管控/游戏加速) | destan19/OpenAppFilter |
 | luci-app-store | iStore商店 | apk (25.12) | 0.2.1-r1 | arm64 / x86 | iStore 应用商店 | linkease/istore |
-| luci-app-tailscale-community | Tailscale组网 | apk (25.12) | 4.2.3-r1 ⚠️上游停更 | arm64 / x86 | Tailscale 组网(Community 版) | Tokisaki-Galaxy/luci-app-tailscale-community |
-| luci-theme-aurora | 极光主题 | apk (25.12) | 1.4.0-r20260920 ⚠️上游停更 | arm64 / x86 | 极光主题界面(需配套 luci-app-aurora-config 配置中心, 会接管 LuCI 菜单/路由, 谨慎启用) | eamonxg/luci-theme-aurora |
+| luci-app-tailscale-community | Tailscale组网 | apk (25.12) | 4.2.3-r1 | arm64 / x86 | Tailscale 组网(Community 版) | Tokisaki-Galaxy/luci-app-tailscale-community |
+| luci-theme-aurora | 极光主题 | apk (25.12) | 1.4.0-r20260920 | arm64 / x86 | 极光主题界面(需配套 luci-app-aurora-config 配置中心, 会接管 LuCI 菜单/路由, 谨慎启用) | eamonxg/luci-theme-aurora |
 | luci-theme-shadcn | Shadcn主题 | apk (25.12) | 0.6.0-r20260920 ⚠️上游停更 | arm64 / x86 | 现代 Shadcn 风格界面主题(会接管 LuCI 菜单/路由, 24.10 下谨慎启用) | eamonxg/luci-theme-shadcn |
 | mosdns | DNS分流 | apk (25.12) | v5.3.4-r14 | arm64 / x86 | 高性能 DNS 分流(DoH/DoQ 等) | sbwml/luci-app-mosdns |
 | openclash | OpenClash | apk (25.12) | v0.47.156 | arm64 / x86 | Clash 代理客户端 | vernesong/OpenClash |
@@ -87,7 +87,7 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | passwall | PassWall | apk (25.12) | 26.9.16 | arm64 / x86 | 代理工具(自带依赖) | Openwrt-Passwall/openwrt-passwall |
 | passwall2 | PassWall2 | apk (25.12) | 26.9.16-1 | arm64 / x86 | 代理工具(自带依赖) | Openwrt-Passwall/openwrt-passwall2 |
 | quickfile | 文件管理 | apk (25.12) | 1.0.16 ⚠️上游停更 | arm64 / x86 | 轻量网页文件管理器(与 luci-app-run 冲突勿同时开启) | sbwml/luci-app-quickfile |
-| rtp2httpd | IPTV转发 | apk (25.12) | 3.17.1-r1 ⚠️上游停更 | arm64 / x86 | IPTV 流媒体转发服务器 | stackia/rtp2httpd |
+| rtp2httpd | IPTV转发 | apk (25.12) | 3.17.1-r1 | arm64 / x86 | IPTV 流媒体转发服务器 | stackia/rtp2httpd |
 | sing-box | Sing-box内核 | apk (25.12) | v1.14.1 | arm64 / x86 | 通用代理内核 | SagerNet/sing-box |
 | ssrp-mihomo | SSRP代理 | apk (25.12) |  | arm64 / x86 | SSR-Plus 代理工具(mihomo 内核) | fw876/helloworld |
 | adguardhome | 本地DNS去广告 | ipk (24.10) | v0.107.79 | arm64 / x86 | AdGuardHome 广告拦截与 DNS 服务 | AdguardTeam/AdGuardHome |
