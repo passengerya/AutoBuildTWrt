@@ -84,7 +84,7 @@ SH_END = "# ============ 自动维护结束 ============"
 APP_META = {
     "adguardhome": {"cn": "本地DNS去广告", "desc": "AdGuardHome 广告拦截与 DNS 服务", "src": "AdguardTeam/AdGuardHome", "cat": "广告与DNS"},
     "argon": {"cn": "Argon主题", "desc": "简洁主题, 支持明暗自动切换", "src": "ImmortalWrt 官方源", "cat": "系统与界面"},
-    "bandix": {"cn": "流量监控", "desc": "Bandix 实时流量监控与统计", "src": "timsaya/luci-app-bandix + dl.openwrt.ai", "cat": "网络服务"},
+    "bandix": {"cn": "流量监控", "desc": "Bandix 实时流量监控与统计", "src": "timsaya/luci-app-bandix + timsaya/openwrt-bandix", "cat": "网络服务"},
     "clashoo": {"cn": "Clashoo代理", "desc": "代理工具(与 nikki 冲突勿同时开启)", "src": "kenzok8/openwrt-clashoo", "cat": "代理工具"},
     "dufs": {"cn": "文件服务器", "desc": "轻量文件服务器(静态托管/上传/WebDAV)", "src": "sigoden/dufs", "cat": "文件与存储"},
     "easytier": {"cn": "异地组网", "desc": "EasyTier 点对点组网工具", "src": "EasyTier/luci-app-easytier", "cat": "网络服务"},
