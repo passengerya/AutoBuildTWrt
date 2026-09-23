@@ -254,6 +254,27 @@ else
     echo "未检测到 Docker，跳过防火墙配置。"
 fi
 
+# oaf(OpenAppFilter)首启自愈: 上游 94_feature_3.0 用 heredoc 批量写入配置,
+# 个别设备首启环境下批量写入静默失败(2026-09-23 实测: 脚本被正常执行器删除、
+# 但 /etc/config/appfilter 未生成, 菜单因此不显示)。这里用逐条 uci set 兜底重建
+# (本脚本已确认在首启环境可用: 主机名/日志均由它写入), 与 nginx 自愈同思路。
+if [ ! -f /etc/config/appfilter ]; then
+    uci -q set appfilter.feature=feature
+    uci -q set appfilter.feature.format='v3.0'
+    uci -q set appfilter.rule=rule
+    uci -q set appfilter.global=global
+    uci -q set appfilter.global.tcp_rst='1'
+    uci -q set appfilter.global.lan_ifname='br-lan'
+    uci -q set appfilter.global.auto_load_engine='1'
+    uci -q set appfilter.global.disable_quic='0'
+    uci -q set appfilter.time=time
+    for i in 0 1 2 3 4 5 6; do
+        uci -q set "appfilter.time.daily_limit_$i='0:0:0'"
+    done
+    uci -q commit appfilter
+    echo "oaf first-boot fallback: recreated /etc/config/appfilter" >>"$LOGFILE"
+fi
+
 # 固定默认主题为 Bootstrap(99 最后执行, 覆盖各主题包首次启动脚本的 mediaurlbase 竞争;
 # 其他已安装主题仍可在 系统-系统-主题 中自主切换)
 uci set luci.main.mediaurlbase='/luci-static/bootstrap'

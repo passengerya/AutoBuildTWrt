@@ -308,6 +308,7 @@ store/
 | 38 | sync-store 的 push 要带 **rebase 重试**（3 次）：上游 builder 完成通知集中到达时一批同步接连触发，checkout 与 push 之间远程 master 可能被其它提交更新 → `fetch first` 非快进拒绝 | 2026-09-18 上午 08:00-08:25 北京实测 4 个同步失败（另 4 个取消=并发组排队溢出，属正常）；失败的本地提交被后续同步自然覆盖，store 状态一致，但工作流红着难看。已在 Commit 步骤加 retry loop |
 | 39 | 同步选源**直接取最新 Release**（跳过 draft/prerelease），缺失应用不回落旧 Release，由停更机制接管；最新 Release 尚无 .run 资产时跳过同步且不判定停更 | 旧「资产最多的 Release」策略被 2026-09-14 的 99 资产旧 Release 长期霸榜（每日新 Release 约 88 资产达不到阈值），aurora 修复与 oaf 新应用都无法同步，需人工放置 store（b43115b）。触发链已保证最新 Release 完整：builder 全部构建完才发 `builder-done` 通知，07:00 定时兜底时当日构建也已结束；上传中途的空 Release 由「不判定停更」守卫保护 |
 | 40 | 停更/恢复判定按「通道\|应用」标识登记（2026-09-18），不用 .run 文件名 | 文件名随版本升级变化：按文件名登记时，应用带新版本回归 → cleanup_old 先删旧文件 → 旧文件名的停更标记成孤儿，README/开关永远挂着「上游停更」（版本不变的回归才能解除）。同应用两架构文件每轮只计一次缺失；store/.sync-state.json 旧格式加载时自动迁移（文件名→通道\|应用，misses 同键取最大计数） |
+| 41 | oaf 首启配置生成在个别设备上静默失败：脚本被正常执行器删除、`/etc/config/appfilter` 却没生成 → 菜单不显示。99-custom.sh 加「appfilter 缺失则逐条 uci set 重建」自愈（2026-09-23） | 用户工控机实测：`appfilter.lua` 在（包已装入）但配置缺失；94/95 脚本（heredoc `uci batch`）在首启环境失败且 `-q` 吞掉报错，退出码 0 被 `( . ./file ) && rm` 删除。同设备上逐条 `uci set`（99-custom 写 hostname）、`echo >>日志`、touch 新建文件全部正常 → 自愈用逐条 set 而非 batch。交互 shell 里 heredoc 粘贴也会失败（Windows 终端 CRLF/缩进），喂文件则 batch exit=0——批量写配置一律用 `printf`/文件方式，别依赖终端粘贴 heredoc |
 
 ---
 
