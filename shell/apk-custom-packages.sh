@@ -17,7 +17,7 @@
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES dae daed luci-app-daede vmlinux-btf"
 # 自动生成: passwall | PassWall | 代理工具(自带依赖) | 26.9.16 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES chinadns-ng dns2socks geoview hysteria luci-app-passwall luci-i18n-passwall-zh-cn tcping v2ray-geoip v2ray-geosite xray-core"
-# 自动生成: passwall2 | PassWall2 | 代理工具(自带依赖) | 26.9.16-1 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: passwall2 | PassWall2 | 代理工具(自带依赖) | 26.9.16-1 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES chinadns-ng geoview luci-app-passwall2 luci-i18n-passwall2-zh-cn shadowsocks-rust-sslocal shadowsocks-rust-ssserver shadowsocksr-libev-ssr-local shadowsocksr-libev-ssr-redir shadowsocksr-libev-ssr-server simple-obfs-client tcping v2ray-geoip v2ray-geosite v2ray-plugin"
 # 自动生成: sing-box | Sing-box内核 | 通用代理内核 | v1.14.1 | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES sing-box"
