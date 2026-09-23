@@ -91,9 +91,9 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | sing-box | Sing-box内核 | apk (25.12) | v1.14.1 ⚠️上游停更 | arm64 / x86 | 通用代理内核 | SagerNet/sing-box |
 | ssrp-mihomo | SSRP代理 | apk (25.12) | ⚠️上游停更 | arm64 / x86 | SSR-Plus 代理工具(mihomo 内核) | fw876/helloworld |
 | adguardhome | 本地DNS去广告 | ipk (24.10) | v0.107.79 | arm64 / x86 | AdGuardHome 广告拦截与 DNS 服务 | AdguardTeam/AdGuardHome |
-| argon | Argon主题 | ipk (24.10) | 2.4.3-r20250722 ⚠️上游停更 | arm64 / x86 | 简洁主题, 支持明暗自动切换 | ImmortalWrt 官方源 |
+| argon | Argon主题 | ipk (24.10) | 2.4.3-r20250722 | arm64 / x86 | 简洁主题, 支持明暗自动切换 | ImmortalWrt 官方源 |
 | bandix | 流量监控 | ipk (24.10) | 0.11.0-r25 ⚠️上游停更 | arm64 / x86 | Bandix 实时流量监控与统计 | timsaya/luci-app-bandix + dl.openwrt.ai |
-| clashoo | Clashoo代理 | ipk (24.10) | 2026.09.19 ⚠️上游停更 | arm64 / x86 | 代理工具(与 nikki 冲突勿同时开启) | kenzok8/openwrt-clashoo |
+| clashoo | Clashoo代理 | ipk (24.10) | 2026.09.19 | arm64 / x86 | 代理工具(与 nikki 冲突勿同时开启) | kenzok8/openwrt-clashoo |
 | dufs | 文件服务器 | ipk (24.10) | 0.46.0-r1 | arm64 / x86 | 轻量文件服务器(静态托管/上传/WebDAV) | sigoden/dufs |
 | easytier | 异地组网 | ipk (24.10) | v2.6.4 ⚠️上游停更 | arm64 / x86 | EasyTier 点对点组网工具 | EasyTier/luci-app-easytier |
 | homeproxy | 代理平台 | ipk (24.10) | 26.187.07809 | arm64 / x86 | 现代代理平台(基于 sing-box) | immortalwrt/homeproxy |
