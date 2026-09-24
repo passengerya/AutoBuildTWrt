@@ -94,7 +94,7 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | argon | Argon主题 | ipk (24.10) | 2.4.3-r20250722 ⚠️上游停更 | arm64 / x86 | 简洁主题, 支持明暗自动切换 | ImmortalWrt 官方源 |
 | bandix | 流量监控 | ipk (24.10) | 0.11.0-r25 ⚠️上游停更 | arm64 / x86 | Bandix 实时流量监控与统计 | timsaya/luci-app-bandix + timsaya/openwrt-bandix |
 | clashoo | Clashoo代理 | ipk (24.10) | 2026.09.19 ⚠️上游停更 | arm64 / x86 | 代理工具(与 nikki 冲突勿同时开启) | kenzok8/openwrt-clashoo |
-| dufs | 文件服务器 | ipk (24.10) | 0.46.0-r1 ⚠️上游停更 | arm64 / x86 | 轻量文件服务器(静态托管/上传/WebDAV) | sigoden/dufs |
+| dufs | 文件服务器 | ipk (24.10) | 0.46.0-r1 | arm64 / x86 | 轻量文件服务器(静态托管/上传/WebDAV) | sigoden/dufs |
 | easytier | 异地组网 | ipk (24.10) | v2.6.4 ⚠️上游停更 | arm64 / x86 | EasyTier 点对点组网工具 | EasyTier/luci-app-easytier |
 | homeproxy | 代理平台 | ipk (24.10) | 26.187.07809 | arm64 / x86 | 现代代理平台(基于 sing-box) | immortalwrt/homeproxy |
 | luci-app-advancedplus | 高级设置 | ipk (24.10) | 1.8.7-r20251116 ⚠️上游停更 | arm64 / x86 | 进阶设置(与 argon-config 冲突勿同时开启) | sirpdboy/luci-app-advancedplus |
@@ -108,7 +108,7 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | luci-theme-aurora | 极光主题 | ipk (24.10) | 1.4.0-r20260920 ⚠️上游停更 | arm64 / x86 | 极光主题界面(需配套 luci-app-aurora-config 配置中心, 会接管 LuCI 菜单/路由, 谨慎启用) | eamonxg/luci-theme-aurora |
 | luci-theme-shadcn | Shadcn主题 | ipk (24.10) | 0.6.0-r20260920 ⚠️上游停更 | arm64 / x86 | 现代 Shadcn 风格界面主题(会接管 LuCI 菜单/路由, 24.10 下谨慎启用) | eamonxg/luci-theme-shadcn |
 | lucky | Lucky大吉 | ipk (24.10) | 2.20.2-r13 ⚠️上游停更 | arm64 / x86 | 端口转发/反向代理/内网穿透 | gdy666/lucky via dl.openwrt.ai |
-| momo | Momo代理 | ipk (24.10) | v1.2.1 ⚠️上游停更 | arm64 / x86 | 基于 sing-box 的透明代理 | nikkinikki-org/OpenWrt-momo |
+| momo | Momo代理 | ipk (24.10) | v1.2.1 | arm64 / x86 | 基于 sing-box 的透明代理 | nikkinikki-org/OpenWrt-momo |
 | mosdns | DNS分流 | ipk (24.10) | v5.3.4-r14 ⚠️上游停更 | arm64 / x86 | 高性能 DNS 分流(DoH/DoQ 等) | sbwml/luci-app-mosdns |
 | nikki | Nikki代理 | ipk (24.10) | v1.26.1 | arm64 / x86 | 代理工具(与 clashoo 冲突勿同时开启) | nikkinikki-org/OpenWrt-nikki |
 | openclash | OpenClash | ipk (24.10) | v0.47.156 ⚠️上游停更 | arm64 / x86 | Clash 代理客户端 | vernesong/OpenClash |
