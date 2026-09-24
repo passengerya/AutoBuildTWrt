@@ -285,7 +285,11 @@ fi
 
 # 固定默认主题为 Bootstrap(99 最后执行, 覆盖各主题包首次启动脚本的 mediaurlbase 竞争;
 # 其他已安装主题仍可在 系统-系统-主题 中自主切换)
-uci set luci.main.mediaurlbase='/luci-static/bootstrap'
-uci commit luci
+# 保留配置升级时跳过: PKG_UPGRADE=1 由 fstools 恢复配置包时导出, 用户已选的
+# 主题属于保留配置, 不应被升级重置(2026-09-24 用户实测主题被踩回 Bootstrap)。
+if [ "$PKG_UPGRADE" != 1 ]; then
+    uci set luci.main.mediaurlbase='/luci-static/bootstrap'
+    uci commit luci
+fi
 
 exit 0
