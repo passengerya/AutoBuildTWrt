@@ -74,6 +74,8 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-theme-aurora"
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES dae"
 # GOST - 加密隧道/代理
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-i18n-gost-zh-cn"
+# HomeProxy - 现代代理平台(基于 sing-box, 内核由 store 同步的 sing-box 提供)
+#CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-homeproxy luci-i18n-homeproxy-zh-cn"
 # Hysteria - 高性能 QUIC 代理
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES hysteria"
 # IPsec VPN 服务器（IKEv1 PSK/Xauth）
@@ -194,6 +196,8 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-theme-aurora"
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-i18n-adblock-fast-zh-cn"
 # Adblock - 广告拦截
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-i18n-adblock-zh-cn"
+# AdGuardHome - 本地DNS去广告(官方源, 官方 luci 未附 zh-cn 语言包)
+#CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-adguardhome adguardhome"
 # HTTPS DNS 代理 - DoH 加密解析
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-i18n-https-dns-proxy-zh-cn"
 # NextDNS - 加密 DNS 服务
@@ -232,6 +236,8 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-theme-aurora"
 # ───────────────────── 文件与存储 ─────────────────────
 # CIFS/SMB - 网络共享挂载
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-i18n-cifs-mount-zh-cn"
+# Dufs - 轻量文件服务器(静态托管/上传/WebDAV)
+#CUSTOM_PACKAGES="$CUSTOM_PACKAGES dufs luci-app-dufs luci-i18n-dufs-zh-cn"
 # 磁盘管理
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-i18n-diskman-zh-cn"
 # FileBrowser - 网页文件管理器

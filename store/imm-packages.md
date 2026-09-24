@@ -148,3 +148,10 @@
 | xray-core | Xray-core - 代理内核 |
 | luci-i18n-xlnetacc-zh-cn | 迅雷快鸟 - 宽带加速 |
 | luci-i18n-zerotier-zh-cn | ZeroTier - 虚拟局域网 |
+| adguardhome | AdGuardHome - 本地DNS去广告(25.12 官方源) |
+| luci-app-adguardhome | AdGuardHome - LuCI 界面(25.12 官方源, 无 zh-cn 语言包) |
+| dufs | Dufs - 轻量文件服务器(25.12 官方源) |
+| luci-app-dufs | Dufs - LuCI 界面(25.12 官方源) |
+| luci-i18n-dufs-zh-cn | Dufs - 简体中文语言包 |
+| luci-app-homeproxy | HomeProxy - 现代代理平台 LuCI 界面(25.12 官方源, 内核用 store 的 sing-box) |
+| luci-i18n-homeproxy-zh-cn | HomeProxy - 简体中文语言包 |
