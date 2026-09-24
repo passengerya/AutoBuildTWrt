@@ -70,6 +70,7 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | 软件 | 中文名 | 通道 | 版本 | 架构 | 用途 | 来源 |
 | --- | --- | --- | --- | --- | --- | --- |
 | argon | Argon主题 | apk (25.12) | 2.4.7 | arm64 / x86 | 简洁主题, 支持明暗自动切换 | ImmortalWrt 官方源 |
+| bandix | 流量监控 | apk (25.12) |  | arm64 / x86 | Bandix 实时流量监控与统计 | timsaya/luci-app-bandix + timsaya/openwrt-bandix |
 | clashoo | Clashoo代理 | apk (25.12) | 2026.09.16 ⚠️上游停更 | arm64 / x86 | 代理工具(与 nikki 冲突勿同时开启) | kenzok8/openwrt-clashoo |
 | clashoo-c947c7 | — | apk (25.12) | 2026.09.22.3 | arm64 / x86 | — | — |
 | clashoo-cc0 | — | apk (25.12) | 2026.09.19.5019 ⚠️上游停更 | arm64 / x86 | — | — |
