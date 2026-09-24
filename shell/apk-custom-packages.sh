@@ -25,7 +25,7 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES sing-box"
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES chinadns-ng dns2tcp ipt2socks lua-neturl luci-app-ssr-plus luci-i18n-ssr-plus-zh-cn shadowsocksr-libev-ssr-check shadowsocksr-libev-ssr-local shadowsocksr-libev-ssr-nat shadowsocksr-libev-ssr-redir shadowsocksr-libev-ssr-server"
 
 # ───────────────────── 网络服务 ─────────────────────
-# 自动生成: bandix | 流量监控 | Bandix 实时流量监控与统计 |  | 取消下一行注释即启用
+# 自动生成: bandix | 流量监控 | Bandix 实时流量监控与统计 | 0.12.10-r1 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES bandix luci-app-bandix luci-i18n-bandix-zh-cn"
 # 自动生成: easytier | 异地组网 | EasyTier 点对点组网工具 | v2.6.4 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES easytier luci-app-easytier"
