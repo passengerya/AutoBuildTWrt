@@ -92,7 +92,7 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | ssrp-mihomo | SSRP代理 | apk (25.12) |  | arm64 / x86 | SSR-Plus 代理工具(mihomo 内核) | fw876/helloworld |
 | adguardhome | 本地DNS去广告 | ipk (24.10) | v0.107.79 | arm64 / x86 | AdGuardHome 广告拦截与 DNS 服务 | AdguardTeam/AdGuardHome |
 | argon | Argon主题 | ipk (24.10) | 2.4.3-r20250722 | arm64 / x86 | 简洁主题, 支持明暗自动切换 | ImmortalWrt 官方源 |
-| bandix | 流量监控 | ipk (24.10) | 0.11.0-r25 | arm64 / x86 | Bandix 实时流量监控与统计 | timsaya/luci-app-bandix + dl.openwrt.ai |
+| bandix | 流量监控 | ipk (24.10) | 0.11.0-r25 | arm64 / x86 | Bandix 实时流量监控与统计 | timsaya/luci-app-bandix + timsaya/openwrt-bandix |
 | clashoo | Clashoo代理 | ipk (24.10) | 2026.09.19 | arm64 / x86 | 代理工具(与 nikki 冲突勿同时开启) | kenzok8/openwrt-clashoo |
 | dufs | 文件服务器 | ipk (24.10) | 0.46.0-r1 | arm64 / x86 | 轻量文件服务器(静态托管/上传/WebDAV) | sigoden/dufs |
 | easytier | 异地组网 | ipk (24.10) | v2.6.4 | arm64 / x86 | EasyTier 点对点组网工具 | EasyTier/luci-app-easytier |
