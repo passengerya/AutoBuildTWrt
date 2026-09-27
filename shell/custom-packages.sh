@@ -53,7 +53,7 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-adguardhome"
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES geo2txt luci-app-mosdns luci-i18n-mosdns-zh-cn mosdns v2ray-geoip v2ray-geosite"
 
 # ───────────────────── 文件与存储 ─────────────────────
-# 自动生成: dufs | 文件服务器 | 轻量文件服务器(静态托管/上传/WebDAV) | 0.46.0-r1 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: dufs | 文件服务器 | 轻量文件服务器(静态托管/上传/WebDAV) | 0.46.0-r1 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES dufs luci-app-dufs luci-i18n-dufs-zh-cn"
 # 自动生成: openlist2 | 网盘聚合 | OpenList2 网盘聚合(Alist 变体) | v4.2.6 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-openlist2 luci-i18n-openlist2-zh-cn openlist2"
