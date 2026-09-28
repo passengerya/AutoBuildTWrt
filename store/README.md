@@ -79,7 +79,7 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | luci-app-advancedplus | 高级设置 | apk (25.12) | 1.8.7-r20251116 | arm64 / x86 | 进阶设置(与 argon-config 冲突勿同时开启) | sirpdboy/luci-app-advancedplus |
 | luci-app-amlogic | 晶晨宝盒 | apk (25.12) | 3.1.321-r1 | arm64 / x86 | 晶晨机顶盒管理(仅 ARM64 平台) | ophub/luci-app-amlogic |
 | luci-app-aurora-config | 极光配置中心 | apk (25.12) | 1.2.5-r20260920 | arm64 / x86 | Aurora 主题配置中心(提供 /etc/config/aurora, 与主题配套启用) | eamonxg/luci-app-aurora-config |
-| luci-app-oaf | 应用过滤 | apk (25.12) | 7.0-r1 | arm64 / x86 | OpenAppFilter 应用过滤(基于 nftables, 程序管控/游戏加速; 与 turboacc 流卸载互斥) | destan19/OpenAppFilter |
+| luci-app-oaf | 应用过滤 | apk (25.12) | 7.0.1 | arm64 / x86 | OpenAppFilter 应用过滤(基于 nftables, 程序管控/游戏加速; 与 turboacc 流卸载互斥) | destan19/OpenAppFilter |
 | luci-app-store | iStore商店 | apk (25.12) | 0.2.1-r1 | arm64 / x86 | iStore 应用商店 | linkease/istore |
 | luci-app-tailscale-community | Tailscale组网 | apk (25.12) | 4.2.3-r1 | arm64 / x86 | Tailscale 组网(Community 版) | Tokisaki-Galaxy/luci-app-tailscale-community |
 | luci-app-turboacc | TurboACC加速 | apk (25.12) | 2026.09.28-r1 | arm64 / x86 | 网络加速(流卸载/BBR; 与 oaf 应用过滤互斥, 勿同时开启) | coolsnowwolf/luci(imm SDK 源编译) |
