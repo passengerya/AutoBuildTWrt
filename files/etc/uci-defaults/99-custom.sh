@@ -4,10 +4,26 @@
 LOGFILE="/etc/config/uci-defaults-log.txt"
 echo "Starting 99-custom.sh at $(date)" >>$LOGFILE
 
+# 检查配置文件pppoe-settings是否存在 该文件由build.sh动态生成
+SETTINGS_FILE="/etc/config/pppoe-settings"
+if [ ! -f "$SETTINGS_FILE" ]; then
+    echo "PPPoE settings file not found. Skipping." >>$LOGFILE
+else
+    # 读取pppoe信息($enable_pppoe、$pppoe_account、$pppoe_password)
+    . "$SETTINGS_FILE"
+fi
+
+# =====================================================================
+# 以下为「全新安装」默认设置：保留配置升级(PKG_UPGRADE=1，fstools 恢复配置包时导出)
+# 时全部跳过——用户已改的设置(主机名/防火墙/网络/PPPoE/SSH/主题等)属于保留配置，
+# 不应被升级重踩(官方包 uci-defaults 如 30_luci-theme-argon 同样用此守卫，见防错 #43)。
+# =====================================================================
+if [ "$PKG_UPGRADE" != 1 ]; then
+
 # 统一默认主机名(所有固件默认 Twrt, 可在 系统-系统-主机名 中自行修改)
 uci set system.@system[0].hostname='TWrt'
 uci commit system
-# 设置默认防火墙规则，方便单网口虚拟机首次访问 WebUI 
+# 设置默认防火墙规则，方便单网口虚拟机首次访问 WebUI
 # 因为本项目中 单网口模式是dhcp模式 直接就能上网并且访问web界面 避免新手每次都要修改/etc/config/network中的静态ip
 # 当你刷机运行后 都调整好了 你完全可以在web页面自行关闭 wan口防火墙的入站数据
 # 具体操作方法：网络——防火墙 在wan的入站数据 下拉选项里选择 拒绝 保存并应用即可。
@@ -17,15 +33,6 @@ uci set firewall.@zone[1].input='ACCEPT'
 uci add dhcp domain
 uci set "dhcp.@domain[-1].name=time.android.com"
 uci set "dhcp.@domain[-1].ip=203.107.6.88"
-
-# 检查配置文件pppoe-settings是否存在 该文件由build.sh动态生成
-SETTINGS_FILE="/etc/config/pppoe-settings"
-if [ ! -f "$SETTINGS_FILE" ]; then
-    echo "PPPoE settings file not found. Skipping." >>$LOGFILE
-else
-    # 读取pppoe信息($enable_pppoe、$pppoe_account、$pppoe_password)
-    . "$SETTINGS_FILE"
-fi
 
 # 1. 先获取所有物理接口列表
 ifnames=""
@@ -99,7 +106,7 @@ elif [ "$count" -gt 1 ]; then
 
     # LAN口设置静态IP
     uci set network.lan.proto='static'
-    # 多网口设备 支持修改为别的管理后台地址 在Github Action 的UI上自行输入即可 
+    # 多网口设备 支持修改为别的管理后台地址 在Github Action 的UI上自行输入即可
     uci set network.lan.netmask='255.255.255.0'
     # 设置路由器管理后台地址
     IP_VALUE_FILE="/etc/config/custom_router_ip.txt"
@@ -138,75 +145,23 @@ uci delete ttyd.@ttyd[0].interface
 uci set dropbear.@dropbear[0].Interface=''
 uci commit
 
-# 设置编译作者信息
-FILE_PATH="/etc/openwrt_release"
-NEW_DESCRIPTION="Packaged by wukongdaily"
-sed -i "s/DISTRIB_DESCRIPTION='[^']*'/DISTRIB_DESCRIPTION='$NEW_DESCRIPTION'/" "$FILE_PATH"
-
 # 若luci-app-advancedplus (进阶设置)已安装 则去除zsh的调用 防止命令行报 /usb/bin/zsh: not found的提示
 if [ -f /usr/lib/lua/luci/controller/advancedplus.lua ]; then
     sed -i '/\/usr\/bin\/zsh/d' /etc/profile
-    sed -i '/\/bin\/zsh/d' /etc/init.d/advancedplus
+    sed -i '/\/usr\/bin\/zsh/d' /etc/init.d/advancedplus
     sed -i '/\/usr\/bin\/zsh/d' /etc/init.d/advancedplus
     echo "fix ttyd show msg: /usb/bin/zsh: not found" >>$LOGFILE
 fi
 
-# 只有安装了 luci-app-quickfile 才执行
-if [ -f /usr/bin/quickfile ]; then
-    uci set nginx.global.uci_enable='true'
-    uci del nginx._lan 2>/dev/null
-    uci del nginx._redirect2ssl 2>/dev/null
-
-    uci add nginx server
-    uci rename nginx.@server[-1]='_lan'
-
-    uci set nginx._lan.server_name='_lan'
-    uci add_list nginx._lan.listen='80 default_server'
-    uci add_list nginx._lan.listen='[::]:80 default_server'
-    uci add_list nginx._lan.include='conf.d/*.locations'
-    uci set nginx._lan.access_log='off; # logd openwrt'
-
-    # LuCI 经 nginx+uwsgi 前端时, nginx 包自带的 uwsgi_params 不转发 HTTP_COOKIE,
-    # ucode cgi 读不到 sysauth 会话 cookie → 页面内不嵌入 sessionid → 前端 RPC
-    # 回退到 rpcd 的匿名零会话, 所有动态数据/表单字段权限被拒(界面元素缺失)。
-    # 在 luci.locations 的 /cgi-bin/luci location 内补上 cookie 转发。
-    if [ -f /etc/nginx/conf.d/luci.locations ] && ! grep -q 'uwsgi_param HTTP_COOKIE' /etc/nginx/conf.d/luci.locations; then
-        sed -i 's#^location /cgi-bin/luci {#location /cgi-bin/luci {\n\tuwsgi_param HTTP_COOKIE $http_cookie;#' /etc/nginx/conf.d/luci.locations
-        echo "fix luci nginx cookie forwarding" >>$LOGFILE
-    fi
-
-    # ngx_http_ubus_module 是动态模块时 nginx -V 检测不到, 上游 60_nginx-luci-support
-    # 不会自动添加 /ubus location; 这里按模块文件存在与否兜底添加。
-    if [ -f /usr/lib/nginx/modules/ngx_http_ubus_module.so ] && [ -f /etc/nginx/conf.d/luci.locations ] && ! grep -q 'location /ubus' /etc/nginx/conf.d/luci.locations; then
-        cat <<'EOT' >> /etc/nginx/conf.d/luci.locations
-
-location /ubus {
-        ubus_interpreter;
-        ubus_socket_path /var/run/ubus/ubus.sock;
-        ubus_parallel_req 2;
-}
-EOT
-        echo "fix luci nginx ubus location" >>$LOGFILE
-    fi
-
-    uci commit nginx
-    echo "fix quickfile nginx config" >>$LOGFILE
-else
-    # 无 quickfile/nginx 的系统若仍残留「nginx 接管」配置(从带 quickfile 的旧固件
-    # 保留配置升级而来), uhttpd 会一直处于禁用状态 → 网页服务整体消失。
-    # 清除接管标志并恢复 uhttpd(2026-09-16 用户工控机实测踩到)。
-    if [ "$(uci -q get nginx.global.uci_enable)" = "true" ]; then
-        uci set nginx.global.uci_enable='false'
-        uci commit nginx
-        /etc/init.d/uhttpd enable 2>/dev/null
-        /etc/init.d/uhttpd start 2>/dev/null
-        echo "fix stale nginx takeover, restore uhttpd" >>$LOGFILE
-    fi
-fi
+# 固定默认主题为 Bootstrap(99 最后执行, 覆盖各主题包首次启动脚本的 mediaurlbase 竞争;
+# 其他已安装主题仍可在 系统-系统-主题 中自主切换)。用户已选的主题属于保留配置,
+# 升级时跳过(2026-09-24 用户实测主题被踩回 Bootstrap)。
+uci set luci.main.mediaurlbase='/luci-static/bootstrap'
+uci commit luci
 
 # 若安装了dockerd 则设置docker的防火墙规则
 # 扩大docker涵盖的子网范围 '172.16.0.0/12'
-# 方便各类docker容器的端口顺利通过防火墙 
+# 方便各类docker容器的端口顺利通过防火墙
 if command -v dockerd >/dev/null 2>&1; then
     echo "检测到 Docker，正在配置防火墙规则..."
     FW_FILE="/etc/config/firewall"
@@ -254,6 +209,68 @@ else
     echo "未检测到 Docker，跳过防火墙配置。"
 fi
 
+# 只有安装了 luci-app-quickfile 才配置 nginx 接管(状态性 UCI 配置, 升级时跳过避免重复添加 _lan 段;
+# 静态 conf 文件的 cookie/ubus 修复不受影响, 见下方自愈段)
+if [ -f /usr/bin/quickfile ]; then
+    uci set nginx.global.uci_enable='true'
+    uci del nginx._lan 2>/dev/null
+    uci del nginx._redirect2ssl 2>/dev/null
+
+    uci add nginx server
+    uci rename nginx.@server[-1]='_lan'
+
+    uci set nginx._lan.server_name='_lan'
+    uci add_list nginx._lan.listen='80 default_server'
+    uci add_list nginx._lan.listen='[::]:80 default_server'
+    uci add_list nginx._lan.include='conf.d/*.locations'
+    uci set nginx._lan.access_log='off; # logd openwrt'
+
+    uci commit nginx
+    echo "fix quickfile nginx config" >>$LOGFILE
+fi
+
+fi
+# ============ 以上为全新安装默认设置(保留配置升级跳过) ============
+
+# =====================================================================
+# 以下为「每次启动」自愈段：均为幂等检查(存在即跳过/缺失才修复)，
+# 保留配置升级与普通重启都会执行——用于修复旧固件残留的坏状态(见防错 #35/#41)。
+# =====================================================================
+
+# LuCI 经 nginx+uwsgi 前端时, nginx 包自带的 uwsgi_params 不转发 HTTP_COOKIE,
+# ucode cgi 读不到 sysauth 会话 cookie → 页面内不嵌入 sessionid → 前端 RPC
+# 回退到 rpcd 的匿名零会话, 所有动态数据/表单字段权限被拒(界面元素缺失)。
+# 在 luci.locations 的 /cgi-bin/luci location 内补上 cookie 转发。
+if [ -f /usr/bin/quickfile ] && [ -f /etc/nginx/conf.d/luci.locations ] && ! grep -q 'uwsgi_param HTTP_COOKIE' /etc/nginx/conf.d/luci.locations; then
+    sed -i 's#^location /cgi-bin/luci {#location /cgi-bin/luci {\n\tuwsgi_param HTTP_COOKIE $http_cookie;#' /etc/nginx/conf.d/luci.locations
+    echo "fix luci nginx cookie forwarding" >>$LOGFILE
+fi
+
+# ngx_http_ubus_module 是动态模块时 nginx -V 检测不到, 上游 60_nginx-luci-support
+# 不会自动添加 /ubus location; 这里按模块文件存在与否兜底添加。
+if [ -f /usr/bin/quickfile ] && [ -f /usr/lib/nginx/modules/ngx_http_ubus_module.so ] && [ -f /etc/nginx/conf.d/luci.locations ] && ! grep -q 'location /ubus' /etc/nginx/conf.d/luci.locations; then
+    cat <<'EOT' >> /etc/nginx/conf.d/luci.locations
+
+location /ubus {
+        ubus_interpreter;
+        ubus_socket_path /var/run/ubus/ubus.sock;
+        ubus_parallel_req 2;
+}
+EOT
+    echo "fix luci nginx ubus location" >>$LOGFILE
+fi
+
+# 无 quickfile/nginx 的系统若仍残留「nginx 接管」配置(从带 quickfile 的旧固件
+# 保留配置升级而来), uhttpd 会一直处于禁用状态 → 网页服务整体消失。
+# 清除接管标志并恢复 uhttpd(2026-09-16 用户工控机实测踩到)。
+if [ ! -f /usr/bin/quickfile ] && [ "$(uci -q get nginx.global.uci_enable)" = "true" ]; then
+    uci set nginx.global.uci_enable='false'
+    uci commit nginx
+    /etc/init.d/uhttpd enable 2>/dev/null
+    /etc/init.d/uhttpd start 2>/dev/null
+    echo "fix stale nginx takeover, restore uhttpd" >>$LOGFILE
+fi
+
 # oaf(OpenAppFilter)首启自愈: 上游 94_feature_3.0 用 heredoc 批量写入配置,
 # 个别设备上 uci 对新配置包的写入(批量或逐条)静默失败(2026-09-23/24 用户工控机
 # 实测: batch/uci set 均不落盘, 仅直接写文件有效)。这里在缺失/空文件时直接生成
@@ -283,13 +300,9 @@ if [ ! -s /etc/config/appfilter ]; then
     echo "oaf first-boot fallback: recreated /etc/config/appfilter" >>"$LOGFILE"
 fi
 
-# 固定默认主题为 Bootstrap(99 最后执行, 覆盖各主题包首次启动脚本的 mediaurlbase 竞争;
-# 其他已安装主题仍可在 系统-系统-主题 中自主切换)
-# 保留配置升级时跳过: PKG_UPGRADE=1 由 fstools 恢复配置包时导出, 用户已选的
-# 主题属于保留配置, 不应被升级重置(2026-09-24 用户实测主题被踩回 Bootstrap)。
-if [ "$PKG_UPGRADE" != 1 ]; then
-    uci set luci.main.mediaurlbase='/luci-static/bootstrap'
-    uci commit luci
-fi
+# 设置编译作者信息
+FILE_PATH="/etc/openwrt_release"
+NEW_DESCRIPTION="Packaged by wukongdaily"
+sed -i "s/DISTRIB_DESCRIPTION='[^']*'/DISTRIB_DESCRIPTION='$NEW_DESCRIPTION'/" "$FILE_PATH"
 
 exit 0

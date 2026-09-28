@@ -1,7 +1,14 @@
 #!/bin/sh
 # 该脚本为immortalwrt首次启动时 运行的脚本 即 /etc/uci-defaults/99-custom.sh 也就是说该文件在路由器内 重启后消失 只运行一次
-# 设置默认防火墙规则，方便虚拟机首次访问 WebUI
 LOGFILE="/etc/config/uci-defaults-log.txt"
+echo "Starting 99-custom.sh at $(date)" >>$LOGFILE
+
+# 以下默认设置仅在「全新安装」时执行；保留配置升级(PKG_UPGRADE=1，fstools 恢复配置包时导出)
+# 时跳过——用户已改的设置(防火墙/网络/PPPoE/SSH等)属于保留配置，不应被升级重踩
+# (与 files/etc/uci-defaults/99-custom.sh 同规则，见防错 #43)。
+if [ "$PKG_UPGRADE" != 1 ]; then
+
+# 设置默认防火墙规则，方便虚拟机首次访问 WebUI
 uci set firewall.@zone[1].input='ACCEPT'
 
 # 设置主机名映射，解决安卓原生 TV 无法联网的问题
@@ -17,7 +24,7 @@ else
    # 读取pppoe信息(由build.sh写入)
    . "$SETTINGS_FILE"
 fi
-# 设置子网掩码 
+# 设置子网掩码
 uci set network.lan.netmask='255.255.255.0'
 # 设置路由器管理后台地址
 IP_VALUE_FILE="/etc/config/custom_router_ip.txt"
@@ -34,11 +41,11 @@ echo "print enable_pppoe value=== $enable_pppoe" >> $LOGFILE
 if [ "$enable_pppoe" = "yes" ]; then
     echo "PPPoE is enabled at $(date)" >> $LOGFILE
     # 设置拨号信息
-    uci set network.wan.proto='pppoe'                
-    uci set network.wan.username=$pppoe_account     
-    uci set network.wan.password=$pppoe_password     
-    uci set network.wan.peerdns='1'                  
-    uci set network.wan.auto='1' 
+    uci set network.wan.proto='pppoe'
+    uci set network.wan.username=$pppoe_account
+    uci set network.wan.password=$pppoe_password
+    uci set network.wan.peerdns='1'
+    uci set network.wan.auto='1'
     echo "PPPoE configuration completed successfully." >> $LOGFILE
 else
     echo "PPPoE is not enabled. Skipping configuration." >> $LOGFILE
@@ -46,7 +53,7 @@ fi
 
 # 若安装了dockerd 则设置docker的防火墙规则
 # 扩大docker涵盖的子网范围 '172.16.0.0/12'
-# 方便各类docker容器的端口顺利通过防火墙 
+# 方便各类docker容器的端口顺利通过防火墙
 if command -v dockerd >/dev/null 2>&1; then
     echo "检测到 Docker，正在配置防火墙规则..."
     FW_FILE="/etc/config/firewall"
@@ -99,6 +106,9 @@ uci delete ttyd.@ttyd[0].interface
 # 设置所有网口可连接 SSH
 uci set dropbear.@dropbear[0].Interface=''
 uci commit
+
+fi
+# ============ 以上为全新安装默认设置(保留配置升级跳过) ============
 
 # 设置编译作者信息
 FILE_PATH="/etc/openwrt_release"
