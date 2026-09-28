@@ -52,6 +52,17 @@ else
   ls -lah /home/build/immortalwrt/packages/
 fi
 
+# 本地包索引: imagebuilder 的 package_reload 会静默执行 mkndx(失败无输出且不报错,
+# 全部本地包变成 "no such package"), 这里显式执行并保留输出, 失败立即暴露
+if [ -n "$CUSTOM_PACKAGES" ] && ls packages/*.apk >/dev/null 2>&1; then
+  echo "🧾 生成本地 apk 索引(packages.adb)..."
+  apk mkndx --allow-untrusted --output packages.adb packages/*.apk || {
+    echo "❌ apk 本地索引生成失败(某个 apk 无法被 mkndx 解析)"
+    exit 1
+  }
+  ls -lh packages/packages.adb
+fi
+
 
 # 输出调试信息
 echo "$(date '+%Y-%m-%d %H:%M:%S') - 开始构建固件..."
