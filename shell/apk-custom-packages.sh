@@ -34,7 +34,7 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES appfilter kmod-oaf luci-app-oaf luci-i18n-oaf-
 # 自动生成: luci-app-tailscale-community | Tailscale组网 | Tailscale 组网(Community 版) | 4.2.3-r1 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-tailscale-community luci-i18n-tailscale-community-zh-cn"
 # 自动生成: luci-app-turboacc | TurboACC加速 | 网络加速(流卸载/BBR; 与 oaf 应用过滤互斥, 勿同时开启) | 2026.09.28-r1 | 取消下一行注释即启用
-#CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-turboacc luci-i18n-turboacc-zh-cn"
+CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-turboacc luci-i18n-turboacc-zh-cn"
 # 自动生成: rtp2httpd | IPTV转发 | IPTV 流媒体转发服务器 | 3.17.1-r1 | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-rtp2httpd luci-i18n-rtp2httpd-zh-cn rtp2httpd"
 
