@@ -93,9 +93,10 @@ APP_META = {
     "luci-app-amlogic": {"cn": "晶晨宝盒", "desc": "晶晨机顶盒管理(仅 ARM64 平台)", "src": "ophub/luci-app-amlogic", "cat": "设备管理"},
     "luci-app-aurora-config": {"cn": "极光配置中心", "desc": "Aurora 主题配置中心(提供 /etc/config/aurora, 与主题配套启用)", "src": "eamonxg/luci-app-aurora-config", "cat": "系统与界面"},
     "luci-app-nekobox": {"cn": "NekoBox代理", "desc": "NekoBox 代理工具", "src": "Thaolga/openwrt-nekobox", "cat": "代理工具"},
-    "luci-app-oaf": {"cn": "应用过滤", "desc": "OpenAppFilter 应用过滤(基于 nftables, 程序管控/游戏加速)", "src": "destan19/OpenAppFilter", "cat": "网络服务"},
+    "luci-app-oaf": {"cn": "应用过滤", "desc": "OpenAppFilter 应用过滤(基于 nftables, 程序管控/游戏加速; 与 turboacc 流卸载互斥)", "src": "destan19/OpenAppFilter", "cat": "网络服务"},
     "luci-app-store": {"cn": "iStore商店", "desc": "iStore 应用商店", "src": "linkease/istore", "cat": "设备管理"},
     "luci-app-tailscale-community": {"cn": "Tailscale组网", "desc": "Tailscale 组网(Community 版)", "src": "Tokisaki-Galaxy/luci-app-tailscale-community", "cat": "网络服务"},
+    "luci-app-turboacc": {"cn": "TurboACC加速", "desc": "网络加速(流卸载/BBR; 与 oaf 应用过滤互斥, 勿同时开启)", "src": "coolsnowwolf/luci(imm SDK 源编译)", "cat": "网络服务"},
     "luci-app-uninstall": {"cn": "高级卸载", "desc": "彻底卸载插件的工具", "src": "上游 run 直采", "cat": "系统与界面"},
     "luci-theme-aurora": {"cn": "极光主题", "desc": "极光主题界面(需配套 luci-app-aurora-config 配置中心, 会接管 LuCI 菜单/路由, 谨慎启用)", "src": "eamonxg/luci-theme-aurora", "cat": "系统与界面"},
     "luci-theme-shadcn": {"cn": "Shadcn主题", "desc": "现代 Shadcn 风格界面主题(会接管 LuCI 菜单/路由, 24.10 下谨慎启用)", "src": "eamonxg/luci-theme-shadcn", "cat": "系统与界面"},
@@ -125,6 +126,7 @@ CONFLICT_GROUPS = [
     {"luci-app-advancedplus", "argon"},
     {"quickfile", "luci-app-run"},
     {"argon", "luci-theme-aurora", "luci-theme-shadcn"},
+    {"luci-app-oaf", "luci-app-turboacc"},  # 流卸载会绕过 oaf 的流量采集(上游 #178 确认)
 ]
 
 # 各机型 build 脚本默认都会加入 Argon; 生成段里即使没取消注释 argon,
@@ -745,6 +747,38 @@ def main():
     print("同步完成。" if not args.dry_run else "dry-run 结束, 未做任何修改。")
 
 
+RE_ALL_VARIANT = re.compile(r"_all(?=[-_.]|$)")
+
+
+def cleanup_all_variants(assets, dry_run=False):
+    """删除 store 中同(通道, 应用)的旧 _all 资产(当上游已改为按架构拆分发布时)。
+
+    oaf 25.12 起上游发布 x86_64/aarch64_generic 两份 .run(引擎+内核模块按架构打包),
+    旧的 `_all` .run(仅 LuCI UI)若不清理会继续被 prepare 收进构建, 且不参与
+    cleanup_old(架构分类不同)。release 里出现按架构拆分的资产时, 对应 _all 旧文件
+    应在本仓库 store 中删除(上游 release 侧随 release 轮换自然淘汰)。
+    """
+    arch_specific = {
+        (channel_of(a["name"]), norm_key(a["name"]))
+        for a in assets
+        if RE_ARCH_X86.search(a["name"]) or RE_ARCH_ARM64.search(a["name"])
+    }
+    for arch, d in ARCH_DIRS.items():
+        if not os.path.isdir(d):
+            continue
+        for f in sorted(os.listdir(d)):
+            if not f.endswith(".run") or not RE_ALL_VARIANT.search(f):
+                continue
+            if (channel_of(f), norm_key(f)) not in arch_specific:
+                continue
+            p = os.path.join(d, f)
+            if dry_run:
+                print("[%s] (dry-run) 将删除旧 _all 资产: %s" % (arch, f))
+                continue
+            os.remove(p)
+            print("[%s] 删除旧 _all 资产(已有按架构拆分): %s" % (arch, f))
+
+
 def run_sync(assets, dry_run=False):
     """从 CloudRunFilesBuilder Release 同步 .run 资产到内嵌 store(原有逻辑)。"""
     # 统计本仓库现有的变体选择(用于同名应用延续原变体; 按通道区分, 24/25 互不影响)
@@ -785,6 +819,9 @@ def run_sync(assets, dry_run=False):
             continue
         download_asset(chosen, ARCH_DIRS[arch])
         cleanup_old(key, arch, chosen["name"])
+
+    # 迁移: 上游改为按架构拆分发布后, 清理 store 中残留的旧 _all 资产
+    cleanup_all_variants(assets, dry_run=dry_run)
 
 
 if __name__ == "__main__":

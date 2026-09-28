@@ -346,6 +346,136 @@ class MaintainListsTests(unittest.TestCase):
         self.assertIn("old-app", readme)
         self.assertIn("old-app", ipk_sh)
 
+    def test_turboacc_meta_and_oaf_triplet(self):
+        """turboacc 元数据存在; oaf apk 通道的引擎+kmod 包名进入开关行;
+        oaf 与 turboacc 同开时输出冲突警告。"""
+        self._write_fixtures(
+            ipk_enabled={},
+            ipk_disabled={"luci-app-oaf": ["luci-app-oaf"]},
+        )
+        summary = {
+            ("apk", "luci-app-oaf"): {
+                "version": "7.0.1",
+                "archs": {"x86", "arm64"},
+                "ipks": set(),
+                "apks": {
+                    "luci-app-oaf-7.0-r1.apk",
+                    "luci-i18n-oaf-zh-cn-26.238.31834~15b2b27.apk",
+                    "appfilter-7.0.1-r1.apk",
+                    "kmod-oaf-6.12.94-r1.apk",
+                },
+            },
+            ("apk", "luci-app-turboacc"): {
+                "version": "2026.09.28",
+                "archs": {"x86", "arm64"},
+                "ipks": set(),
+                "apks": {
+                    "luci-app-turboacc-2026.09.28.apk",
+                    "luci-i18n-turboacc-zh-cn-26.238.31834~15b2b27.apk",
+                },
+            },
+        }
+        srf.maintain_lists(summary, valid_names=None, dry_run=False)
+        apk_sh = self._read("shell/apk-custom-packages.sh")
+        readme = self._read("store/README.md")
+
+        # oaf 开关行包含三件套(引擎 + 内核模块 + UI)
+        self.assertRegex(
+            apk_sh,
+            r'(?m)^#CUSTOM_PACKAGES="\$CUSTOM_PACKAGES appfilter kmod-oaf luci-app-oaf luci-i18n-oaf-zh-cn"$',
+        )
+        self.assertRegex(
+            apk_sh,
+            r'(?m)^#CUSTOM_PACKAGES="\$CUSTOM_PACKAGES luci-app-turboacc luci-i18n-turboacc-zh-cn"$',
+        )
+        self.assertIn("TurboACC加速", readme)
+        # 均未启用: 无冲突警告
+        self.assertNotIn("冲突警告", apk_sh)
+
+    def test_oaf_turboacc_conflict_warning(self):
+        """oaf 与 turboacc 同时启用时输出 ⚠️ 冲突警告。"""
+        self._write_fixtures(ipk_enabled={}, ipk_disabled={})
+        with open(os.path.join(self.root, "shell", "apk-custom-packages.sh"), "w", encoding="utf-8") as f:
+            f.write(
+                self.header
+                + srf.SH_BEGIN + "\n"
+                + "# 自动生成: luci-app-oaf | 应用过滤 | 说明 | 取消下一行注释即启用\n"
+                + 'CUSTOM_PACKAGES="$CUSTOM_PACKAGES appfilter kmod-oaf luci-app-oaf"\n'
+                + "# 自动生成: luci-app-turboacc | TurboACC加速 | 说明 | 取消下一行注释即启用\n"
+                + 'CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-turboacc"\n'
+                + srf.SH_END + "\n" + self.fixed
+            )
+        summary = {
+            ("apk", "luci-app-oaf"): {
+                "version": "7.0.1", "archs": {"x86"}, "ipks": set(),
+                "apks": {"luci-app-oaf-7.0-r1.apk", "appfilter-7.0.1-r1.apk", "kmod-oaf-6.12.94-r1.apk"},
+            },
+            ("apk", "luci-app-turboacc"): {
+                "version": "2026.09.28", "archs": {"x86"}, "ipks": set(),
+                "apks": {"luci-app-turboacc-2026.09.28.apk"},
+            },
+        }
+        srf.maintain_lists(summary, valid_names=None, dry_run=False)
+        apk_sh = self._read("shell/apk-custom-packages.sh")
+        self.assertIn("冲突警告", apk_sh)
+        self.assertIn("luci-app-oaf", apk_sh)
+        self.assertIn("luci-app-turboacc", apk_sh)
+        # 启用状态保持(两个都仍处于启用态)
+        self.assertRegex(apk_sh, r'(?m)^CUSTOM_PACKAGES="\$CUSTOM_PACKAGES appfilter kmod-oaf luci-app-oaf[^"]*"$')
+        self.assertRegex(apk_sh, r'(?m)^CUSTOM_PACKAGES="\$CUSTOM_PACKAGES luci-app-turboacc"$')
+
+
+class CleanupAllVariantsTests(unittest.TestCase):
+    """_all 资产迁移清理: 上游改为按架构拆分发布后删除旧 _all .run。"""
+
+    def setUp(self):
+        self._saved = {k: getattr(srf, k) for k in ("ARCH_DIRS",)}
+        self.tmp = tempfile.TemporaryDirectory()
+        run = os.path.join(self.tmp.name, "store", "run")
+        srf.ARCH_DIRS = {"x86": os.path.join(run, "x86"), "arm64": os.path.join(run, "arm64")}
+        for d in srf.ARCH_DIRS.values():
+            os.makedirs(d)
+        for d in srf.ARCH_DIRS.values():
+            for name in (
+                "25-luci-app-oaf-7.0-r1_all.run",      # 待清理: oaf 旧 _all
+                "25-other-app-1.0_all.run",            # 保留: 其它应用
+                "25-luci-app-oaf-7.0.1_x86_64.run",    # 保留: 已拆分的新资产
+                "24_oaf-6.1.4-r1_all.run",             # 保留: 不同通道(24 无拆分)
+            ):
+                with open(os.path.join(d, name), "w") as f:
+                    f.write("x")
+
+    def tearDown(self):
+        for k, v in self._saved.items():
+            setattr(srf, k, v)
+        self.tmp.cleanup()
+
+    def _names(self, arch):
+        return sorted(os.listdir(srf.ARCH_DIRS[arch]))
+
+    def test_migration_removes_all_variant(self):
+        assets = [
+            {"name": "25-luci-app-oaf-7.0.1_x86_64.run"},
+            {"name": "25-luci-app-oaf-7.0.1_aarch64_generic.run"},
+            {"name": "25-other-app-1.0_all.run"},
+        ]
+        srf.cleanup_all_variants(assets, dry_run=False)
+        for arch in ("x86", "arm64"):
+            names = self._names(arch)
+            self.assertNotIn("25-luci-app-oaf-7.0-r1_all.run", names)
+            self.assertIn("25-other-app-1.0_all.run", names)
+            self.assertIn("24_oaf-6.1.4-r1_all.run", names)
+
+    def test_dry_run_keeps_files(self):
+        assets = [{"name": "25-luci-app-oaf-7.0.1_x86_64.run"}]
+        srf.cleanup_all_variants(assets, dry_run=True)
+        self.assertIn("25-luci-app-oaf-7.0-r1_all.run", self._names("x86"))
+
+    def test_no_arch_specific_assets_no_cleanup(self):
+        assets = [{"name": "25-other-app-1.0_all.run"}]
+        srf.cleanup_all_variants(assets, dry_run=False)
+        self.assertIn("25-luci-app-oaf-7.0-r1_all.run", self._names("x86"))
+
 
 if __name__ == "__main__":
     unittest.main()
