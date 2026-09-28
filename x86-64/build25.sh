@@ -56,7 +56,7 @@ fi
 # 全部本地包变成 "no such package"), 这里显式执行并保留输出, 失败立即暴露
 if [ -n "$CUSTOM_PACKAGES" ] && ls packages/*.apk >/dev/null 2>&1; then
   echo "🧾 生成本地 apk 索引(packages.adb)..."
-  apk mkndx --allow-untrusted --output packages.adb packages/*.apk || {
+  staging_dir/host/bin/apk mkndx --allow-untrusted --output packages.adb packages/*.apk || {
     echo "❌ apk 本地索引生成失败(某个 apk 无法被 mkndx 解析)"
     exit 1
   }
