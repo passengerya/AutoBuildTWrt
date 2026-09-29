@@ -3,10 +3,16 @@
 LOGFILE="/etc/config/uci-defaults-log.txt"
 echo "Starting 99-custom.sh at $(date)" >>$LOGFILE
 
-# 以下默认设置仅在「全新安装」时执行；保留配置升级(PKG_UPGRADE=1，fstools 恢复配置包时导出)
-# 时跳过——用户已改的设置(防火墙/网络/PPPoE/SSH等)属于保留配置，不应被升级重踩
-# (与 files/etc/uci-defaults/99-custom.sh 同规则，见防错 #43)。
-if [ "$PKG_UPGRADE" != 1 ]; then
+# 以下默认设置仅在「全新安装」时执行。判定(双保险, 见防错 #47):
+# 标记文件 + 主机名印记——不能用 PKG_UPGRADE(该变量只在包管理器 pre/post-upgrade
+# 脚本里 export, uci-defaults 环境里没有; 2026-09-29 用户实测升级后设置仍被重踩)。
+DEFAULTS_MARKER="/etc/config/.twrt-defaults-applied"
+if [ ! -f "$DEFAULTS_MARKER" ] && \
+   [ "$(uci -q get system.@system[0].hostname)" != "TWrt" ]; then
+
+# 统一默认主机名(与 files/etc/uci-defaults/99-custom.sh 一致)
+uci set system.@system[0].hostname='TWrt'
+uci commit system
 
 # 设置默认防火墙规则，方便虚拟机首次访问 WebUI
 uci set firewall.@zone[1].input='ACCEPT'
@@ -108,7 +114,9 @@ uci set dropbear.@dropbear[0].Interface=''
 uci commit
 
 fi
-# ============ 以上为全新安装默认设置(保留配置升级跳过) ============
+# ============ 以上为全新安装默认设置(已初始化配置则跳过) ============
+# 旧固件升级来的配置(主机名已是 TWrt)首次启动补写标记
+touch "$DEFAULTS_MARKER"
 
 # 设置编译作者信息
 FILE_PATH="/etc/openwrt_release"
