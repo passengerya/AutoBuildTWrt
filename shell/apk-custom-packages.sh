@@ -12,13 +12,13 @@
 # ───────────────────── 代理工具 ─────────────────────
 # 自动生成: clashoo | Clashoo代理 | 代理工具(与 nikki 冲突勿同时开启) | 2026.09.25 上游停更(保留旧版) | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES clashoo luci-app-clashoo luci-i18n-clashoo-zh-cn"
-# 自动生成: openclash | OpenClash | Clash 代理客户端 | v0.47.156 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: openclash | OpenClash | Clash 代理客户端 | v0.47.156 | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-openclash"
 # 自动生成: openwrt-daede | eBPF代理 | 基于 eBPF 的高性能透明代理(dae/daed) | 2026.09.29 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES dae daed luci-app-daede vmlinux-btf"
-# 自动生成: passwall | PassWall | 代理工具(自带依赖) | 26.9.26 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: passwall | PassWall | 代理工具(自带依赖) | 26.9.27 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES chinadns-ng dns2socks geoview hysteria luci-app-passwall luci-i18n-passwall-zh-cn tcping v2ray-geoip v2ray-geosite xray-core"
-# 自动生成: passwall2 | PassWall2 | 代理工具(自带依赖) | 26.9.16-1 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: passwall2 | PassWall2 | 代理工具(自带依赖) | 26.9.16-1 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES chinadns-ng geoview luci-app-passwall2 luci-i18n-passwall2-zh-cn shadowsocks-rust-sslocal shadowsocks-rust-ssserver shadowsocksr-libev-ssr-local shadowsocksr-libev-ssr-redir shadowsocksr-libev-ssr-server simple-obfs-client tcping v2ray-geoip v2ray-geosite v2ray-plugin"
 # 自动生成: sing-box | Sing-box内核 | 通用代理内核 | v1.14.2 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES sing-box"
@@ -26,7 +26,7 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-openclash"
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES chinadns-ng dns2tcp ipt2socks lua-neturl luci-app-ssr-plus luci-i18n-ssr-plus-zh-cn shadowsocksr-libev-ssr-check shadowsocksr-libev-ssr-local shadowsocksr-libev-ssr-nat shadowsocksr-libev-ssr-redir shadowsocksr-libev-ssr-server"
 
 # ───────────────────── 网络服务 ─────────────────────
-# 自动生成: bandix | 流量监控 | Bandix 实时流量监控与统计 | 0.12.10-r1 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: bandix | 流量监控 | Bandix 实时流量监控与统计 | 0.12.11-r1 | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES bandix luci-app-bandix luci-i18n-bandix-zh-cn"
 # 自动生成: easytier | 异地组网 | EasyTier 点对点组网工具 | v2.6.4 上游停更(保留旧版) | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES easytier luci-app-easytier"
@@ -40,7 +40,7 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-turboacc luci-i18n-turboacc-zh-cn"
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-rtp2httpd luci-i18n-rtp2httpd-zh-cn rtp2httpd"
 
 # ───────────────────── 广告与DNS ─────────────────────
-# 自动生成: mosdns | DNS分流 | 高性能 DNS 分流(DoH/DoQ 等) | v5.3.4-r14 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: mosdns | DNS分流 | 高性能 DNS 分流(DoH/DoQ 等) | v5.3.4-r14 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES geo2txt luci-app-mosdns luci-i18n-mosdns-zh-cn mosdns v2ray-geoip v2ray-geosite"
 
 # ───────────────────── 文件与存储 ─────────────────────
