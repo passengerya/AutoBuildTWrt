@@ -62,7 +62,7 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-theme-shadcn"
 # ───────────────────── 设备管理 ─────────────────────
 # 自动生成: luci-app-amlogic | 晶晨宝盒 | 晶晨机顶盒管理(仅 ARM64 平台) | 3.1.321-r1 上游停更(保留旧版) | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-amlogic luci-i18n-amlogic-zh-cn"
-# 自动生成: luci-app-store | iStore商店 | iStore 应用商店 | 0.2.1-r1 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: luci-app-store | iStore商店 | iStore 应用商店 | 0.2.1-r1 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-store luci-lib-taskd luci-lib-xterm taskd"
 
 # ───────────────────── 其他 ─────────────────────

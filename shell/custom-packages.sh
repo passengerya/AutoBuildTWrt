@@ -11,13 +11,13 @@
 # ───────────────────── 代理工具 ─────────────────────
 # 自动生成: clashoo | Clashoo代理 | 代理工具(与 nikki 冲突勿同时开启) | 2026.09.27 上游停更(保留旧版) | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES clashoo luci-app-clashoo luci-i18n-clashoo-zh-cn"
-# 自动生成: homeproxy | 代理平台 | 现代代理平台(基于 sing-box) | 26.187.07809 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: homeproxy | 代理平台 | 现代代理平台(基于 sing-box) | 26.187.07809 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-homeproxy luci-i18n-homeproxy-zh-cn sing-box-tiny"
 # 自动生成: luci-app-nekobox | NekoBox代理 | NekoBox 代理工具 | 2.0.9 上游停更(保留旧版) | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-nekobox"
 # 自动生成: momo | Momo代理 | 基于 sing-box 的透明代理 | v1.2.1 上游停更(保留旧版) | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-momo luci-i18n-momo-zh-cn momo"
-# 自动生成: nikki | Nikki代理 | 代理工具(与 clashoo 冲突勿同时开启) | v1.26.1 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: nikki | Nikki代理 | 代理工具(与 clashoo 冲突勿同时开启) | v1.26.1 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-nikki luci-i18n-nikki-ru luci-i18n-nikki-zh-cn luci-i18n-nikki-zh-tw mihomo-alpha mihomo-meta nikki"
 # 自动生成: openclash | OpenClash | Clash 代理客户端 | v0.47.156 上游停更(保留旧版) | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-openclash"
@@ -47,7 +47,7 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-lucky lucky"
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-rtp2httpd luci-i18n-rtp2httpd-zh-cn rtp2httpd"
 
 # ───────────────────── 广告与DNS ─────────────────────
-# 自动生成: adguardhome | 本地DNS去广告 | AdGuardHome 广告拦截与 DNS 服务 | v0.107.79 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: adguardhome | 本地DNS去广告 | AdGuardHome 广告拦截与 DNS 服务 | v0.107.79 | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-adguardhome"
 # 自动生成: mosdns | DNS分流 | 高性能 DNS 分流(DoH/DoQ 等) | v5.3.4-r14 上游停更(保留旧版) | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES geo2txt luci-app-mosdns luci-i18n-mosdns-zh-cn mosdns v2ray-geoip v2ray-geosite"
@@ -55,7 +55,7 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-adguardhome"
 # ───────────────────── 文件与存储 ─────────────────────
 # 自动生成: dufs | 文件服务器 | 轻量文件服务器(静态托管/上传/WebDAV) | 0.46.0-r1 上游停更(保留旧版) | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES dufs luci-app-dufs luci-i18n-dufs-zh-cn"
-# 自动生成: openlist2 | 网盘聚合 | OpenList2 网盘聚合(Alist 变体) | v4.2.6 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: openlist2 | 网盘聚合 | OpenList2 网盘聚合(Alist 变体) | v4.2.6 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-openlist2 luci-i18n-openlist2-zh-cn openlist2"
 # 自动生成: quickfile | 文件管理 | 轻量网页文件管理器(与 luci-app-run 冲突勿同时开启) | 1.0.16 上游停更(保留旧版) | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-quickfile luci-i18n-quickfile-zh-cn quickfile"
