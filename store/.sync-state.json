@@ -1,15 +1,15 @@
 {
   "misses": {
-    "apk|quickfile": 146,
-    "ipk|passwall": 146,
-    "ipk|passwall2": 146,
-    "ipk|quickfile": 146,
-    "ipk|ssrp-mihomo": 146,
-    "apk|clashoo-cc0": 85,
-    "apk|clashoo-c947c7": 62,
-    "apk|luci-app-turboacc": 15,
-    "apk|clashoo-bd52e": 7,
-    "ipk|nikki": 7
+    "apk|quickfile": 147,
+    "ipk|passwall": 147,
+    "ipk|passwall2": 147,
+    "ipk|quickfile": 147,
+    "ipk|ssrp-mihomo": 147,
+    "apk|clashoo-cc0": 86,
+    "apk|clashoo-c947c7": 63,
+    "apk|luci-app-turboacc": 16,
+    "apk|clashoo-bd52e": 8,
+    "ipk|nikki": 8
   },
   "stale": [
     "apk|clashoo-bd52e",
