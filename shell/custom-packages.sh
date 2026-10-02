@@ -17,7 +17,7 @@
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-nekobox"
 # 自动生成: momo | Momo代理 | 基于 sing-box 的透明代理 | v1.2.1 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-momo luci-i18n-momo-zh-cn momo"
-# 自动生成: nikki | Nikki代理 | 代理工具(与 clashoo 冲突勿同时开启) | v1.26.1 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: nikki | Nikki代理 | 代理工具(与 clashoo 冲突勿同时开启) | v1.26.1 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-nikki luci-i18n-nikki-ru luci-i18n-nikki-zh-cn luci-i18n-nikki-zh-tw mihomo-alpha mihomo-meta nikki"
 # 自动生成: openclash | OpenClash | Clash 代理客户端 | v0.47.156 | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-openclash"

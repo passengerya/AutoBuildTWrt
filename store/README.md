@@ -114,7 +114,7 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | lucky | Lucky大吉 | ipk (24.10) | 2.20.2-r13 | arm64 / x86 | 端口转发/反向代理/内网穿透 | gdy666/lucky via dl.openwrt.ai |
 | momo | Momo代理 | ipk (24.10) | v1.2.1 | arm64 / x86 | 基于 sing-box 的透明代理 | nikkinikki-org/OpenWrt-momo |
 | mosdns | DNS分流 | ipk (24.10) | v5.3.4-r14 | arm64 / x86 | 高性能 DNS 分流(DoH/DoQ 等) | sbwml/luci-app-mosdns |
-| nikki | Nikki代理 | ipk (24.10) | v1.26.1 ⚠️上游停更 | arm64 / x86 | 代理工具(与 clashoo 冲突勿同时开启) | nikkinikki-org/OpenWrt-nikki |
+| nikki | Nikki代理 | ipk (24.10) | v1.26.1 | arm64 / x86 | 代理工具(与 clashoo 冲突勿同时开启) | nikkinikki-org/OpenWrt-nikki |
 | openclash | OpenClash | ipk (24.10) | v0.47.156 | arm64 / x86 | Clash 代理客户端 | vernesong/OpenClash |
 | openlist2 | 网盘聚合 | ipk (24.10) | v4.2.6 | arm64 / x86 | OpenList2 网盘聚合(Alist 变体) | sbwml/luci-app-openlist2 |
 | openwrt-daede | eBPF代理 | ipk (24.10) | 2026.10.01 | arm64 / x86 | 基于 eBPF 的高性能透明代理(dae/daed) | kenzok8/openwrt-daede |
