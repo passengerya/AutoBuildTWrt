@@ -86,7 +86,7 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | luci-app-tailscale-community | Tailscale组网 | apk (25.12) | 4.3.0-r1 | arm64 / x86 | Tailscale 组网(Community 版) | Tokisaki-Galaxy/luci-app-tailscale-community |
 | luci-app-turboacc | TurboACC加速 | apk (25.12) | 2026.09.28-r1 ⚠️上游停更 | arm64 / x86 | 网络加速(流卸载/BBR; 与 oaf 应用过滤互斥, 勿同时开启) | coolsnowwolf/luci(imm SDK 源编译) |
 | luci-theme-aurora | 极光主题 | apk (25.12) | 1.4.0-r20260920 | arm64 / x86 | 极光主题界面(需配套 luci-app-aurora-config 配置中心, 会接管 LuCI 菜单/路由, 谨慎启用) | eamonxg/luci-theme-aurora |
-| luci-theme-shadcn | Shadcn主题 | apk (25.12) | 0.6.0-r20260920 ⚠️上游停更 | arm64 / x86 | 现代 Shadcn 风格界面主题(会接管 LuCI 菜单/路由, 24.10 下谨慎启用) | eamonxg/luci-theme-shadcn |
+| luci-theme-shadcn | Shadcn主题 | apk (25.12) | 0.6.0-r20260920 | arm64 / x86 | 现代 Shadcn 风格界面主题(会接管 LuCI 菜单/路由, 24.10 下谨慎启用) | eamonxg/luci-theme-shadcn |
 | mosdns | DNS分流 | apk (25.12) | v5.3.4-r14 | arm64 / x86 | 高性能 DNS 分流(DoH/DoQ 等) | sbwml/luci-app-mosdns |
 | openclash | OpenClash | apk (25.12) | v0.47.156 | arm64 / x86 | Clash 代理客户端 | vernesong/OpenClash |
 | openwrt-daede | eBPF代理 | apk (25.12) | 2026.10.04 | arm64 / x86 | 基于 eBPF 的高性能透明代理(dae/daed) | kenzok8/openwrt-daede |
