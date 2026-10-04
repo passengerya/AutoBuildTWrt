@@ -70,7 +70,7 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | 软件 | 中文名 | 通道 | 版本 | 架构 | 用途 | 来源 |
 | --- | --- | --- | --- | --- | --- | --- |
 | argon | Argon主题 | apk (25.12) | 2.4.7 | arm64 / x86 | 简洁主题, 支持明暗自动切换 | ImmortalWrt 官方源 |
-| bandix | 流量监控 | apk (25.12) | 0.12.11-r1 ⚠️上游停更 | arm64 / x86 | Bandix 实时流量监控与统计 | timsaya/luci-app-bandix + timsaya/openwrt-bandix |
+| bandix | 流量监控 | apk (25.12) | 0.12.11-r1 | arm64 / x86 | Bandix 实时流量监控与统计 | timsaya/luci-app-bandix + timsaya/openwrt-bandix |
 | clashoo | Clashoo代理 | apk (25.12) | 2026.09.30.1341769-r1 ⚠️上游停更 | arm64 / x86 | 代理工具(与 nikki 冲突勿同时开启) | kenzok8/openwrt-clashoo |
 | clashoo-bd52e | — | apk (25.12) | 2026.09.27.63 ⚠️上游停更 | arm64 / x86 | — | — |
 | clashoo-c947c7 | — | apk (25.12) | 2026.09.22.3 ⚠️上游停更 | arm64 / x86 | — | — |
@@ -95,10 +95,10 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | quickfile | 文件管理 | apk (25.12) | 1.0.16 ⚠️上游停更 | arm64 / x86 | 轻量网页文件管理器(与 luci-app-run 冲突勿同时开启) | sbwml/luci-app-quickfile |
 | rtp2httpd | IPTV转发 | apk (25.12) | 3.17.2-r1 ⚠️上游停更 | arm64 / x86 | IPTV 流媒体转发服务器 | stackia/rtp2httpd |
 | sing-box | Sing-box内核 | apk (25.12) | v1.14.2 | arm64 / x86 | 通用代理内核 | SagerNet/sing-box |
-| ssrp-mihomo | SSRP代理 | apk (25.12) | ⚠️上游停更 | arm64 / x86 | SSR-Plus 代理工具(mihomo 内核) | fw876/helloworld |
+| ssrp-mihomo | SSRP代理 | apk (25.12) |  | arm64 / x86 | SSR-Plus 代理工具(mihomo 内核) | fw876/helloworld |
 | adguardhome | 本地DNS去广告 | ipk (24.10) | v0.107.79 | arm64 / x86 | AdGuardHome 广告拦截与 DNS 服务 | AdguardTeam/AdGuardHome |
 | argon | Argon主题 | ipk (24.10) | 2.4.3-r20250722 | arm64 / x86 | 简洁主题, 支持明暗自动切换 | ImmortalWrt 官方源 |
-| bandix | 流量监控 | ipk (24.10) | 0.12.11-r1 ⚠️上游停更 | arm64 / x86 | Bandix 实时流量监控与统计 | timsaya/luci-app-bandix + timsaya/openwrt-bandix |
+| bandix | 流量监控 | ipk (24.10) | 0.12.11-r1 | arm64 / x86 | Bandix 实时流量监控与统计 | timsaya/luci-app-bandix + timsaya/openwrt-bandix |
 | clashoo | Clashoo代理 | ipk (24.10) | 2026.10.02 | arm64 / x86 | 代理工具(与 nikki 冲突勿同时开启) | kenzok8/openwrt-clashoo |
 | dufs | 文件服务器 | ipk (24.10) | 0.46.0-r1 | arm64 / x86 | 轻量文件服务器(静态托管/上传/WebDAV) | sigoden/dufs |
 | easytier | 异地组网 | ipk (24.10) | v2.6.4 ⚠️上游停更 | arm64 / x86 | EasyTier 点对点组网工具 | EasyTier/luci-app-easytier |
@@ -109,7 +109,7 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | luci-app-nekobox | NekoBox代理 | ipk (24.10) | 2.0.9 | arm64 / x86 | NekoBox 代理工具 | Thaolga/openwrt-nekobox |
 | luci-app-oaf | 应用过滤 | ipk (24.10) | 6.1.4-r1 | arm64 / x86 | OpenAppFilter 应用过滤(基于 nftables, 程序管控/游戏加速; 与 turboacc 流卸载互斥) | destan19/OpenAppFilter |
 | luci-app-store | iStore商店 | ipk (24.10) | 0.2.1-r1 | arm64 / x86 | iStore 应用商店 | linkease/istore |
-| luci-app-tailscale-community | Tailscale组网 | ipk (24.10) | 4.3.0-r1 ⚠️上游停更 | arm64 / x86 | Tailscale 组网(Community 版) | Tokisaki-Galaxy/luci-app-tailscale-community |
+| luci-app-tailscale-community | Tailscale组网 | ipk (24.10) | 4.3.0-r1 | arm64 / x86 | Tailscale 组网(Community 版) | Tokisaki-Galaxy/luci-app-tailscale-community |
 | luci-app-uninstall | 高级卸载 | ipk (24.10) | v1.2.6 | arm64 / x86 | 彻底卸载插件的工具 | 上游 run 直采 |
 | luci-theme-aurora | 极光主题 | ipk (24.10) | 1.4.0-r20260920 | arm64 / x86 | 极光主题界面(需配套 luci-app-aurora-config 配置中心, 会接管 LuCI 菜单/路由, 谨慎启用) | eamonxg/luci-theme-aurora |
 | luci-theme-shadcn | Shadcn主题 | ipk (24.10) | 0.6.0-r20260920 ⚠️上游停更 | arm64 / x86 | 现代 Shadcn 风格界面主题(会接管 LuCI 菜单/路由, 24.10 下谨慎启用) | eamonxg/luci-theme-shadcn |

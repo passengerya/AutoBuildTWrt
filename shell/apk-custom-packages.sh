@@ -22,11 +22,11 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-openclash"
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES chinadns-ng geoview luci-app-passwall2 luci-i18n-passwall2-zh-cn shadowsocks-rust-sslocal shadowsocks-rust-ssserver shadowsocksr-libev-ssr-local shadowsocksr-libev-ssr-redir shadowsocksr-libev-ssr-server simple-obfs-client tcping v2ray-geoip v2ray-geosite v2ray-plugin"
 # 自动生成: sing-box | Sing-box内核 | 通用代理内核 | v1.14.2 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES sing-box"
-# 自动生成: ssrp-mihomo | SSRP代理 | SSR-Plus 代理工具(mihomo 内核) | 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: ssrp-mihomo | SSRP代理 | SSR-Plus 代理工具(mihomo 内核) |  | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES chinadns-ng dns2tcp ipt2socks lua-neturl luci-app-ssr-plus luci-i18n-ssr-plus-zh-cn shadowsocksr-libev-ssr-check shadowsocksr-libev-ssr-local shadowsocksr-libev-ssr-nat shadowsocksr-libev-ssr-redir shadowsocksr-libev-ssr-server"
 
 # ───────────────────── 网络服务 ─────────────────────
-# 自动生成: bandix | 流量监控 | Bandix 实时流量监控与统计 | 0.12.11-r1 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: bandix | 流量监控 | Bandix 实时流量监控与统计 | 0.12.11-r1 | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES bandix luci-app-bandix luci-i18n-bandix-zh-cn"
 # 自动生成: easytier | 异地组网 | EasyTier 点对点组网工具 | v2.6.4 上游停更(保留旧版) | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES easytier luci-app-easytier"
