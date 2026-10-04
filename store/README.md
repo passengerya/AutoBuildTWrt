@@ -78,14 +78,14 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | clashoo-dcbf7 | — | apk (25.12) | 2026.09.30.88 ⚠️上游停更 | arm64 / x86 | — | — |
 | clashoo-f053c4 | — | apk (25.12) | 2026.10.02.9 | arm64 / x86 | — | — |
 | easytier | 异地组网 | apk (25.12) | v2.6.4 ⚠️上游停更 | arm64 / x86 | EasyTier 点对点组网工具 | EasyTier/luci-app-easytier |
-| luci-app-advancedplus | 高级设置 | apk (25.12) | 1.8.7-r20251116 ⚠️上游停更 | arm64 / x86 | 进阶设置(与 argon-config 冲突勿同时开启) | sirpdboy/luci-app-advancedplus |
-| luci-app-amlogic | 晶晨宝盒 | apk (25.12) | 3.1.321-r1 ⚠️上游停更 | arm64 / x86 | 晶晨机顶盒管理(仅 ARM64 平台) | ophub/luci-app-amlogic |
+| luci-app-advancedplus | 高级设置 | apk (25.12) | 1.8.7-r20251116 | arm64 / x86 | 进阶设置(与 argon-config 冲突勿同时开启) | sirpdboy/luci-app-advancedplus |
+| luci-app-amlogic | 晶晨宝盒 | apk (25.12) | 26.10.0301-r1 | arm64 / x86 | 晶晨机顶盒管理(仅 ARM64 平台) | ophub/luci-app-amlogic |
 | luci-app-aurora-config | 极光配置中心 | apk (25.12) | 1.2.5-r20260920 ⚠️上游停更 | arm64 / x86 | Aurora 主题配置中心(提供 /etc/config/aurora, 与主题配套启用) | eamonxg/luci-app-aurora-config |
 | luci-app-oaf | 应用过滤 | apk (25.12) | 7.0.1 | arm64 / x86 | OpenAppFilter 应用过滤(基于 nftables, 程序管控/游戏加速; 与 turboacc 流卸载互斥) | destan19/OpenAppFilter |
 | luci-app-store | iStore商店 | apk (25.12) | 0.2.1-r1 | arm64 / x86 | iStore 应用商店 | linkease/istore |
-| luci-app-tailscale-community | Tailscale组网 | apk (25.12) | 4.3.0-r1 ⚠️上游停更 | arm64 / x86 | Tailscale 组网(Community 版) | Tokisaki-Galaxy/luci-app-tailscale-community |
+| luci-app-tailscale-community | Tailscale组网 | apk (25.12) | 4.3.0-r1 | arm64 / x86 | Tailscale 组网(Community 版) | Tokisaki-Galaxy/luci-app-tailscale-community |
 | luci-app-turboacc | TurboACC加速 | apk (25.12) | 2026.09.28-r1 ⚠️上游停更 | arm64 / x86 | 网络加速(流卸载/BBR; 与 oaf 应用过滤互斥, 勿同时开启) | coolsnowwolf/luci(imm SDK 源编译) |
-| luci-theme-aurora | 极光主题 | apk (25.12) | 1.4.0-r20260920 ⚠️上游停更 | arm64 / x86 | 极光主题界面(需配套 luci-app-aurora-config 配置中心, 会接管 LuCI 菜单/路由, 谨慎启用) | eamonxg/luci-theme-aurora |
+| luci-theme-aurora | 极光主题 | apk (25.12) | 1.4.0-r20260920 | arm64 / x86 | 极光主题界面(需配套 luci-app-aurora-config 配置中心, 会接管 LuCI 菜单/路由, 谨慎启用) | eamonxg/luci-theme-aurora |
 | luci-theme-shadcn | Shadcn主题 | apk (25.12) | 0.6.0-r20260920 ⚠️上游停更 | arm64 / x86 | 现代 Shadcn 风格界面主题(会接管 LuCI 菜单/路由, 24.10 下谨慎启用) | eamonxg/luci-theme-shadcn |
 | mosdns | DNS分流 | apk (25.12) | v5.3.4-r14 | arm64 / x86 | 高性能 DNS 分流(DoH/DoQ 等) | sbwml/luci-app-mosdns |
 | openclash | OpenClash | apk (25.12) | v0.47.156 | arm64 / x86 | Clash 代理客户端 | vernesong/OpenClash |
@@ -101,7 +101,7 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | bandix | 流量监控 | ipk (24.10) | 0.12.11-r1 | arm64 / x86 | Bandix 实时流量监控与统计 | timsaya/luci-app-bandix + timsaya/openwrt-bandix |
 | clashoo | Clashoo代理 | ipk (24.10) | 2026.10.02 | arm64 / x86 | 代理工具(与 nikki 冲突勿同时开启) | kenzok8/openwrt-clashoo |
 | dufs | 文件服务器 | ipk (24.10) | 0.46.0-r1 | arm64 / x86 | 轻量文件服务器(静态托管/上传/WebDAV) | sigoden/dufs |
-| easytier | 异地组网 | ipk (24.10) | v2.6.4 ⚠️上游停更 | arm64 / x86 | EasyTier 点对点组网工具 | EasyTier/luci-app-easytier |
+| easytier | 异地组网 | ipk (24.10) | v2.6.4 | arm64 / x86 | EasyTier 点对点组网工具 | EasyTier/luci-app-easytier |
 | homeproxy | 代理平台 | ipk (24.10) | 26.187.07809 | arm64 / x86 | 现代代理平台(基于 sing-box) | immortalwrt/homeproxy |
 | luci-app-advancedplus | 高级设置 | ipk (24.10) | 1.8.7-r20251116 | arm64 / x86 | 进阶设置(与 argon-config 冲突勿同时开启) | sirpdboy/luci-app-advancedplus |
 | luci-app-amlogic | 晶晨宝盒 | ipk (24.10) | 26.10.0301-r1 | arm64 / x86 | 晶晨机顶盒管理(仅 ARM64 平台) | ophub/luci-app-amlogic |

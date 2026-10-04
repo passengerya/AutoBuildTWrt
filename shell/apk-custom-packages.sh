@@ -32,7 +32,7 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES bandix luci-app-bandix luci-i18n-bandix-zh-cn"
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES easytier luci-app-easytier"
 # 自动生成: luci-app-oaf | 应用过滤 | OpenAppFilter 应用过滤(基于 nftables, 程序管控/游戏加速; 与 turboacc 流卸载互斥) | 7.0.1 | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES appfilter kmod-oaf luci-app-oaf luci-i18n-oaf-zh-cn"
-# 自动生成: luci-app-tailscale-community | Tailscale组网 | Tailscale 组网(Community 版) | 4.3.0-r1 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: luci-app-tailscale-community | Tailscale组网 | Tailscale 组网(Community 版) | 4.3.0-r1 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-tailscale-community luci-i18n-tailscale-community-zh-cn"
 # 自动生成: luci-app-turboacc | TurboACC加速 | 网络加速(流卸载/BBR; 与 oaf 应用过滤互斥, 勿同时开启) | 2026.09.28-r1 上游停更(保留旧版) | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-turboacc luci-i18n-turboacc-zh-cn"
@@ -50,17 +50,17 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-rtp2httpd luci-i18n-rtp2httpd-zh-cn r
 # ───────────────────── 系统与界面 ─────────────────────
 # 自动生成: argon | Argon主题 | 简洁主题, 支持明暗自动切换 | 2.4.7 | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-argon-config luci-i18n-argon-config-zh-cn luci-theme-argon"
-# 自动生成: luci-app-advancedplus | 高级设置 | 进阶设置(与 argon-config 冲突勿同时开启) | 1.8.7-r20251116 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: luci-app-advancedplus | 高级设置 | 进阶设置(与 argon-config 冲突勿同时开启) | 1.8.7-r20251116 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-advancedplus luci-i18n-advancedplus-zh-cn"
 # 自动生成: luci-app-aurora-config | 极光配置中心 | Aurora 主题配置中心(提供 /etc/config/aurora, 与主题配套启用) | 1.2.5-r20260920 上游停更(保留旧版) | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-aurora-config luci-i18n-aurora-config-zh-cn"
-# 自动生成: luci-theme-aurora | 极光主题 | 极光主题界面(需配套 luci-app-aurora-config 配置中心, 会接管 LuCI 菜单/路由, 谨慎启用) | 1.4.0-r20260920 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: luci-theme-aurora | 极光主题 | 极光主题界面(需配套 luci-app-aurora-config 配置中心, 会接管 LuCI 菜单/路由, 谨慎启用) | 1.4.0-r20260920 | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-theme-aurora"
 # 自动生成: luci-theme-shadcn | Shadcn主题 | 现代 Shadcn 风格界面主题(会接管 LuCI 菜单/路由, 24.10 下谨慎启用) | 0.6.0-r20260920 上游停更(保留旧版) | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-theme-shadcn"
 
 # ───────────────────── 设备管理 ─────────────────────
-# 自动生成: luci-app-amlogic | 晶晨宝盒 | 晶晨机顶盒管理(仅 ARM64 平台) | 3.1.321-r1 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: luci-app-amlogic | 晶晨宝盒 | 晶晨机顶盒管理(仅 ARM64 平台) | 26.10.0301-r1 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-amlogic luci-i18n-amlogic-zh-cn"
 # 自动生成: luci-app-store | iStore商店 | iStore 应用商店 | 0.2.1-r1 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-store luci-lib-taskd luci-lib-xterm taskd"
