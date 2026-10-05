@@ -74,7 +74,7 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-theme-shadcn"
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES clashoo luci-app-clashoo luci-i18n-clashoo-zh-cn"
 # 自动生成: clashoo-dcbf7 |  |  | 2026.09.30.88 上游停更(保留旧版) | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES clashoo luci-app-clashoo luci-i18n-clashoo-zh-cn"
-# 自动生成: clashoo-f053c4 |  |  | 2026.10.02.9 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: clashoo-f053c4 |  |  | 2026.10.02.9 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES clashoo luci-app-clashoo luci-i18n-clashoo-zh-cn"
 # ============ 自动维护结束 ============
 
