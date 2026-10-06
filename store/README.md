@@ -119,7 +119,7 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | nikki | Nikki代理 | ipk (24.10) | v1.26.1 | arm64 / x86 | 代理工具(与 clashoo 冲突勿同时开启) | nikkinikki-org/OpenWrt-nikki |
 | openclash | OpenClash | ipk (24.10) | v0.47.156 | arm64 / x86 | Clash 代理客户端 | vernesong/OpenClash |
 | openlist2 | 网盘聚合 | ipk (24.10) | v4.2.6 | arm64 / x86 | OpenList2 网盘聚合(Alist 变体) | sbwml/luci-app-openlist2 |
-| openwrt-daede | eBPF代理 | ipk (24.10) | 2026.10.05 | arm64 / x86 | 基于 eBPF 的高性能透明代理(dae/daed) | kenzok8/openwrt-daede |
+| openwrt-daede | eBPF代理 | ipk (24.10) | 2026.10.06 | arm64 / x86 | 基于 eBPF 的高性能透明代理(dae/daed) | kenzok8/openwrt-daede |
 | passwall | PassWall | ipk (24.10) | 26.9.9-1 ⚠️上游停更 | arm64 / x86 | 代理工具(自带依赖) | Openwrt-Passwall/openwrt-passwall |
 | passwall2 | PassWall2 | ipk (24.10) | 26.9.12-2 ⚠️上游停更 | arm64 / x86 | 代理工具(自带依赖) | Openwrt-Passwall/openwrt-passwall2 |
 | quickfile | 文件管理 | ipk (24.10) | 1.0.16 ⚠️上游停更 | arm64 / x86 | 轻量网页文件管理器(与 luci-app-run 冲突勿同时开启) | sbwml/luci-app-quickfile |
