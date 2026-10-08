@@ -65,13 +65,13 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-adguardhome"
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-argon-config luci-i18n-argon-config-zh-cn luci-theme-argon"
 # 自动生成: luci-app-advancedplus | 高级设置 | 进阶设置(与 argon-config 冲突勿同时开启) | 1.8.7-r20251116 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-advancedplus luci-i18n-advancedplus-zh-cn"
-# 自动生成: luci-app-aurora-config | 极光配置中心 | Aurora 主题配置中心(提供 /etc/config/aurora, 与主题配套启用) | 1.2.5-r20260920 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: luci-app-aurora-config | 极光配置中心 | Aurora 主题配置中心(提供 /etc/config/aurora, 与主题配套启用) | 1.2.5-r20260920 | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-aurora-config luci-i18n-aurora-config-zh-cn"
 # 自动生成: luci-app-uninstall | 高级卸载 | 彻底卸载插件的工具 | v1.2.6 | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-uninstall"
 # 自动生成: luci-theme-aurora | 极光主题 | 极光主题界面(需配套 luci-app-aurora-config 配置中心, 会接管 LuCI 菜单/路由, 谨慎启用) | 1.4.0-r20260920 | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-theme-aurora"
-# 自动生成: luci-theme-shadcn | Shadcn主题 | 现代 Shadcn 风格界面主题(会接管 LuCI 菜单/路由, 24.10 下谨慎启用) | 0.6.0-r20260920 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: luci-theme-shadcn | Shadcn主题 | 现代 Shadcn 风格界面主题(会接管 LuCI 菜单/路由, 24.10 下谨慎启用) | 0.6.0-r20260920 | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-theme-shadcn"
 
 # ───────────────────── 设备管理 ─────────────────────
