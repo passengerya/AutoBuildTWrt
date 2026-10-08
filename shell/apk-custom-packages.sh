@@ -14,7 +14,7 @@
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES clashoo luci-app-clashoo luci-i18n-clashoo-zh-cn"
 # 自动生成: openclash | OpenClash | Clash 代理客户端 | v0.47.156 上游停更(保留旧版) | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-openclash"
-# 自动生成: openwrt-daede | eBPF代理 | 基于 eBPF 的高性能透明代理(dae/daed) | 2026.10.07 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: openwrt-daede | eBPF代理 | 基于 eBPF 的高性能透明代理(dae/daed) | 2026.10.08 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES dae daed luci-app-daede vmlinux-btf"
 # 自动生成: passwall | PassWall | 代理工具(自带依赖) | 26.10.4 上游停更(保留旧版) | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES chinadns-ng dns2socks geoview hysteria luci-app-passwall luci-i18n-passwall-zh-cn tcping v2ray-geoip v2ray-geosite xray-core"
@@ -74,7 +74,7 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-theme-shadcn"
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES clashoo luci-app-clashoo luci-i18n-clashoo-zh-cn"
 # 自动生成: clashoo-dcbf7 |  |  | 2026.09.30.88 上游停更(保留旧版) | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES clashoo luci-app-clashoo luci-i18n-clashoo-zh-cn"
-# 自动生成: clashoo-f053c4 |  |  | 2026.10.02.9 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: clashoo-f053c4 |  |  | 2026.10.02.9 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES clashoo luci-app-clashoo luci-i18n-clashoo-zh-cn"
 # ============ 自动维护结束 ============
 

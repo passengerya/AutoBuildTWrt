@@ -76,7 +76,7 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | clashoo-c947c7 | — | apk (25.12) | 2026.09.22.3 ⚠️上游停更 | arm64 / x86 | — | — |
 | clashoo-cc0 | — | apk (25.12) | 2026.09.19.5019 ⚠️上游停更 | arm64 / x86 | — | — |
 | clashoo-dcbf7 | — | apk (25.12) | 2026.09.30.88 ⚠️上游停更 | arm64 / x86 | — | — |
-| clashoo-f053c4 | — | apk (25.12) | 2026.10.02.9 ⚠️上游停更 | arm64 / x86 | — | — |
+| clashoo-f053c4 | — | apk (25.12) | 2026.10.02.9 | arm64 / x86 | — | — |
 | easytier | 异地组网 | apk (25.12) | v2.6.4 ⚠️上游停更 | arm64 / x86 | EasyTier 点对点组网工具 | EasyTier/luci-app-easytier |
 | luci-app-advancedplus | 高级设置 | apk (25.12) | 1.8.7-r20251116 ⚠️上游停更 | arm64 / x86 | 进阶设置(与 argon-config 冲突勿同时开启) | sirpdboy/luci-app-advancedplus |
 | luci-app-amlogic | 晶晨宝盒 | apk (25.12) | 26.10.0301-r1 ⚠️上游停更 | arm64 / x86 | 晶晨机顶盒管理(仅 ARM64 平台) | ophub/luci-app-amlogic |
@@ -89,7 +89,7 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | luci-theme-shadcn | Shadcn主题 | apk (25.12) | 0.6.0-r20260920 ⚠️上游停更 | arm64 / x86 | 现代 Shadcn 风格界面主题(会接管 LuCI 菜单/路由, 24.10 下谨慎启用) | eamonxg/luci-theme-shadcn |
 | mosdns | DNS分流 | apk (25.12) | v5.3.4-r14 ⚠️上游停更 | arm64 / x86 | 高性能 DNS 分流(DoH/DoQ 等) | sbwml/luci-app-mosdns |
 | openclash | OpenClash | apk (25.12) | v0.47.156 ⚠️上游停更 | arm64 / x86 | Clash 代理客户端 | vernesong/OpenClash |
-| openwrt-daede | eBPF代理 | apk (25.12) | 2026.10.07 ⚠️上游停更 | arm64 / x86 | 基于 eBPF 的高性能透明代理(dae/daed) | kenzok8/openwrt-daede |
+| openwrt-daede | eBPF代理 | apk (25.12) | 2026.10.08 | arm64 / x86 | 基于 eBPF 的高性能透明代理(dae/daed) | kenzok8/openwrt-daede |
 | passwall | PassWall | apk (25.12) | 26.10.4 ⚠️上游停更 | arm64 / x86 | 代理工具(自带依赖) | Openwrt-Passwall/openwrt-passwall |
 | passwall2 | PassWall2 | apk (25.12) | 26.10.1-2 ⚠️上游停更 | arm64 / x86 | 代理工具(自带依赖) | Openwrt-Passwall/openwrt-passwall2 |
 | quickfile | 文件管理 | apk (25.12) | 1.0.16 ⚠️上游停更 | arm64 / x86 | 轻量网页文件管理器(与 luci-app-run 冲突勿同时开启) | sbwml/luci-app-quickfile |
@@ -115,15 +115,15 @@ python3 store/sync_run_files.py             # 正式同步（需要 GITHUB_TOKEN
 | luci-theme-shadcn | Shadcn主题 | ipk (24.10) | 0.6.0-r20260920 ⚠️上游停更 | arm64 / x86 | 现代 Shadcn 风格界面主题(会接管 LuCI 菜单/路由, 24.10 下谨慎启用) | eamonxg/luci-theme-shadcn |
 | lucky | Lucky大吉 | ipk (24.10) | 2.20.2-r13 ⚠️上游停更 | arm64 / x86 | 端口转发/反向代理/内网穿透 | gdy666/lucky via dl.openwrt.ai |
 | momo | Momo代理 | ipk (24.10) | v1.2.1 | arm64 / x86 | 基于 sing-box 的透明代理 | nikkinikki-org/OpenWrt-momo |
-| mosdns | DNS分流 | ipk (24.10) | v5.3.4-r14 ⚠️上游停更 | arm64 / x86 | 高性能 DNS 分流(DoH/DoQ 等) | sbwml/luci-app-mosdns |
+| mosdns | DNS分流 | ipk (24.10) | v5.3.4-r14 | arm64 / x86 | 高性能 DNS 分流(DoH/DoQ 等) | sbwml/luci-app-mosdns |
 | nikki | Nikki代理 | ipk (24.10) | v1.26.1 | arm64 / x86 | 代理工具(与 clashoo 冲突勿同时开启) | nikkinikki-org/OpenWrt-nikki |
 | openclash | OpenClash | ipk (24.10) | v0.47.156 ⚠️上游停更 | arm64 / x86 | Clash 代理客户端 | vernesong/OpenClash |
 | openlist2 | 网盘聚合 | ipk (24.10) | v4.2.6 | arm64 / x86 | OpenList2 网盘聚合(Alist 变体) | sbwml/luci-app-openlist2 |
-| openwrt-daede | eBPF代理 | ipk (24.10) | 2026.10.07 ⚠️上游停更 | arm64 / x86 | 基于 eBPF 的高性能透明代理(dae/daed) | kenzok8/openwrt-daede |
+| openwrt-daede | eBPF代理 | ipk (24.10) | 2026.10.08 | arm64 / x86 | 基于 eBPF 的高性能透明代理(dae/daed) | kenzok8/openwrt-daede |
 | passwall | PassWall | ipk (24.10) | 26.9.9-1 ⚠️上游停更 | arm64 / x86 | 代理工具(自带依赖) | Openwrt-Passwall/openwrt-passwall |
 | passwall2 | PassWall2 | ipk (24.10) | 26.9.12-2 ⚠️上游停更 | arm64 / x86 | 代理工具(自带依赖) | Openwrt-Passwall/openwrt-passwall2 |
 | quickfile | 文件管理 | ipk (24.10) | 1.0.16 ⚠️上游停更 | arm64 / x86 | 轻量网页文件管理器(与 luci-app-run 冲突勿同时开启) | sbwml/luci-app-quickfile |
 | rtp2httpd | IPTV转发 | ipk (24.10) | 3.17.2-r1 ⚠️上游停更 | arm64 / x86 | IPTV 流媒体转发服务器 | stackia/rtp2httpd |
-| sing-box | Sing-box内核 | ipk (24.10) | v1.14.2 ⚠️上游停更 | arm64 / x86 | 通用代理内核 | SagerNet/sing-box |
+| sing-box | Sing-box内核 | ipk (24.10) | v1.14.2 | arm64 / x86 | 通用代理内核 | SagerNet/sing-box |
 | ssrp-mihomo | SSRP代理 | ipk (24.10) | ⚠️上游停更 | arm64 / x86 | SSR-Plus 代理工具(mihomo 内核) | fw876/helloworld |
 <!-- AUTO-SOFTWARE-TABLE:END -->
