@@ -49,7 +49,7 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-lucky lucky"
 # ───────────────────── 广告与DNS ─────────────────────
 # 自动生成: adguardhome | 本地DNS去广告 | AdGuardHome 广告拦截与 DNS 服务 | v0.107.79 | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-adguardhome"
-# 自动生成: mosdns | DNS分流 | 高性能 DNS 分流(DoH/DoQ 等) | v5.3.4-r14 上游停更(保留旧版) | 取消下一行注释即启用
+# 自动生成: mosdns | DNS分流 | 高性能 DNS 分流(DoH/DoQ 等) | v5.3.4-r14 | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES geo2txt luci-app-mosdns luci-i18n-mosdns-zh-cn mosdns v2ray-geoip v2ray-geosite"
 
 # ───────────────────── 文件与存储 ─────────────────────
