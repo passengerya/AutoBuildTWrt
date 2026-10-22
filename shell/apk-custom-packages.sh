@@ -7,7 +7,6 @@
 
 # ============ 以下由 Sync Store 自动维护(根据内嵌 store 实际内容生成) ============
 # ⚠️ 冲突警告: argon 与 luci-theme-aurora 与 luci-theme-shadcn 同时开启, 可能互相冲突, 请只保留其中一个
-# ⚠️ 冲突警告: luci-app-oaf 与 luci-app-turboacc 同时开启, 可能互相冲突, 请只保留其中一个
 
 # ───────────────────── 代理工具 ─────────────────────
 # 自动生成: clashoo | Clashoo代理 | 代理工具(与 nikki 冲突勿同时开启) | 2026.10.08 | 取消下一行注释即启用
@@ -31,7 +30,7 @@ CUSTOM_PACKAGES="$CUSTOM_PACKAGES bandix luci-app-bandix luci-i18n-bandix-zh-cn"
 # 自动生成: easytier | 异地组网 | EasyTier 点对点组网工具 | v2.6.4 上游停更(保留旧版) | 取消下一行注释即启用
 CUSTOM_PACKAGES="$CUSTOM_PACKAGES easytier luci-app-easytier"
 # 自动生成: luci-app-oaf | 应用过滤 | OpenAppFilter 应用过滤(基于 nftables, 程序管控/游戏加速; 与 turboacc 流卸载互斥) | 7.0.1 上游停更(保留旧版) | 取消下一行注释即启用
-CUSTOM_PACKAGES="$CUSTOM_PACKAGES appfilter kmod-oaf luci-app-oaf luci-i18n-oaf-zh-cn"
+#CUSTOM_PACKAGES="$CUSTOM_PACKAGES appfilter kmod-oaf luci-app-oaf luci-i18n-oaf-zh-cn"
 # 自动生成: luci-app-tailscale-community | Tailscale组网 | Tailscale 组网(Community 版) | 4.3.0-r1 上游停更(保留旧版) | 取消下一行注释即启用
 #CUSTOM_PACKAGES="$CUSTOM_PACKAGES luci-app-tailscale-community luci-i18n-tailscale-community-zh-cn"
 # 自动生成: luci-app-turboacc | TurboACC加速 | 网络加速(流卸载/BBR; 与 oaf 应用过滤互斥, 勿同时开启) | 2026.09.28-r1 上游停更(保留旧版) | 取消下一行注释即启用
