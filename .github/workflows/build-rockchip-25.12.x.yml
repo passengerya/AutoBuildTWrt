@@ -83,7 +83,7 @@ on:
       custom_router_ip:
         description: "请设置软路由的管理地址(注意仅对多网口软路由有效) 格式:192.168.x.1 或 10.x.x.1"
         required: true
-        default: "192.168.100.1"
+        default: "192.168.10.1"
       rootfs_partsize:
         description: '选择软件包空间大小'
         required: true
@@ -136,7 +136,7 @@ permissions:
 env:
   luci_version: ${{ github.event.inputs.luci_version || '25.12.1' }}
   profile: ${{ github.event.inputs.profile || 'friendlyarm_nanopi-r3s' }}
-  custom_router_ip: ${{ github.event.inputs.custom_router_ip || '192.168.100.1' }}
+  custom_router_ip: ${{ github.event.inputs.custom_router_ip || '192.168.10.1' }}
   rootfs_partsize: ${{ github.event.inputs.rootfs_partsize || '1G' }}
   enable_store: ${{ github.event.inputs.enable_store || 'false' }}
   include_docker: ${{ github.event.inputs.include_docker || 'no' }}
