@@ -82,10 +82,23 @@ esac
 if [ "$count" -eq 1 ]; then
     # 单网口设备，DHCP模式
     uci set network.lan.proto='dhcp'
-    uci delete network.lan.ipaddr
-    uci delete network.lan.netmask
-    uci delete network.lan.gateway
-    uci delete network.lan.dns
+    uci -q delete network.lan.ipaddr
+    uci -q delete network.lan.netmask
+    uci -q delete network.lan.gateway
+    uci -q delete network.lan.dns
+    # 保守补齐 br-lan ports(防错 #48): 网卡不在 ports 且未被 wan/wan6 占用才补,
+    # 避免与上游 wan 配置抢同一 device
+    only_iface=$(echo "$ifnames" | awk '{print $1}')
+    section=$(uci show network | awk -F '[.=]' '/\.name=.br-lan.$/ {print $2; exit}')
+    wan_dev=$(uci -q get network.wan.device 2>/dev/null)
+    wan6_dev=$(uci -q get network.wan6.device 2>/dev/null)
+    if [ -n "$section" ] && [ "$wan_dev" != "$only_iface" ] && [ "$wan6_dev" != "$only_iface" ]; then
+        current_ports=$(uci -q get "network.$section.ports" 2>/dev/null)
+        if ! echo " $current_ports " | grep -q " $only_iface "; then
+            uci add_list "network.$section.ports"="$only_iface"
+            echo "Added $only_iface to br-lan ports" >>$LOGFILE
+        fi
+    fi
     uci commit network
 elif [ "$count" -gt 1 ]; then
     # 多网口设备配置
@@ -99,18 +112,31 @@ elif [ "$count" -gt 1 ]; then
     uci set network.wan6.device="$wan_ifname"
     uci set network.wan6.proto='dhcpv6'
 
-    # 查找 br-lan 设备 section
-    section=$(uci show network | awk -F '[.=]' '/\.@?device\[\d+\]\.name=.br-lan.$/ {print $2; exit}')
+    # 查找 br-lan 设备 section(匿名 @device[N] 或命名 section 均可; 防错 #48:
+    # 旧正则用 \[\d+\], 而 POSIX ERE 中 \d 是字面 d, 导致从未匹配到过)
+    section=$(uci show network | awk -F '[.=]' '/\.name=.br-lan.$/ {print $2; exit}')
     if [ -z "$section" ]; then
         echo "error：cannot find device 'br-lan'." >>$LOGFILE
     else
-        # 删除原有ports
-        uci -q delete "network.$section.ports"
-        # 添加LAN接口端口
-        for port in $lan_ifnames; do
-            uci add_list "network.$section.ports"="$port"
-        done
-        echo "Updated br-lan ports: $lan_ifnames" >>$LOGFILE
+        # 保守策略(防错 #48): 上游 ports 正确时不动; 仅在设备冲突(wan 网卡
+        # 也在 br-lan 里)或 ports 为空时才重写, 避免覆盖 board.d 的正确映射
+        current_ports=$(uci -q get "network.$section.ports" 2>/dev/null)
+        if [ -z "$current_ports" ] || echo " $current_ports " | grep -q " $wan_ifname "; then
+            # 写前校验端口真实存在, 缺失端口会导致 netifd 起不来
+            new_ports=""
+            for port in $lan_ifnames; do
+                [ -e "/sys/class/net/$port" ] && new_ports="$new_ports $port"
+            done
+            if [ -n "$new_ports" ]; then
+                uci -q delete "network.$section.ports"
+                for port in $new_ports; do
+                    uci add_list "network.$section.ports"="$port"
+                done
+                echo "Rewrote br-lan ports (conflict or empty):$new_ports" >>$LOGFILE
+            fi
+        else
+            echo "Keep upstream br-lan ports: $current_ports" >>$LOGFILE
+        fi
     fi
 
     # LAN口设置静态IP
@@ -281,6 +307,36 @@ if [ ! -f /usr/bin/quickfile ] && [ "$(uci -q get nginx.global.uci_enable)" = "t
     /etc/init.d/uhttpd enable 2>/dev/null
     /etc/init.d/uhttpd start 2>/dev/null
     echo "fix stale nginx takeover, restore uhttpd" >>$LOGFILE
+fi
+
+# 网络内核调优(防错 #48): 按内存分档生成 sysctl.d, 文件不存在才写(NAND 磨损考虑;
+# 升级保留配置后 sysctl.d 不保留会自动重建)。S11 sysctl init 每次启动自动加载,
+# 无需手动 sysctl -p(裸 -p 只读 /etc/sysctl.conf 不读 sysctl.d)。不设
+# tcp_congestion_control: BBR 由 turboacc 的 tcpcca 机制管理, 且 kmod-tcp-bbr
+# 自带的 12-tcp-bbr.conf 也会在其后覆盖。
+if [ ! -f /etc/sysctl.d/11-twrt-net.conf ]; then
+    mem_total=$(awk '/^MemTotal:/ {print $2}' /proc/meminfo)
+    if [ "$mem_total" -le 262144 ]; then
+        BUF="4194304"
+    elif [ "$mem_total" -le 524288 ]; then
+        BUF="8388608"
+    else
+        BUF="16777216"
+    fi
+    mkdir -p /etc/sysctl.d
+    {
+        echo "net.core.rmem_max=$BUF"
+        echo "net.core.wmem_max=$BUF"
+        echo "net.ipv4.tcp_rmem=4096 87380 $BUF"
+        echo "net.ipv4.tcp_wmem=4096 65536 $BUF"
+        echo "net.ipv4.tcp_fastopen=3"
+        echo "net.ipv4.tcp_slow_start_after_idle=0"
+        echo "net.ipv4.tcp_keepalive_time=600"
+        echo "net.ipv4.tcp_keepalive_intvl=10"
+        echo "net.ipv4.tcp_keepalive_probes=9"
+        echo "net.core.default_qdisc=fq"
+    } > /etc/sysctl.d/11-twrt-net.conf
+    echo "created sysctl tune /etc/sysctl.d/11-twrt-net.conf (buf=$BUF)" >>$LOGFILE
 fi
 
 # oaf(OpenAppFilter)首启自愈: 上游 94_feature_3.0 用 heredoc 批量写入配置,
